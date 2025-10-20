@@ -1,0 +1,92 @@
+@layout.app({ title: "Welcome page title" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+         
+  @slot('main')
+    <header class="w-full max-w-md">
+      <div class="w-full h-16 mb-6 items-center">
+        <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-full h-full object-contain" />
+      </div>
+      <h1 class="text-white text-3xl w-full text-left mb-4">
+        Créer votre compte
+      </h1>
+    </header>
+    <main class="w-full max-w-md">
+      <form id="authetification" action="{{ route('create.user') }}"  method="POST" class="flex flex-col items-center w-full mt-6">
+         {{ csrfField() }}
+        <input
+          type="text"
+          id="noms"
+          name="nom"
+          placeholder="NOM"
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+        <input
+          type="text"
+          id="noms"
+          name="prenom"
+          placeholder=" PRÉNOM"
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+        <input
+          type="text"
+          id="email"
+          name="email"
+          placeholder="Email"
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+        <p id="email-error" class="text-red-500 text-sm w-full text-left">
+        </p>
+
+        <a href="#" class="text-blue-400 w-full text-left mb-4 text-sm">Utiliser un Téléphone</a>
+
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Mot de passe"
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirmez votre mot de passe "
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+         <input
+          id="telephone"
+          type="text"
+          name="telephone"
+          placeholder="Téléphone"
+          class="border-2 p-4 rounded-md text-sm text-white w-full mb-4 bg-black"
+        />
+        <h2 class="text-white w-full text-left mt-6 mb-2">
+          Date de naissance
+        </h2>
+        <p class="text-white text-sm w-full mb-4">
+          Cette information ne sera pas affichée publiquement. Confirmez votre
+          âge, même si ce compte est pour une entreprise, un animal de compagnie
+          ou autre chose.
+        </p>
+
+        <div class="w-full flex gap-2">
+          <input
+            type="date"
+            name="date"
+            id="due_date"
+            class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+          />
+        </div>
+
+        {{--  <section class="w-full flex justify-center mt-10 pb-6">  --}}
+          <button type="submit" id="btnInscription" class="bg-slate-500 text-white rounded-3xl py-3 px-10 w-full">
+            Suivant
+          </button>
+        {{--  </section>  --}}
+      </form>
+    </main>
+  @endslot
+@end

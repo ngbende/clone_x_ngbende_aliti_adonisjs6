@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Document
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+
+    </script>
+  </head>
+  <body class="bg-black w-full flex flex-col h-screen">
+    @include('partials/header')
+       @!component('components/logoutModal')
+
+    <main id="main_profil" class="ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-2/4">
+      <div
+        class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
+      >
+        <div class="flex flex-row items-center gap-8 sm:gap-x-52">
+          <a class="text-white text-sm">Pour vous</a>
+          <a class="text-white text-sm">Abonnements</a>
+        </div>
+      </div>
+
+      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full sm:h-40">
+        <div class="bg-black w-auto sm:h-96 relative flex flex-col items-start">
+
+          <div class="flex flex-row p-5 gap-2 w-full">
+            <a id="username_profil" class="text-white text-sm">
+              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+            </a>
+            <input
+              id="tweets"
+              type="text"
+              placeholder="Que se passe-t-il?"
+              class="border-none rounded-md text-base sm:text-2xl text-white flex-1 bg-transparent focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="button"
+            class="btn_post right-3 absolute mt-[4.5rem] sm:mt-11 text-black bg-white border-white border-[2px] rounded-full text-sm sm:text-xl p-2 w-[90px] sm:w-[100px]"
+          >
+            Poster
+          </button>
+
+          <section
+            class="img_section none flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto"
+            style="display: none"
+          >
+            <img id="imagePreview" style="display: none" class="rounded-lg w-60 h-55 object-cover" />
+          </section>
+
+          <div class="flex px-6 gap-4 mt-5 border-b-2 border-gray-700 w-full">
+            <img src="assets/galerie_twees.png" alt="" id="image_tweet" class="cursor-pointer" />
+            <input type="file" id="imageInput" accept="image/*" style="display: none" />
+
+            <button>
+              <img src="assets/Gif.png" alt="" class="galerie_input" />
+            </button>
+            <a href="">              <img src="assets/graphique.png" alt="" /></a>
+            <a href="">              <img src="assets/smile.png" alt="" /></a>
+            <a href="">              <img src="assets/Top-Tweets.png" alt="" /></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="post_tweets flex flex-col w-full border-b border-gray-700 text-white">
+        <!-- <div id="icon_reaction" class="flex w-full justify-between p-4"></div> -->
+      </section>
+    </main>
+
+    @include('partials/sectionFolowSearch')
+  </body>
+</html>
