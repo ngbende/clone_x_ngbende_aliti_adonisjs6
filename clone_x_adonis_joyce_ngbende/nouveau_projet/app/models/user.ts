@@ -7,20 +7,20 @@ import Tweet from '#models/tweet'
 import Like from '#models/like'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import Retweet from './retweet.js'
+import GrokSuggestion from './grok_suggestion.js'
+import Follow from './follow.js'
+import Block from './block.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
-  static email(email: any) {
-    throw new Error('Method not implemented.')
-  }
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare nom: string | null
+  declare nom: string
 
   @column()
   declare prenom: string | null
@@ -32,7 +32,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare password: string
 
   @column({ serializeAs: 'telephone' })
-  declare telephone: string
+  declare telephone: string | null
 
   @column()
   declare bio: string | null
@@ -62,10 +62,24 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare tweets: HasMany<typeof Tweet>
 
   @hasMany(() => Retweet)
-  declare Retweet: HasMany<typeof Retweet>
+  declare retweets: HasMany<typeof Retweet>
 
   @hasMany(() => Like)
   declare likes: HasMany<typeof Like>
+
+  @hasMany(() => GrokSuggestion)
+  declare grokSuggestions: HasMany<typeof GrokSuggestion>
+
+  // Relations avec Follow (N-N entre utilisateurs)
+  @hasMany(() => Follow, { foreignKey: 'followerId' })
+  declare following: HasMany<typeof Follow> // utilisateurs que je suis
+
+  @hasMany(() => Follow, { foreignKey: 'followedId' })
+  declare followers: HasMany<typeof Follow> // utilisateurs qui me suivent
+
+  // Relations avec Block
+  @hasMany(() => Block, { foreignKey: 'blockerId' })
+  declare blockedUsers: HasMany<typeof Block>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

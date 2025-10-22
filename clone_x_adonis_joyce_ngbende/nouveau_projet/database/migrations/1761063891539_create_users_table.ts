@@ -20,8 +20,8 @@ export default class extends BaseSchema {
       table.string('photoProfil').nullable()
       table.string('coverPicture').nullable()
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('created_at', { useTz: true })
+      table.timestamp('updated_at', { useTz: true })
     })
   }
 
