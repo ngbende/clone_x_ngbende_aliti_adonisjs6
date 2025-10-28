@@ -9,153 +9,135 @@
     <script src="https://cdn.tailwindcss.com">
 
     </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
   </head>
   <body class="bg-black w-full flex flex-col h-screen">
     @include('partials/header')
 
-    <main id="main_profil" class="relative ml-[20%] w-2/4 h-full flex flex-col">
-      <div
-        class="sticky z-50 h-15 justify-between top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700"
-      >
-        <a href="acceuil.html">          <img
-            width="20"
-            height="20"
-            src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"
-            alt="left"
-          /></a>
+<main id="main_profil" class="relative ml-[20%] w-2/4 h-full flex flex-col border-l border-r border-gray-700">
 
-        <a href="" class="mr-40">
-          <div id="para-name-user_profil1" class="flex flex-col">
-            <p class="text-white text-sm w-[300px] username1">
-              username
-            </p>
-            <p class="text-white text-sm w-[300px]">
-              0 message
-            </p>
-          </div>
-        </a>
+  <!-- Header sticky -->
+  <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
+    <a href="/accueil">
+      <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"/>
+    </a>
 
-        <a href="">          <img
-            width="17"
-            height="17"
-            src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"
-            alt="search--v1"
-          /></a>
+    <div class="flex flex-col">
+      <p class="font-semibold text-white text-sm username1">username</p>
+      <p class="text-gray-400 text-xs">0 messages</p>
+    </div>
+
+    <div class="ml-auto">
+      <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
+    </div>
+  </div>
+
+  <!-- Bannière + avatar -->
+  <section id="photo_profil" class="relative w-full h-52 bg-gray-700">
+    <img class="object-cover w-full h-full" id="banner-img"/>
+
+    <img class="absolute -bottom-14 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
+         id="profile-img" />
+
+    <button class="absolute bottom-3 right-4 text-white border border-gray-500 rounded-full px-4 py-1 text-sm">
+      Modifier le profil
+    </button>
+  </section>
+
+  <!-- Infos utilisateur -->
+  <div id="para-name-user_profil" class="mt-16 px-5 text-white">
+    <p class="font-semibold username1">username</p>
+    <p class="text-gray-400 text-sm username2">@username</p>
+
+    <div class="flex gap-2 items-center mt-2 text-gray-400 text-sm">
+      <img width="15" height="15"
+        src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
+      <span>Inscrit en juillet 2025</span>
+    </div>
+
+    <div class="flex gap-4 mt-2 text-sm">
+      <p><span class="font-semibold">0</span> abonnements</p>
+      <p><span class="font-semibold">0</span> abonnés</p>
+    </div>
+  </div>
+
+  <!-- Onglets profil -->
+  <section id="post_profil" class="flex w-full border-b border-gray-700 mt-5">
+    <nav id="nav_post" class="flex w-full justify-between text-sm">
+     <a href="#" class="tab w-full text-center py-3 font-semibold border-b-2 border-blue-500 active" data-target="posts">Posts</a>
+<a href="#" class="tab w-full text-center py-3 text-gray-400 hover:text-white" data-target="replies">Réponses</a>
+<a href="#" class="tab w-full text-center py-3 text-gray-400 hover:text-white" data-target="medias">Tweets-marquants</a>
+<a href="#" class="tab w-full text-center py-3 text-gray-400 hover:text-white" data-target="likes">J'aime</a>
+
+    </nav>
+  </section>
+
+  <section id="profile-tweets" class="flex flex-col">
+     <div id="container-posts">
+     @each(tweet in tweets)
+          @include('partials/tweetSection')
+         @!component('components/reponseForm')
+         @!component('components/deleteTweet')
+
+          {{--  @!component('components/reponseForm')  --}}
+        @endeach
       </div>
-      <section id="photo_profil" class="flex flex-col bg-gray-700 h-52 w-full mt-33">
-        <div class="bg-[#333639] w-auto h-full relative flex items-start">
-          <div id="space_couverture" class="w-[100%]">
-          </div>
+        <div id="container-replies" class="hidden flex flex-col">
+    <!-- Contenu chargé via fetch -->
+  </div>
 
-          <div
-            class="div-profil rounded-full border-black border-5 w-35 h-35 bg-[#333639] absolute top-32 left-4"
-            aria-label="Placeholder photo de profil"
-          >
-            <img class="profile-picture object-cover w-full h-full rounded-full" />
-          </div>
-          <!-- <div id="case-profil" class="flex flex-row"> -->
-          <button
-            id="btn-modifier"
-            class="text-white sm:ml-[-200px] mt-55 border-white border-[1px] rounded-full text-sm p-3 w-[200px] cursor-pointer"
-          >
-            Modifier le profil
-            </button>
-          <!--  Popup (modal) -->
-          <div
-            id="popup-modifier"
-            class="hidden fixed inset-0 bg-opacity-50 h-screen overflow-y-scroll  flex  justify-center items-center z-50"
-          >
-            <div class="space_popup bg-white p-6 rounded shadow-lg w-[45%] h-screen mt-10 text-center mr-28">
-              <!-- <h2 class="text-lg font-semibold mb-4">Modifier votre photo</h2> -->
+  <div id="container-medias" class="hidden flex flex-col">
+    <!-- Filtrage médias ici si nécessaire -->
+  </div>
 
-              <!-- Champ pour choisir une image -->
-              <!-- zone couverture -->
-              <img
-                width="40"
-                height="40"
-                src="https://img.icons8.com/ios-filled/50/apple-camera.png"
-                alt="apple-camera"
-                id="icon-couverture"
-                class=" mt-40 ml-60 cursor-pointer"
-              />
-              <img id="preview_couverture" class="w-full h-32 object-cover  " />
-
-              <input type="file" accept="image/*" id="input-couverture" style="display: none" />
-
-              <div
-                id="space_photo"
-                class="rounded-full border-black border-5 w-20 h-20 bg-[#333639] mt-4"
-                aria-label="Placeholder photo de profil"
-              >
-                <img id="preview_profil" class="rounded-full w-full h-full object-cover hidden" />
-
-                <img
-                  width="50"
-                  height="50"
-                  src="https://img.icons8.com/ios-filled/50/apple-camera.png"
-                  alt="apple-camera"
-                  id="icon-profil"
-                  class=" flex  absolute mt-2 ml-2 cursor-pointer"
-                />
-                <input type="file" id="input-profil" accept="image/*" style="display: none" />
-              </div>
-
-              <!-- Boutons -->
-              <div class="flex justify-around mt-32">
-                <button id="btn-annuler" class="bg-gray-400 text-white px-4 py-2 rounded">Annuler</button>
-                <button id="btn-valider" class="bg-green-600 text-white px-4 py-2 rounded">Enregistrer</button>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div id="para-name-user_profil" class="flex flex-col">
-      <a href="" class="p-5 mt-13">
-        <p class="text-white text-sm w-[300px] username1">
-          username
-        </p>
-        <p class="text-white text-sm w-[300px] username2">
-          @username
-        </p>
-      </a>
-    </div>
-    <div id="dates_profil" class="text-white text-sm flex flex-row gap-4 pl-5">
-      <img
-        width="15"
-        height="15"
-        src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"
-        alt="calendar"
-      />
-      <p>
-        inscrit en juillet 2025
-      </p>
-    </div>
-    <div id="infos_profil" class="text-white text-sm flex flex-row gap-4 pl-5 mt-4">
-      <p>
-        0 abonnenemnts
-      </p>
-      <p>
-        0 abonnés
-      </p>
-    </div>
+  <div id="container-likes" class="hidden flex flex-col">
+    <!-- Filtrage likes ici si nécessaire -->
+  </div>
   </section>
-  <section id="post_profil" class="flex w-full border-b border-gray-700 mt-53 flex-row">
-    <div id="nav_post" class="flex w-full justify-between p-4">
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Posts</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Réponses</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Tweets-marquants</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Articles</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Médias</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">J'aime</a>
-    </div>
-  </section>
-  <section class="post_tweets">
-  </section>
+
 </main>
 
+
 @include('partials/sectionFolowSearch')
+<script>
+  lucide.createIcons();
+</script>
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', async (e) => {
+    e.preventDefault()
+
+    // Onglet actif
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold')
+      t.classList.add('text-gray-400')
+    })
+    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold')
+    tab.classList.remove('text-gray-400')
+
+    const target = tab.dataset.target
+
+    // Cacher tous les containers
+    document.querySelectorAll('#profile-tweets > div').forEach(c => c.classList.add('hidden'))
+
+    if(target === 'replies') {
+      const repliesContainer = document.getElementById('container-replies')
+      repliesContainer.classList.remove('hidden')
+       
+
+      // Si pas déjà chargé, fetch les réponses
+      if(!repliesContainer.innerHTML.trim()) {
+        const res = await fetch(`/profile/tweets/{{ user.id }}/reply`)
+        const html = await res.text()
+        repliesContainer.innerHTML = html
+      }
+    } else {
+      const container = document.getElementById(`container-${target}`)
+      container.classList.remove('hidden')
+    }
+  })
+})
+</script>
 </body>
 </html>
