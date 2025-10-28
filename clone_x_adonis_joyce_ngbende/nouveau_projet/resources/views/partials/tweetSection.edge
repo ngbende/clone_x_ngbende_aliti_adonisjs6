@@ -1,0 +1,101 @@
+<div class="flex flex-col gap-4">
+  <img
+    src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"
+    alt="avatar"
+    class="profile-picture w-10 h-10 rounded-full"
+  />
+
+  <div class="text-white">
+    <span class="font-bold">{{ tweet.user.nom }}</span>
+
+    {{-- Affichage si c'est une réponse --}}
+    @if(tweet.parentId)
+      <p class="text-gray-400 text-xs mb-1">
+        Répond à 
+        <a href="{{ route('tweet.show', { id: tweet.parentId }) }}" class="text-blue-400">
+          {{ tweet.user.nom }}
+        </a>
+      </p>
+    @endif
+
+    {{-- Affichage si c'est un retweet --}}
+@if(tweet.$extras?.isRetweet)
+  <p class="text-gray-400 text-xs mb-1 ml-12">
+    🔁 Retweeté par {{ tweet.$extras.retweetedBy }}
+  </p>
+@endif
+
+    {{-- Contenu du tweet --}}
+    <p class="mt-1">{{ tweet.content }}</p>
+    {{-- Médias --}}
+  @if(tweet.medias && tweet.medias.length > 0)
+  @each(media in tweet.medias)
+
+    {{-- Affichage des images --}}
+    @if(media.type === 'image')
+      <img src="data:image/png;base64,{{ media.url }}"
+           alt="Tweet Image"
+           class="mt-2 rounded-lg w-full max-w-md object-cover" />
+    @endif
+
+    {{-- Affichage des vidéos --}}
+   @if(media.type === 'video')
+  <video controls class="mt-2 rounded-lg w-full max-w-md">
+    <source src="/videos/{{ media.url }}" type="video/mp4" />
+    Ton navigateur ne supporte pas la vidéo.
+  </video>
+@endif
+
+
+  @endeach
+@endif
+
+
+
+
+
+
+  </div>
+
+  <div class="flex justify-around items-center text-gray-400 mt-3 max-w-[250px] text-xl mb-3 gap-9">
+    <button class="openReplyForm"
+        data-id="{{ tweet.id }}"
+        data-user="{{ tweet.user.nom }}"
+        data-content="{{ tweet.content }}">
+      Répondre
+    </button>
+     {{-- Répondre --}}
+  <button class="openReplyForm flex items-center gap-1">
+    <i data-lucide="message-circle" class="w-5 h-5"></i>
+    {{ tweet.replies?.length || 0 }}
+  </button>
+
+    
+     {{-- Retweet --}}
+  <button class="retweet-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+  <i data-lucide="repeat-2" class="w-5 h-5 text-gray-400"></i>
+  <span class="retweet-count">{{ tweet.retweets?.length || 0 }}</span>
+</button>
+
+
+  {{-- Like --}}
+<button class="like-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+  <i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>
+  <span class="like-count">{{ tweet.likes?.length || 0 }}</span>
+</button>
+
+
+    <button title="Partager" class="hover:text-blue-300">📤</button>
+   <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')" class="hover:text-red-400">
+  Supprimer
+</button>
+
+    </button>
+    <a href="{{ route('tweet.show', { id: tweet.id }) }}" class="hover:underline ">
+      Voir le thread →
+    </a>
+  </div>
+</div>
+
+
+

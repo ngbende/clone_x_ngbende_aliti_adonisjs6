@@ -1,0 +1,75 @@
+<!-- Formulaire de réponse (inspiré de Twitter) -->
+<div
+  id="replyFormModal"
+  class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+>
+  <div class="bg-gray-900 text-white w-[600px] rounded-2xl shadow-xl p-6 relative">
+    <!-- Bouton fermer -->
+    <button
+      id="closeReplyModal"
+      class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold"
+    >
+      ×
+    </button>
+
+    <!-- Tweet parent affiché en haut -->
+    <div id="replyParent" class="flex gap-3 mb-5 border-b border-gray-700 pb-4">
+      <img
+        id="replyAvatar"
+        src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png"
+        alt="avatar"
+        class="w-10 h-10 rounded-full"
+      />
+      <div>
+        <p id="replyUser" class="font-semibold"></p>
+        <p id="replyContent" class="text-gray-300"></p>
+      </div>
+    </div>
+
+    <!-- Formulaire -->
+    <form id="replyForm"  method="POST" action="" class="flex flex-col gap-4">
+      {{ csrfField() }}
+      <input type="hidden" name="parent_id" id="replyParentId" />
+      <textarea
+        name="content"
+        rows="3"
+        class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Postez votre réponse..."
+        required
+      ></textarea>
+      <div class="flex justify-end mt-4">
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full font-semibold"
+        >
+          Répondre
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Ouvrir la modal
+document.querySelectorAll('.openReplyForm').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const tweetId = btn.dataset.id;
+    const user = btn.dataset.user;
+    const content = btn.dataset.content;
+
+    document.getElementById('replyUser').textContent = user;
+    document.getElementById('replyContent').textContent = content;
+    document.getElementById('replyParentId').value = tweetId;
+    const form = document.getElementById('replyForm')
+  form.action = `/tweets/${tweetId}/reply` // ✅ met la vraie URL
+
+
+    document.getElementById('replyFormModal').classList.remove('hidden');
+  });
+});
+
+// Fermer la modal
+document.getElementById('closeReplyModal').addEventListener('click', () => {
+  document.getElementById('replyFormModal').classList.add('hidden');
+});
+</script>

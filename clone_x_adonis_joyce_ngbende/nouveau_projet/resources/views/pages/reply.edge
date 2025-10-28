@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Document
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+
+    </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  </head>
+  <body class="bg-black w-full flex flex-col h-screen">
+    @include('partials/header')
+       @!component('components/logoutModal')
+
+    <main id="main_profil" class="ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-2/4">
+       @include('partials/reponses')
+          @!component('components/reponseForm')
+         @!component('components/deleteTweet')
+
+       
+    </main>
+
+    @include('partials/sectionFolowSearch')
+    
+<script>
+  lucide.createIcons();
+</script>
+  </body>
+</html>
+{{--  <script>
+  document.querySelectorAll('.replyBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tweetId = btn.dataset.tweetId
+      const userName = btn.dataset.userName
+      const content = btn.dataset.tweetContent
+      const avatar = btn.dataset.userAvatar
+
+      document.getElementById('parentName').innerText = userName
+      document.getElementById('parentContent').innerText = content
+      document.getElementById('parentAvatar').src = avatar
+      document.getElementById('parentIdInput').value = tweetId
+
+      document.getElementById('replyModal').classList.remove('hidden')
+    })
+  })
+
+  document.getElementById('closeReplyModal').addEventListener('click', () => {
+    document.getElementById('replyModal').classList.add('hidden')
+  })
+</script>  --}}

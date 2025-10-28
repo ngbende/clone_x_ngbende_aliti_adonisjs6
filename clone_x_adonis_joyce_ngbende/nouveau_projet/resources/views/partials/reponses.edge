@@ -1,0 +1,140 @@
+<section class="tweet-thread border-x border-gray-700 min-h-screen bg-black text-white">
+
+  {{-- Tweet parent --}}
+  <div class="tweet-parent p-4 border-b border-gray-800">
+    <div class="flex items-start space-x-3">
+      <img 
+        src="{{ tweet.user?.avatar_url || '/images/default-avatar.png' }}" 
+        alt="avatar"
+        class="w-10 h-10 rounded-full"
+      />
+      <div class="flex-1">
+        <div class="flex items-center space-x-2">
+          <h2 class="font-semibold">{{ tweet.user?.nom || 'Utilisateur' }}</h2>
+          {{--  <span class="text-gray-500 text-sm">@{{ tweet.user?.handle || 'handle' }}</span>  --}}
+          <span class="text-gray-500 text-sm">· {{ tweet.createdAt?.toRelative() }}</span>
+        </div>
+
+        <p class="mt-1 text-gray-200">{{ tweet.content }}</p>
+
+        {{-- Médias --}}
+   @if(tweet.medias)
+  @each(media in tweet.medias)
+    @if(media.type === 'image')
+      <img src="data:image/png;base64,{{ media.url }}" 
+           alt="Tweet Image" 
+           class="mt-2 rounded-lg w-full max-w-md object-cover" />
+    @endif
+  @endeach
+@endif
+
+        <div class="flex justify-between mt-3 text-gray-500 text-sm">
+          <button class="hover:text-blue-500">💬 {{ tweet.replies?.length || 0 }}</button>
+          <button class="hover:text-green-500">🔁 {{ tweet.retweets?.length || 0 }}</button>
+  {{-- Like --}}
+<button class="like-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+  <i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>
+  <span class="like-count">{{ tweet.likes?.length || 0 }}</span>
+</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- Liste des réponses --}}
+  <div class="tweet-replies divide-y divide-gray-800">
+    @if(tweet.replies && tweet.replies.length > 0)
+      @each(reply in tweet.replies)
+       <div class="tweet-reply p-4 hover:bg-gray-900 transition">
+    <div class="flex items-start space-x-3">
+      <img 
+        src="{{ reply.user?.avatar_url || '/images/default-avatar.png' }}" 
+        alt="avatar"
+        class="w-9 h-9 rounded-full"
+      />
+      <div class="flex-1">
+        <div class="flex items-center space-x-2">
+          <h3 class="font-semibold">{{ reply.user?.nom|| 'Utilisateur' }}</h3>
+          <span class="text-gray-500 text-sm">@.{{ reply.user?.prenom || prenom }}</span>
+          <span class="text-gray-500 text-sm">· {{ reply.createdAt?.toRelative() }}</span>
+        </div>
+        <p class="mt-1 text-gray-200">{{ reply.content }}</p>
+
+        <!-- Boutons d'interaction pour la réponse -->
+        <div class="flex justify-between mt-2 text-gray-500 text-sm">
+          <button class="openReplyForm"
+                  data-id="{{ reply.id }}"
+                  data-user="{{ reply.user.nom }}"
+                  data-content="{{ reply.content }}">
+            💬 {{ reply.replies?.length || 0 }}
+          </button>
+           <button class="openReplyForm"
+        data-id="{{ tweet.id }}"
+        data-user="{{ tweet.user.nom }}"
+        data-content="{{ tweet.content }}">
+      Répondre
+    </button>
+          <button class="hover:text-green-500">🔁 {{ reply.retweets?.length || 0 }}</button>
+     <button class="like-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+  <i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>
+  <span class="like-count">{{ tweet.likes?.length || 0 }}</span>
+
+</button>
+   <button title="Partager" class="hover:text-blue-300">📤</button>
+   <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')" class="hover:text-red-400">
+  Supprimer
+</button>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+      @endeach
+    @else
+      <p class="text-gray-500 text-center py-6">Aucune réponse pour ce tweet.</p>
+    @endif
+  </div>
+</section>
+
+
+
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const tweetId = btn.dataset.tweetId
+    const countEl = btn.querySelector('.like-count')
+    const heartEl = btn.querySelector('i')
+
+    try {
+      const res = await fetch(`/tweets/${tweetId}/like`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': '{{ csrfToken }}'
+        }
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        let count = parseInt(countEl.textContent)
+
+        if (data.action === 'liked') {
+          countEl.textContent = count + 1
+          heartEl.classList.remove('text-gray-400')
+          heartEl.classList.add('text-pink-400')
+        } else if (data.action === 'unliked') {
+          countEl.textContent = Math.max(0, count - 1)
+          heartEl.classList.remove('text-pink-400')
+          heartEl.classList.add('text-gray-400')
+        }
+      }
+
+    } catch (err) {
+      console.error('Erreur like:', err)
+    }
+  })
+})
+</script>

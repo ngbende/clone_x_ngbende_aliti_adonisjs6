@@ -1,0 +1,28 @@
+<!-- Modal de confirmation de suppression -->
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+  <div class="bg-white rounded-lg p-6 w-96">
+    <h2 class="text-lg text-black font-semibold mb-4">Confirmer la suppression</h2>
+    <p id="modalMessage" class="mb-4"></p>
+    <div class="flex justify-end gap-4">
+      <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-300 rounded">Annuler</button>
+      <form id="deleteForm" method="POST">
+        {{ csrfField() }}
+        <input type="hidden" name="_method" value="DELETE" />
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded">Supprimer</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function openDeleteModal(tweetId, tweetContent) {
+  document.getElementById("modalMessage").innerText = `Voulez-vous vraiment supprimer ce tweet : "${tweetContent}" ?`;
+  const form = document.getElementById("deleteForm");
+  form.action = `/tweets/${tweetId}/delete`; // route DELETE
+  document.getElementById("deleteModal").classList.remove("hidden");
+}
+
+function closeDeleteModal() {
+  document.getElementById("deleteModal").classList.add("hidden");
+}
+</script>
