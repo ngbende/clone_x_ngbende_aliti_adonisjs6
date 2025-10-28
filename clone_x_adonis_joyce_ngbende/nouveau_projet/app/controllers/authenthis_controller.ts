@@ -4,9 +4,19 @@ import User from '#models/user'
 import mail from '@adonisjs/mail/services/main'
 import crypto from 'node:crypto'
 import env from '#start/env'
+import Tweet from '#models/tweet'
 export default class AuthenthisController {
   public async showHomeUser({ view }: HttpContext) {
-    return view.render('pages/home')
+    const tweets = await Tweet.query()
+      .whereNull('parentId') // 🔹 uniquement les tweets parents
+      .preload('user')
+      .preload('medias') // pour récupérer l'utilisateur lié
+      .orderBy('created_at', 'desc')
+
+    return view.render('pages/home', {
+      User,
+      tweets, // on envoie les tweets à la vue
+    })
   }
 
   public async showSignUp({ view }: HttpContext) {
