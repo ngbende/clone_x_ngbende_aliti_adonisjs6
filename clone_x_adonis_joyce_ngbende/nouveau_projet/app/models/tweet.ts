@@ -15,6 +15,14 @@ export default class Tweet extends BaseModel {
   @column()
   declare content: string
 
+  // Clé étrangère vers l'utilisateur qui a posté le tweet
+  @column()
+  declare userId: number
+
+  // Clé étrangère optionnelle vers le tweet parent (si c'est une réponse)
+  @column()
+  declare parentId?: number | null
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
