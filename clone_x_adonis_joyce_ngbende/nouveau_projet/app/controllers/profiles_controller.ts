@@ -122,7 +122,7 @@ export default class ProfilesController {
     const { username, type } = params
 
     const user = await User.query()
-      .where('nom', username) // ✅ ici
+      .where('nom', username) //  ici
       .preload('followers')
       .preload('following')
       .firstOrFail()
