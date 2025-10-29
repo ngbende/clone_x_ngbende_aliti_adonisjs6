@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Recherche</title>
+</head>
+
+<body class="bg-black text-white">
+@include('partials/header')
+
+<main class="ml-[20%] w-2/4 border-l border-r border-gray-700 min-h-screen p-4">
+
+  <form action="{{ route('search') }}" method="GET" class="mb-4">
+    <input
+      type="text"
+      name="query"
+      value="{{ query }}"
+      placeholder="Recherche..."
+      class="w-full p-2 rounded bg-gray-800 border border-gray-600"
+    />
+  </form>
+
+  <h2 class="font-bold text-lg mb-3">Utilisateurs</h2>
+  @if(users.length === 0)
+    <p class="text-gray-500 text-sm">Aucun utilisateur trouvé.</p>
+  @endif
+
+  @each(user in users)
+   <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-3 mb-2">
+  <img src="{{ user.photoProfil }}" class="w-10 h-10 rounded-full">
+  <span>{{ user.nom }} {{ user.prenom }}</span>
+</a>
+  @endeach
+
+  <h2 class="font-bold text-lg mt-6 mb-3">Tweets</h2>
+  @if(tweets.length === 0)
+    <p class="text-gray-500 text-sm">Aucun tweet trouvé.</p>
+  @endif
+
+  @each(tweet in tweets)
+    @include('partials/tweetSection')
+  @endeach
+
+</main>
+</body>
+</html>

@@ -13,6 +13,7 @@ import GestionTweetsController from '#controllers/gestion_tweets_controller'
 import profilesController from '#controllers/profiles_controller'
 import InteractionsTweetsController from '#controllers/interactions_tweets_controller'
 import FollowsController from '#controllers/follows_controller'
+import SearchController from '#controllers/searches_controller'
 
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
@@ -142,6 +143,9 @@ router
   .where('type', 'followers|followings')
   .as('profile.follows')
   .use(middleware.auth())
+
+// route pour la recherche
+router.get('/search', [SearchController, 'index']).as('search')
 
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW
