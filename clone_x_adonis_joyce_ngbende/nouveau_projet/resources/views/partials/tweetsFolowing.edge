@@ -1,0 +1,41 @@
+@each(tweet in tweets)
+  <div class="tweet flex flex-col border-b border-gray-700 text-white p-4">
+    <div class="flex gap-3 items-center">
+      <img src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+           alt="{{ tweet.user.nom }}" class="w-10 h-10 rounded-full"/>
+      <div class="flex flex-col">
+        <span class="font-bold">{{ tweet.user.nom }} {{ tweet.user.prenom }}</span>
+        <span class="text-gray-400 text-sm">'@'{{ tweet.user.nom }}</span>
+      </div>
+    </div>
+
+    <p class="mt-2">{{ tweet.content }}</p>
+
+    @if(tweet.medias)
+      <div class="flex flex-wrap gap-2 mt-2">
+        @each(media in tweet.medias)
+          @if(media.type === 'image')
+            <img src="{{ media.url }}" class="rounded-lg w-40 h-40 object-cover" />
+          @elseif(media.type === 'video')
+            <video controls class="rounded-lg w-40 h-40 object-cover">
+              <source src="{{ media.url }}" type="video/mp4">
+            </video>
+          @endif
+        @endeach
+      </div>
+    @endif
+
+    <!-- Boutons like / retweet -->
+    <div class="flex justify-between mt-3">
+      <button class="like-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+        <i class="text-gray-400 lucide-heart"></i>
+        <span class="like-count">{{ tweet.likes_count || 0 }}</span>
+      </button>
+
+      <button class="retweet-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+        <i class="text-gray-400 lucide-repeat"></i>
+        <span class="retweet-count">{{ tweet.retweets_count || 0 }}</span>
+      </button>
+    </div>
+  </div>
+@endeach

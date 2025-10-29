@@ -12,6 +12,7 @@ import { middleware } from '#start/kernel'
 import GestionTweetsController from '#controllers/gestion_tweets_controller'
 import profilesController from '#controllers/profiles_controller'
 import InteractionsTweetsController from '#controllers/interactions_tweets_controller'
+import FollowsController from '#controllers/follows_controller'
 
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
@@ -105,3 +106,54 @@ router
   .get('/profile/tweets/:id/reply', [profilesController, 'repliesPartial'])
   .as('profile.tweets.reply')
   .use(middleware.auth())
+
+// routes pour les follow/unfollow
+router
+  .post('/follow/:id/toggle', [FollowsController, 'toggleFollow'])
+  .as('user.follow')
+  .use(middleware.auth())
+
+// router
+//   .post('/unfollow/:id', [FollowsController, 'unfollowUser'])
+//   .as('user.unfollow')
+//   .use(middleware.auth())
+
+// routes pour récupérer les followers et followings
+router
+  .get('/users/:id/followers', [FollowsController, 'getFollowers'])
+  .as('user.followers')
+  .use(middleware.auth())
+
+router
+  .get('/users/:id/followings', [FollowsController, 'getFollowings'])
+  .as('user.followings')
+  .use(middleware.auth())
+
+// routes pour les tweets des utilisateurs suivis
+router
+  .get('/tweets/following', [FollowsController, 'tweetsFollowing'])
+  .as('tweets.following')
+  .use(middleware.auth())
+
+// routes pour la liste des followers et followings
+// start/routes.ts
+router
+  .get('/profile/:username/:type', [profilesController, 'showFollows'])
+  .where('type', 'followers|followings')
+  .as('profile.follows')
+  .use(middleware.auth())
+
+// ✅ Routes API AUTH pour test avec script externe
+// ✅ Routes API AUTH + FOLLOW
+// router
+//   .group(() => {
+//     router.post('/login', [AuthenthisController, 'apiLogin'])
+//     router.post('/logout', [AuthenthisController, 'apiLogout']).use(middleware.auth())
+
+//     router.post('/follow/:id', [FollowsController, 'followUser']).use(middleware.auth())
+//     router.post('/unfollow/:id', [FollowsController, 'unfollowUser']).use(middleware.auth())
+
+//     router.get('/users/:id/followers', [FollowsController, 'getFollowers']).use(middleware.auth())
+//     router.get('/users/:id/followings', [FollowsController, 'getFollowings']).use(middleware.auth())
+//   })
+//   .prefix('api')

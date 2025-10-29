@@ -5,17 +5,36 @@ import mail from '@adonisjs/mail/services/main'
 import crypto from 'node:crypto'
 import env from '#start/env'
 import Tweet from '#models/tweet'
+import Follow from '#models/follow'
+
 export default class AuthenthisController {
-  public async showHomeUser({ view }: HttpContext) {
+  public async showHomeUser({ view, auth }: HttpContext) {
     const tweets = await Tweet.query()
       .whereNull('parentId') // 🔹 uniquement les tweets parents
       .preload('user')
       .preload('medias') // pour récupérer l'utilisateur lié
       .orderBy('created_at', 'desc')
+    // Récupérer les suggestions
+    const suggestions = await User.query().whereNot('id', auth.user!.id).limit(3)
 
+    // Vérifier pour chaque suggestion si l'utilisateur connecté les suit déjà
+    const suggestionsWithFollowState = await Promise.all(
+      suggestions.map(async (user) => {
+        const isFollowing = await Follow.query()
+          .where('followerId', auth.user!.id)
+          .andWhere('followedId', user.id)
+          .first()
+
+        return {
+          ...user.toJSON(),
+          isFollowing: !!isFollowing,
+        }
+      })
+    )
     return view.render('pages/home', {
-      User,
+      User: auth.user,
       tweets, // on envoie les tweets à la vue
+      suggestions: suggestionsWithFollowState,
     })
   }
 

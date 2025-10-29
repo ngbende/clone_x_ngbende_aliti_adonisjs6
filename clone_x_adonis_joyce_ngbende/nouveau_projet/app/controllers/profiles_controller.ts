@@ -2,13 +2,19 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Tweet from '#models/tweet'
 import User from '#models/user'
 import Retweet from '#models/retweet'
+import Follow from '#models/follow'
 
 export default class ProfilesController {
   /**
    * Profil de l'utilisateur connecté
    */
   public async myProfile({ auth, view }: HttpContext) {
-    const user = auth.user
+    const user = await User.query()
+      .where('id', auth.user!.id)
+      .preload('followers')
+      .preload('following')
+      .firstOrFail()
+
     if (!user) {
       return view.render('pages/auth/login', {
         error: 'Connectez-vous pour voir votre profil.',
@@ -57,7 +63,11 @@ export default class ProfilesController {
    * Profil d'un autre utilisateur
    */
   public async showUserProfile({ params, view }: HttpContext) {
-    const user = await User.findOrFail(params.id)
+    const user = await User.query()
+      .where('id', params.id)
+      .preload('followers')
+      .preload('following')
+      .firstOrFail()
 
     // Tweets écrits par cet utilisateur
     const tweets = await Tweet.query()
@@ -106,5 +116,29 @@ export default class ProfilesController {
       .firstOrFail()
 
     return view.render('views/partials/reply', { tweet })
+  }
+
+  public async showFollows({ params, view }: HttpContext) {
+    const { username, type } = params
+
+    const user = await User.query()
+      .where('nom', username) // ✅ ici
+      .preload('followers')
+      .preload('following')
+      .firstOrFail()
+
+    let list = []
+
+    if (type === 'followers') {
+      const followers = await Follow.query().where('followed_id', user.id).preload('follower')
+      list = followers.map((f) => f.follower)
+    } else if (type === 'followings') {
+      const followings = await Follow.query().where('follower_id', user.id).preload('followed')
+      list = followings.map((f) => f.followed)
+    } else {
+      return view.render('errors/not-found')
+    }
+
+    return view.render('pages/folowsLists', { user, users: list, type })
   }
 }

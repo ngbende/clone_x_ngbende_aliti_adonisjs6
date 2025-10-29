@@ -17,67 +17,40 @@
       class="w-4 h-4 absolute top-1/2 left-3 transform -translate-y-1/2"
     />
   </div>
-  <div
-    id="case_suggestion"
-    class="flex flex-col w-full relative h-75 border-[1px] border-gray-300 rounded-xl right-10 p-5 gap-4"
-  >
-    <h3 class="font-bold text-2xl text-white">
-      Vous pourriez aimer
-    </h3>
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_1.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          *Urbano*
-        </p>
-        <p>
-          @Urbano_N
-        </p>
+ <div id="case_suggestion" class="flex flex-col w-full relative h-75 border-[1px] border-gray-300 rounded-xl right-10 p-5 gap-4">
+  <h3 class="font-bold text-2xl text-white">Vous pourriez aimer</h3>
+
+ @if(!suggestions || suggestions.length === 0)
+
+    <p class="text-gray-400 text-sm">Aucun utilisateur à suggérer</p>
+  @endif
+
+  @each(s in suggestions)
+    <div class="flex flex-row text-white gap-3 justify-between items-center">
+      <div class="flex flex-row gap-3 items-center">
+        <img 
+          src="{{ s.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+          alt="profil_sugg" 
+          class="rounded-full w-11 h-11"
+        />
+        <div class="flex flex-col">
+          <p>{{ s.nom }}</p>
+          <p class="text-gray-400">@user{{ s.id }}</p>
+        </div>
       </div>
 
-      <button class="text-black bg-white border-white border-[2px] rounded-full text-sm p-1 w-[80px] ml-17">
-        Suivre
-          </button>
+   <button
+  type="submit"
+  data-user-id="{{ s.id }}"
+  class="follow-btn text-sm px-3 py-1 rounded-full
+    {{ s.isFollowing ? 'bg-gray-500 text-white' : 'bg-white text-black' }}">
+  {{ s.isFollowing ? 'Suivi ✔️' : 'Suivre' }}
+</button>
+
     </div>
+  @endeach
+</div>
 
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_2.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          Bernard BAHATI
-        </p>
-        <p>
-          @Bernard_bahati
-        </p>
-      </div>
-
-      <button
-        class="items-center text-black bg-white border-white border-[2px] rounded-full text-sm w-[80px] ml-8"
-      >
-        Suivre
-          </button>
-    </div>
-
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_3.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          Billy
-        </p>
-        <p>
-          @RebeuDeter
-        </p>
-      </div>
-
-      <button
-        class="items-center text-black bg-white border-white border-[2px] rounded-full text-sm p-1 w-[80px] ml-14"
-      >
-        Suivre
-          </button>
-    </div>
-
-    <a href="#" class="text-blue-600">Afficher plus</a>
-  </div>
   <div
     id="case_tendance"
     class="flex flex-col w-full relative h-100 border-[1px] border-gray-300 rounded-xl right-10 p-5 gap-4 text-white"
