@@ -16,7 +16,7 @@
     @include('partials/header')
        @!component('components/logoutModal')
 
-    <main id="main_profil" class="ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-2/4">
+    <main id="main_profil" class="relative z-10 ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-[60%] md:w-[55%] lg:w-[50%]">
       <div
         class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
       >
@@ -102,7 +102,7 @@
         </div>
       </section>
 
-      <section class="post_tweets flex flex-col w-full border-b border-gray-700 text-white">
+      <section class="post_tweets flex flex-col border-b border-gray-700 text-white">
          @each(tweet in tweets)
           @include('partials/tweetSection')
          @!component('components/reponseForm')
@@ -276,7 +276,14 @@ document.querySelectorAll('.follow-btn').forEach(btn => {
   })
 })
 </script>
+  <div
+      class="div-bar fixed left-[20%] top-0 w-px h-screen bg-gray-700 z-50 sm:block fixed left-67 top-0 w-px h-screen bg-gray-700 z-50"
+    ></div>
 
+    <!-- Ligne entre main et search -->
+    <div
+      class="div-bar hidden sm:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50"
+    ></div>
   </body>
 </html>
 {{--  <script>

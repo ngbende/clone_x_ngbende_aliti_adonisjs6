@@ -85,7 +85,17 @@
    <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')" class="hover:text-red-400">
   Supprimer
 </button>
-
+ <!-- Bouton Bloquer/Débloquer -->
+  @if(auth.user.id !== tweet.user.id)
+    <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST">
+      {{ csrfField() }}
+      <button type="submit"
+              class="px-3 py-1 rounded-lg text-sm font-semibold
+                     {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }}">
+        {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+      </button>
+    </form>
+  @endif
         </div>
 
       </div>
