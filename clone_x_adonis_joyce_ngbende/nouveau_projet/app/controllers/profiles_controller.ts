@@ -3,6 +3,7 @@ import Tweet from '#models/tweet'
 import User from '#models/user'
 import Retweet from '#models/retweet'
 import Follow from '#models/follow'
+import Block from '#models/block'
 
 export default class ProfilesController {
   /**
@@ -56,13 +57,13 @@ export default class ProfilesController {
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
 
-    return view.render('pages/profile', { user, tweets: allTweets })
+    return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false })
   }
 
   /**
    * Profil d'un autre utilisateur
    */
-  public async showUserProfile({ params, view }: HttpContext) {
+  public async showUserProfile({ params, view, auth }: HttpContext) {
     const user = await User.query()
       .where('id', params.id)
       .preload('followers')
@@ -103,8 +104,19 @@ export default class ProfilesController {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
+    // Vérifier si l'utilisateur connecté a bloqué ce profil
+    const isBlocked = await user.isBlockedBy(auth.user!.id)
+    // Dans showUserProfile
+    const blocked = await Block.query()
+      .where('blocker_id', user.id) // le profil que je consulte
+      .andWhere('blocked_id', auth.user!.id) // moi
+      .first()
 
-    return view.render('pages/profile', { user, tweets: allTweets })
+    if (blocked) {
+      return view.render('pages/profile', { user, tweets: [], isBlocked: true })
+    }
+
+    return view.render('pages/profile', { user, tweets: allTweets, isBlocked })
   }
 
   public async repliesPartial({ view, params }: HttpContext) {

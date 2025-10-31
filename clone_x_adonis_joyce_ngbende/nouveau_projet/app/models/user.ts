@@ -81,6 +81,22 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Block, { foreignKey: 'blockerId' })
   declare blockedUsers: HasMany<typeof Block>
 
+  public async isBlocking(userId: number): Promise<boolean> {
+    const exists = await Block.query()
+      .where('blocker_id', this.id)
+      .andWhere('blocked_id', userId)
+      .first()
+    return !!exists
+  }
+
+  public async isBlockedBy(userId: number): Promise<boolean> {
+    const exists = await Block.query()
+      .where('blocker_id', userId)
+      .andWhere('blocked_id', this.id)
+      .first()
+    return !!exists
+  }
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

@@ -14,6 +14,7 @@ import profilesController from '#controllers/profiles_controller'
 import InteractionsTweetsController from '#controllers/interactions_tweets_controller'
 import FollowsController from '#controllers/follows_controller'
 import SearchController from '#controllers/searches_controller'
+import BlocksController from '#controllers/blocks_controller'
 
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
@@ -69,13 +70,16 @@ router
   .use(middleware.auth())
 
 // route pour les reponses aux tweets
-router.get('/tweet/:id', [GestionTweetsController, 'show']).as('tweet.show')
+router
+  .get('/tweet/:id', [GestionTweetsController, 'show'])
+  .as('tweet.show')
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour les reponses aux tweets
 router
   .post('/tweets/:id/reply', [GestionTweetsController, 'reply'])
   .as('tweets.reply')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour supprimer un tweet
 router
@@ -88,19 +92,18 @@ router.get('/profile', [profilesController, 'myProfile']).as('profile.my').use(m
 router
   .get('/users/:id', [profilesController, 'showUserProfile'])
   .as('profile.show')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour les interactions (like/unlike) sur les tweets
 router
   .post('/tweets/:id/like', [InteractionsTweetsController, 'toggleLike'])
   .as('tweets.like')
-  .use(middleware.auth())
-
+  .use([middleware.auth(), middleware.checkBlocked()])
 // route pour les retweets
 router
   .post('/tweets/:id/retweet', [InteractionsTweetsController, 'toggleRetweet'])
   .as('tweets.retweet')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour les reponses aux tweets dans la page profil
 router
@@ -112,7 +115,7 @@ router
 router
   .post('/follow/:id/toggle', [FollowsController, 'toggleFollow'])
   .as('user.follow')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // router
 //   .post('/unfollow/:id', [FollowsController, 'unfollowUser'])
@@ -123,12 +126,12 @@ router
 router
   .get('/users/:id/followers', [FollowsController, 'getFollowers'])
   .as('user.followers')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 router
   .get('/users/:id/followings', [FollowsController, 'getFollowings'])
   .as('user.followings')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // routes pour les tweets des utilisateurs suivis
 router
@@ -142,10 +145,16 @@ router
   .get('/profile/:username/:type', [profilesController, 'showFollows'])
   .where('type', 'followers|followings')
   .as('profile.follows')
-  .use(middleware.auth())
+  .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour la recherche
 router.get('/search', [SearchController, 'index']).as('search')
+
+// routes pour les blocages
+router
+  .post('/users/:id/block', [BlocksController, 'toggle'])
+  .as('user.block')
+  .use(middleware.auth())
 
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW

@@ -72,6 +72,24 @@
     </a>
   </p>
     </div>
+   @if(auth.user.id !== user.id)
+  <form 
+    action="{{ route('user.block', { id: user.id }) }}" 
+    method="POST"
+    class="inline-block"
+  >
+    {{ csrfField() }}
+    <button 
+      type="submit"
+      class="px-3 py-1 rounded-lg text-sm font-semibold 
+             {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }}"
+    >
+      {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+    </button>
+  </form>
+@endif
+
+
   </div>
 
   <!-- Onglets profil -->
