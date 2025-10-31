@@ -15,7 +15,7 @@ export default class AuthenthisController {
       .preload('medias') // pour récupérer l'utilisateur lié
       .orderBy('created_at', 'desc')
     // Récupérer les suggestions
-    const suggestions = await User.query().whereNot('id', auth.user!.id).limit(3)
+    const suggestions = await User.query().whereNot('id', auth.user!.id)
 
     // Vérifier pour chaque suggestion si l'utilisateur connecté les suit déjà
     const suggestionsWithFollowState = await Promise.all(

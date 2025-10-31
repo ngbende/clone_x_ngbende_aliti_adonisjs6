@@ -29,29 +29,34 @@
   @endif
 
   @each(s in suggestions)
-    <div class="flex flex-row text-white gap-3 justify-between items-center">
-      <div class="flex flex-row gap-3 items-center">
-        <img 
-          src="{{ s.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
-          alt="profil_sugg" 
-          class="rounded-full w-11 h-11"
-        />
-        <div class="flex flex-col">
-          <p>{{ s.nom }}</p>
-          <p class="text-gray-400">@user{{ s.id }}</p>
-        </div>
+  <div class="flex flex-row text-white gap-3 justify-between items-center">
+    <!-- Lien vers le profil -->
+    <a href="{{ route('profile.show', { id: s.id }) }}" class="flex flex-row gap-3 items-center">
+      <img 
+        src="{{ s.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+        alt="profil_sugg" 
+        class="rounded-full w-11 h-11"
+      />
+      <div class="flex flex-col">
+        <p>{{ s.nom }}</p>
+        <p class="text-gray-400">@user{{ s.id }}</p>
+        @if(s.isPrivate)
+          <span class="text-yellow-400 text-xs">Compte privé 🔒</span>
+        @endif
       </div>
+    </a>
 
-   <button
-  type="submit"
-  data-user-id="{{ s.id }}"
-  class="follow-btn text-sm px-3 py-1 rounded-full
-    {{ s.isFollowing ? 'bg-gray-500 text-white' : 'bg-white text-black' }}">
-  {{ s.isFollowing ? 'Suivi ✔️' : 'Suivre' }}
-</button>
+    <!-- Bouton follow avec la logique existante -->
+    <button
+      type="button"
+      data-user-id="{{ s.id }}"
+      class="follow-btn text-sm px-3 py-1 rounded-full
+        {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+      {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+    </button>
+  </div>
+@endeach
 
-    </div>
-  @endeach
 </div>
 
   <div

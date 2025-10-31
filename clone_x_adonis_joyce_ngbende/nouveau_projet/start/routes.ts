@@ -19,6 +19,8 @@ import BlocksController from '#controllers/blocks_controller'
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 import repl from '@adonisjs/core/services/repl'
+import FollowRequestsController from '#controllers/follow_requests_controller'
+import ModifProfilesController from '#controllers/modif_profiles_controller'
 
 router.on('/').render('pages/auth/homeAuth')
 
@@ -79,7 +81,7 @@ router
 router
   .post('/tweets/:id/reply', [GestionTweetsController, 'reply'])
   .as('tweets.reply')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 // route pour supprimer un tweet
 router
@@ -92,18 +94,18 @@ router.get('/profile', [profilesController, 'myProfile']).as('profile.my').use(m
 router
   .get('/users/:id', [profilesController, 'showUserProfile'])
   .as('profile.show')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 // route pour les interactions (like/unlike) sur les tweets
 router
   .post('/tweets/:id/like', [InteractionsTweetsController, 'toggleLike'])
   .as('tweets.like')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 // route pour les retweets
 router
   .post('/tweets/:id/retweet', [InteractionsTweetsController, 'toggleRetweet'])
   .as('tweets.retweet')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 // route pour les reponses aux tweets dans la page profil
 router
@@ -115,7 +117,7 @@ router
 router
   .post('/follow/:id/toggle', [FollowsController, 'toggleFollow'])
   .as('user.follow')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 // router
 //   .post('/unfollow/:id', [FollowsController, 'unfollowUser'])
@@ -126,12 +128,12 @@ router
 router
   .get('/users/:id/followers', [FollowsController, 'getFollowers'])
   .as('user.followers')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 router
   .get('/users/:id/followings', [FollowsController, 'getFollowings'])
   .as('user.followings')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
 
 // routes pour les tweets des utilisateurs suivis
 router
@@ -155,6 +157,43 @@ router
   .post('/users/:id/block', [BlocksController, 'toggle'])
   .as('user.block')
   .use(middleware.auth())
+
+// route pour les demandes de suivi et compte privée
+// Toggle follow / demande
+router
+  .post('/follow/:id/request', [FollowRequestsController, 'toggle'])
+  .as('user.request')
+  .use([middleware.auth(), middleware.checkBlocked()])
+
+// Accepter une demande
+router
+  .post('/follow-requests/:id/accept', [FollowRequestsController, 'accept'])
+  .as('follow.accept')
+  .use([middleware.auth()])
+
+// Refuser une demande
+router
+  .post('/follow-requests/:id/reject', [FollowRequestsController, 'reject'])
+  .as('follow.reject')
+  .use([middleware.auth()])
+
+// Voir mes demandes reçues
+router
+  .get('/follow-requests/received', [FollowRequestsController, 'received'])
+  .as('follow.received')
+  .use([middleware.auth()])
+
+// route pour afficher la page de modification de profil
+router
+  .get('/user/editProfil', [ModifProfilesController, 'modifPage'])
+  .as('profile.edit')
+  .use([middleware.auth()])
+
+// route pour mettre le compte en prive
+router
+  .post('/user/updatePrivate', [ModifProfilesController, 'updatePrivate'])
+  .as('user.updateProfil')
+  .use([middleware.auth()])
 
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW

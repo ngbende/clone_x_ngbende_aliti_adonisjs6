@@ -10,6 +10,7 @@ import Retweet from './retweet.js'
 import GrokSuggestion from './grok_suggestion.js'
 import Follow from './follow.js'
 import Block from './block.js'
+import FollowRequest from './follow_request.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
@@ -43,7 +44,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare website: string | null
 
-  @column({ serializeAs: 'isPrivate' })
+  @column({ columnName: 'isPrivate' })
   declare isPrivate: boolean
 
   @column({ serializeAs: 'photoProfil' })
@@ -96,6 +97,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
       .first()
     return !!exists
   }
+  @hasMany(() => FollowRequest, { foreignKey: 'demandeur_id' })
+  declare sentFollowRequests: HasMany<typeof FollowRequest>
+
+  @hasMany(() => FollowRequest, { foreignKey: 'cible_id' })
+  declare receivedFollowRequests: HasMany<typeof FollowRequest>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

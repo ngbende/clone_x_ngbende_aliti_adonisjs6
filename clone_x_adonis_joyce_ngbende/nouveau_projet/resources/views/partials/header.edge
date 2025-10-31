@@ -29,6 +29,20 @@
         Notifications
       </p>
     </a>
+    {{-- 🔔 Lien pour les demandes de suivi (visible seulement si compte privé) --}}
+@if(auth.user && auth.user.isPrivate)
+  <a href="{{ route('follow.received') }}" class="link-nav flex flex-row items-center gap-4 ml-4">
+    <img
+      width="25"
+      height="25"
+      src="https://img.icons8.com/ios-filled/50/FFFFFF/add-user-group-man-man.png"
+      alt="follow-requests"
+    />
+    <p class="text-white text-sm w-auto sm:w-[300px]">
+      Demandes de suivi
+    </p>
+  </a>
+@endif
     <a href="" class=" link-nav flex flex-row items-center gap-4">
       <img
         width="23"

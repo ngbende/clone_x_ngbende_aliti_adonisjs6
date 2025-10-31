@@ -27,11 +27,34 @@
   @endif
 
   @each(user in users)
-   <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-3 mb-2">
-  <img src="{{ user.photoProfil }}" class="w-10 h-10 rounded-full">
-  <span>{{ user.nom }} {{ user.prenom }}</span>
-</a>
-  @endeach
+<div class="flex items-center gap-3 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors">
+  <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-3 flex-1">
+    <img 
+      src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+      alt="avatar" 
+      class="w-10 h-10 rounded-full"
+    />
+    <div class="flex flex-col">
+      <p class="text-white font-semibold">{{ user.nom }} {{ user.prenom }}</p>
+    </div>
+  </a>
+
+  <button
+    type="button"
+    data-user-id="{{ user.id }}"
+    data-is-private="{{ user.isPrivate }}"
+    class="follow-btn text-sm px-3 py-1 rounded-full
+      {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
+        : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
+        : 'bg-white text-black' }}">
+    {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
+      : user.followStatus === 'pending' ? 'En attente ⏳' 
+      : (user.isPrivate ? 'Demander à suivre 🔒' : 'Suivre') }}
+  </button>
+</div>
+@endeach
+
+
 
   <h2 class="font-bold text-lg mt-6 mb-3">Tweets</h2>
   @if(tweets.length === 0)
@@ -43,5 +66,42 @@
   @endeach
 
 </main>
+{{--  <script>
+document.querySelectorAll('.follow-btn').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    e.preventDefault()
+    const userId = btn.dataset.userId
+    const isPrivate = btn.dataset.isPrivate === 'true'
+
+    try {
+      const res = await fetch(`/follow/${userId}/toggle`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrfToken }}',
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+
+      const data = await res.json()
+
+      if (data.status === 'followed') {
+        btn.textContent = 'Suivi ✔️'
+        btn.classList.remove('bg-white', 'text-black', 'bg-yellow-500')
+        btn.classList.add('bg-gray-600', 'text-white')
+      } else if (data.status === 'unfollowed') {
+        btn.textContent = isPrivate ? 'Demander à suivre 🔒' : 'Suivre'
+        btn.classList.remove('bg-gray-600', 'text-white', 'bg-yellow-500')
+        btn.classList.add('bg-white', 'text-black')
+      }
+    } catch (err) {
+      console.error('Erreur toggle follow:', err)
+    }
+  })
+})
+
+
+</script>  --}}
+
+
 </body>
 </html>
