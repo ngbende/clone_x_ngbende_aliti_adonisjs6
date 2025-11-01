@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Document
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+
+    </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  </head>
+  <body class="bg-black w-full flex flex-col h-screen">
+    @include('partials/header')
+       @!component('components/logoutModal')
+
+    <main id="main_profil" class="relative z-10 ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-[60%] md:w-[55%] lg:w-[50%]">
+      <div
+        class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
+      >
+        <div class="flex flex-row items-center gap-8 sm:gap-x-52">
+          <a class="text-white text-sm">Pour vous</a>
+          <a href="{{route ('tweets.following')}}" class="text-white text-sm">Abonnements</a>
+        </div>
+      </div>
+
+      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full sm:h-40">
+        <div class="bg-black w-auto sm:h-96 relative flex flex-col items-start">
+
+          <div class="flex flex-row p-5 gap-2 w-full">
+            <a id="username_profil" class="text-white text-sm">
+              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+            </a>
+            <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data">
+            {{ csrfField() }}
+
+                <input
+              id="tweets"
+              type="text"
+              name="inputTweet"
+              placeholder="Que se passe-t-il?"
+              class="border-none rounded-md text-base sm:text-2xl text-white flex-1 bg-transparent focus:outline-none"
+            />
+             <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
+             <!-- Input vidéo caché -->
+<input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
+            <button
+            type="submit"
+            class="btn_post right-3 absolute mt-[4.5rem] sm:mt-11 text-black bg-white border-white border-[2px] rounded-full text-sm sm:text-xl p-2 w-[90px] sm:w-[100px]"
+          >
+            Poster
+          </button></form>
+          
+          </div>
+
+          <!-- Section prévisualisation vidéo -->
+<section class="video_section flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto" style="display:none">
+  <video id="videoPreview" controls class="rounded-lg w-60 h-55 object-cover" style="display:none"></video>
+</section>
+
+          <section
+            class="img_section none flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto"
+            style="display: none"
+          >
+            <img id="imagePreview" style="display: none" class="rounded-lg w-60 h-55 object-cover" />
+          </section>
+
+          <div class="flex px-6 gap-4 mt-5 border-b-2 border-gray-700 w-full pb-3">
+            <img src="assets/galerie_twees.png" alt="" id="image_tweet" class="cursor-pointer" />
+           
+
+           {{-- Galerie (upload image) --}}
+  <button id="openFilePicker" class="cursor-pointer text-white">
+ <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+  </button>
+  
+  <!-- Bouton pour ouvrir le picker vidéo -->
+<button id="openVideoPicker" class="cursor-pointer text-white">
+  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+</button>
+  {{-- Gif --}}
+  <button class="text-white">
+ <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />  </button>
+
+  {{-- Sondage --}}
+  <a href="#" class="text-white">
+    @include('components/icones/pol')
+  </a>
+
+  {{-- Calendrier --}}
+  <a href="#" class="text-white ">
+    @include('components/icones/calendrier')
+  </a>
+
+  {{-- Localisation --}}
+  <a href="#" class="text-white">
+    @include('components/icones/localisation')
+  </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="post_tweets flex flex-col border-b border-gray-700 text-white">
+         @each(tweet in tweets)
+          @include('partials/sectionHashtags')
+         @!component('components/reponseForm')
+         @!component('components/deleteTweet')
+
+          {{--  @!component('components/reponseForm')  --}}
+        @endeach
+
+        <!-- <div id="icon_reaction" class="flex w-full justify-between p-4"></div> -->
+      </section>
+    </main>
+
+    @include('partials/sectionFolowSearch')
+
+  <script>
+  const fileBtn = document.getElementById('openFilePicker')
+  const fileInput = document.getElementById('imageInput')
+  const previewContainer = document.querySelector('.img_section')
+  const preview = document.getElementById('imagePreview')
+
+  fileBtn.addEventListener('click', () => {
+    fileInput.click()
+  })
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      preview.src = reader.result
+      preview.style.display = 'block'
+      previewContainer.style.display = 'flex'
+    }
+    reader.readAsDataURL(file)
+  })
+
+  const videoBtn = document.getElementById('openVideoPicker')
+const videoInput = document.getElementById('videoInput')
+const videoPreviewContainer = document.querySelector('.video_section')
+const videoPreview = document.getElementById('videoPreview')
+
+videoBtn.addEventListener('click', () => {
+  videoInput.click()
+})
+
+videoInput.addEventListener('change', () => {
+  const file = videoInput.files[0]
+  if (!file) return
+
+  const url = URL.createObjectURL(file)
+  videoPreview.src = url
+  videoPreview.style.display = 'block'
+  videoPreviewContainer.style.display = 'flex'
+
+  videoPreview.onloadedmetadata = () => {
+    console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`)
+  }
+})
+</script>
+
+<script>
+  lucide.createIcons();
+</script>
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const tweetId = btn.dataset.tweetId
+    const countEl = btn.querySelector('.like-count')
+    const heartEl = btn.querySelector('i')
+
+    try {
+      const res = await fetch(`/tweets/${tweetId}/like`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': '{{ csrfToken }}'
+        }
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        let count = parseInt(countEl.textContent)
+
+        if (data.action === 'liked') {
+          countEl.textContent = count + 1
+          heartEl.classList.remove('text-gray-400')
+          heartEl.classList.add('text-pink-400')
+        } else if (data.action === 'unliked') {
+          countEl.textContent = Math.max(0, count - 1)
+          heartEl.classList.remove('text-pink-400')
+          heartEl.classList.add('text-gray-400')
+        }
+      }
+
+    } catch (err) {
+      console.error('Erreur like:', err)
+    }
+  })
+})
+
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.retweet-btn')
+    if (!btn) return
+
+    const tweetId = btn.dataset.tweetId
+    const countEl = btn.querySelector('.retweet-count')
+    const iconEl = btn.querySelector('i')
+
+    try {
+      const res = await fetch(`/tweets/${tweetId}/retweet`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': '{{ csrfToken }}'
+        }
+      })
+
+      const data = await res.json()
+      console.log('Toggle retweet:', data)
+
+      let count = Number(countEl.textContent)
+
+      if (data.action === 'retweeted') {
+        countEl.textContent = count + 1
+        iconEl.classList.replace('text-gray-400', 'text-green-400')
+      } else {
+        countEl.textContent = Math.max(0, count - 1)
+        iconEl.classList.replace('text-green-400', 'text-gray-400')
+      }
+
+    } catch (err) {
+      console.error('Erreur retweet:', err)
+    }
+  })
+})
+</script>
+{{--  script pour le bouton de suivi   --}}
+<script>
+document.querySelectorAll('.follow-btn').forEach(btn => {
+  btn.addEventListener('click', async e => {
+    e.preventDefault()
+    const userId = btn.dataset.userId
+
+    try {
+      const res = await fetch(`/follow/${userId}/toggle`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrfToken }}',
+          'X-Requested-With': 'XMLHttpRequest',
+        }
+      })
+
+      const data = await res.json()
+
+      if (data.status === 'followed') {
+        btn.textContent = 'Suivi ✔️'
+        btn.classList.add('bg-gray-200')
+      } else if (data.status === 'unfollowed') {
+        btn.textContent = 'Suivre'
+        btn.classList.remove('bg-gray-200')
+      }
+    } catch (err) {
+      console.error('Erreur toggle follow:', err)
+    }
+  })
+})
+</script>
+  <div
+      class="div-bar fixed left-[20%] top-0 w-px h-screen bg-gray-700 z-50 sm:block fixed left-67 top-0 w-px h-screen bg-gray-700 z-50"
+    ></div>
+
+    <!-- Ligne entre main et search -->
+    <div
+      class="div-bar hidden sm:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50"
+    ></div>
+  </body>
+</html>
+{{--  <script>
+  document.querySelectorAll('.replyBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tweetId = btn.dataset.tweetId
+      const userName = btn.dataset.userName
+      const content = btn.dataset.tweetContent
+      const avatar = btn.dataset.userAvatar
+
+      document.getElementById('parentName').innerText = userName
+      document.getElementById('parentContent').innerText = content
+      document.getElementById('parentAvatar').src = avatar
+      document.getElementById('parentIdInput').value = tweetId
+
+      document.getElementById('replyModal').classList.remove('hidden')
+    })
+  })
+
+  document.getElementById('closeReplyModal').addEventListener('click', () => {
+    document.getElementById('replyModal').classList.add('hidden')
+  })
+</script>  --}}

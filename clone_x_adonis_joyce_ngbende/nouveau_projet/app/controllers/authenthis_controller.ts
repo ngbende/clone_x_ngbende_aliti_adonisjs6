@@ -12,7 +12,8 @@ export default class AuthenthisController {
     const tweets = await Tweet.query()
       .whereNull('parentId') // 🔹 uniquement les tweets parents
       .preload('user')
-      .preload('medias') // pour récupérer l'utilisateur lié
+      .preload('medias')
+      .preload('hashtags') // pour récupérer l'utilisateur lié
       .orderBy('created_at', 'desc')
     // Récupérer les suggestions
     const suggestions = await User.query().whereNot('id', auth.user!.id)
@@ -31,6 +32,23 @@ export default class AuthenthisController {
         }
       })
     )
+    // 🔹 Ici on transforme le content en contentClean
+    tweets.forEach((tweet) => {
+      if (tweet.hashtags && tweet.hashtags.length > 0) {
+        let content = tweet.content
+        tweet.hashtags.forEach((h) => {
+          const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+          content = content.replace(
+            regex,
+            `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+          )
+        })
+        tweet.contentClean = content
+      } else {
+        tweet.contentClean = tweet.content
+      }
+    })
+
     return view.render('pages/home', {
       User: auth.user,
       tweets, // on envoie les tweets à la vue
@@ -180,3 +198,6 @@ export default class AuthenthisController {
   //   }
   // }
 }
+// function route(arg0: string, arg1: { tag: string }) {
+//   throw new Error('Function not implemented.')
+// }

@@ -21,6 +21,7 @@ import router from '@adonisjs/core/services/router'
 import repl from '@adonisjs/core/services/repl'
 import FollowRequestsController from '#controllers/follow_requests_controller'
 import ModifProfilesController from '#controllers/modif_profiles_controller'
+import HashtagsController from '#controllers/hashtags_controller'
 
 router.on('/').render('pages/auth/homeAuth')
 
@@ -193,6 +194,12 @@ router
 router
   .post('/user/updatePrivate', [ModifProfilesController, 'updatePrivate'])
   .as('user.updateProfil')
+  .use([middleware.auth()])
+
+// route pour afficher les tweet_hashtags
+router
+  .get('/hashtag/:tag', [HashtagsController, 'showHashtags'])
+  .as('hashtag.show')
   .use([middleware.auth()])
 
 // ✅ Routes API AUTH pour test avec script externe

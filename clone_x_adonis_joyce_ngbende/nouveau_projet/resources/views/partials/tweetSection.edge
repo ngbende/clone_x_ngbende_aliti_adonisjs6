@@ -26,7 +26,12 @@
 @endif
 
     {{-- Contenu du tweet --}}
-    <p class="mt-1">{{ tweet.content }}</p>
+   <p class="mt-1 leading-relaxed" x-html="tweet.contentClean">
+  {{{ tweet.contentClean }}}
+</p>
+
+
+    
     {{-- Médias --}}
   @if(tweet.medias && tweet.medias.length > 0)
   @each(media in tweet.medias)

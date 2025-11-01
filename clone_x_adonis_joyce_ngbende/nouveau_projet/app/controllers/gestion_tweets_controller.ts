@@ -5,6 +5,7 @@ import Media from '#models/media'
 
 // import User from '#models/user'
 import { promises as fs } from 'node:fs'
+import Hashtag from '#models/hashtag'
 
 export default class GestionTweetsController {
   public async createTweets({ request, auth, response }: HttpContext) {
@@ -26,6 +27,17 @@ export default class GestionTweetsController {
         content: inputTweet,
         userId: user.id,
       })
+
+      // Extraction des hashtags (#mot)
+      const hashtags = (inputTweet.match(/#\w+/g) || []).map((tag) => tag.toLowerCase())
+
+      if (hashtags.length) {
+        for (const tag of hashtags) {
+          const texteHashtag = tag.replace('#', '')
+          const hashtag = await Hashtag.firstOrCreate({ texteHashtag }, { texteHashtag })
+          await tweet.related('hashtags').sync([hashtag.id], false)
+        }
+      }
 
       // 3️⃣ Récupérer les fichiers envoyés
       const imageFile = request.file('image', {

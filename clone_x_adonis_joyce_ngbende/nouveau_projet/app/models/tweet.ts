@@ -23,6 +23,9 @@ export default class Tweet extends BaseModel {
   @column()
   declare parentId?: number | null
 
+  // ✅ ajoute cette ligne :
+  public contentClean?: string
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
