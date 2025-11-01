@@ -16,4 +16,7 @@ export default defineConfig({
       reload: ['resources/views/**/*.edge'],
     }),
   ],
+  server: {
+    allowedHosts: ['clone-x-ngbende-aliti-adonisjs6.onrender.com'],
+  },
 })
