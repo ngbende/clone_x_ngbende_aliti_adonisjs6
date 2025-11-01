@@ -64,7 +64,7 @@ export default class AuthenthisController {
     return view.render('pages/auth/login')
   }
 
-  public async createAccount({ view, request }: HttpContext) {
+  public async createAccount({ view, request, response }: HttpContext) {
     try {
       const { nom, prenom, email, telephone, password } =
         await request.validateUsing(createAcountValidator)
@@ -74,6 +74,14 @@ export default class AuthenthisController {
       //     error: 'Email already in use. Please use a different email.',
       //   })
       // }
+      // ✅ Vérifier si un utilisateur existe déjà avec cet email
+      const existingUser = await User.findBy('email', email)
+      if (existingUser) {
+        return view.render('pages/auth/signUp', {
+          error: 'Cet email est déjà utilisé. Veuillez en choisir un autre.',
+        })
+      }
+
       const verificationToken = crypto.randomBytes(32).toString('hex')
       const user = await User.create({
         nom: nom,
@@ -107,7 +115,7 @@ export default class AuthenthisController {
       //   success: 'Compte créé ! Vérifiez votre email pour activer votre compte.',
       // })
       console.log('User created successfully')
-      return view.render('pages/auth/login')
+      return response.redirect().toRoute('show.login')
 
       // return view.render('authenthis/create_account', { success: 'Compte créé avec succès !' })
     } catch (error) {
