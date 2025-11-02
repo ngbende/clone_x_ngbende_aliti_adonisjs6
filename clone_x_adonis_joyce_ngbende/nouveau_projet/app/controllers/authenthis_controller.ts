@@ -6,6 +6,7 @@ import crypto from 'node:crypto'
 import env from '#start/env'
 import Tweet from '#models/tweet'
 import Follow from '#models/follow'
+import sgMail from '@sendgrid/mail'
 
 export default class AuthenthisController {
   public async showHomeUser({ view, auth }: HttpContext) {
@@ -68,13 +69,8 @@ export default class AuthenthisController {
     try {
       const { nom, prenom, email, telephone, password } =
         await request.validateUsing(createAcountValidator)
-      // const existingUser = await User.findBy('email', email)
-      // if (existingUser) {
-      //   return view.render('authenthis/create_account', {
-      //     error: 'Email already in use. Please use a different email.',
-      //   })
-      // }
-      // ✅ Vérifier si un utilisateur existe déjà avec cet email
+
+      // Vérifie si l'utilisateur existe déjà
       const existingUser = await User.findBy('email', email)
       if (existingUser) {
         return view.render('pages/auth/signUp', {
@@ -82,42 +78,49 @@ export default class AuthenthisController {
         })
       }
 
+      // Crée le token de vérification
       const verificationToken = crypto.randomBytes(32).toString('hex')
       const user = await User.create({
-        nom: nom,
-        prenom: prenom,
-        email: email,
+        nom,
+        prenom,
+        email,
         telephone: telephone ?? undefined,
-        password: password,
+        password,
         verified: false,
-        verificationToken: verificationToken,
+        verificationToken,
       })
+
       const appUrl = env.get('APP_URL')
-      //  Crée le lien de vérification
       const verificationLink = `${appUrl}/verify-email?token=${verificationToken}`
-      //  Envoie un mail avec le lien de vérification
-      await mail.send((message) => {
-        message
-          .to(user.email)
-          .from('ngbendej@gmail.com') // <- ton email Gmail
-          .subject('Verify your email address').html(`
-      <h1> Verify email address </h1>
-      <p>
-        <a href="${verificationLink}">
-          Click here
-        </a> to verify your email address
-      </p>
-    `)
-      })
-      console.log('✅ Email envoyé à', user.email)
 
-      // return view.render('pages/auth/signUp', {
-      //   success: 'Compte créé ! Vérifiez votre email pour activer votre compte.',
-      // })
+      // Tente d'envoyer l'email de vérification, mais ne bloque pas la création si ça échoue
+      try {
+        sgMail.setApiKey(env.get('SENDGRID_API_KEY')!)
+
+        const msg = {
+          to: user.email, // 👈 le destinataire (l'utilisateur créé)
+          from: {
+            email: env.get('MAIL_FROM_ADDRESS')!, // 👈 ton expéditeur vérifié
+            name: env.get('MAIL_FROM_NAME')!,
+          },
+          subject: 'Vérifie ton adresse e-mail',
+          html: `
+      <h1>Bienvenue sur CloneX !</h1>
+      <p>Merci de t’être inscrit. Clique sur le lien ci-dessous pour vérifier ton adresse e-mail :</p>
+      <p><a href="${verificationLink}">Vérifier mon adresse e-mail</a></p>
+    `,
+        }
+
+        await sgMail.send(msg)
+        console.log('✅ Email envoyé à', user.email)
+      } catch (mailError) {
+        console.warn('⚠️ Impossible d’envoyer l’email:', mailError.message)
+      }
+
       console.log('User created successfully')
-      return response.redirect().toRoute('show.login')
 
-      // return view.render('authenthis/create_account', { success: 'Compte créé avec succès !' })
+      // Redirection vers login, succès optionnel affiché là-bas
+      return response.redirect().toRoute('show.login')
     } catch (error) {
       console.error('Error creating user:', error)
       return view.render('pages/auth/signUp', {
