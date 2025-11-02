@@ -46,4 +46,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   MAIL_FROM_ADDRESS: Env.schema.string.optional(),
   MAIL_FROM_NAME: Env.schema.string.optional(),
   SENDGRID_API_KEY: Env.schema.string.optional(),
+  MISTRAL_API_KEY: Env.schema.string.optional(),
 })

@@ -1,0 +1,57 @@
+<div class="max-w-xl mx-auto mt-10 p-4 text-white">
+  <h2 class="text-2xl font-bold mb-4 text-center">🤖 Espace IA - Grok</h2>
+
+  <!-- Génération de tweets -->
+
+  <form id="grokForm" class="flex flex-col sm:flex-row gap-2">
+    <input type="text" id="prompt" name="prompt" placeholder="Sujet du tweet..."
+           class="flex-1 p-2 rounded text-black w-full" required>
+    <button type="submit" class="bg-blue-500 px-4 py-2 rounded w-full sm:w-auto">Générer</button>
+  </form>
+  <div id="result" class="mt-4 bg-gray-800 p-4 rounded break-words"></div>
+
+  <hr class="my-6 border-gray-700">
+
+  <!-- Analyse de tweet -->
+
+  <form id="analyzeForm" class="flex flex-col sm:flex-row gap-2">
+    <input type="text" id="tweetText" name="tweetText" placeholder="Analyse ton tweet..."
+           class="flex-1 p-2 rounded text-black w-full" required>
+    <button type="submit" class="bg-green-500 px-4 py-2 rounded w-full sm:w-auto">Analyser</button>
+  </form>
+  <div id="analysis" class="mt-4 bg-gray-800 p-4 rounded break-words"></div>
+</div>
+
+<script>
+  // Génération
+  const grokForm = document.getElementById('grokForm')
+  const result = document.getElementById('result')
+
+  grokForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const prompt = document.getElementById('prompt').value
+    const res = await fetch('/grok/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    })
+    const data = await res.json()
+    result.textContent = data.content || 'Aucune réponse.'
+  })
+
+  // Analyse
+  const analyzeForm = document.getElementById('analyzeForm')
+  const analysis = document.getElementById('analysis')
+
+  analyzeForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const text = document.getElementById('tweetText').value
+    const res = await fetch('/grok/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    })
+    const data = await res.json()
+    analysis.textContent = data.analysis || 'Aucune analyse.'
+  })
+</script>

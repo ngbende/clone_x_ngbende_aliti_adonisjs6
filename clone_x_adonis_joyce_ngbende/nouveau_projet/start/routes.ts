@@ -22,7 +22,7 @@ import repl from '@adonisjs/core/services/repl'
 import FollowRequestsController from '#controllers/follow_requests_controller'
 import ModifProfilesController from '#controllers/modif_profiles_controller'
 import HashtagsController from '#controllers/hashtags_controller'
-
+import GrokController from '#controllers/groks_controller'
 router.on('/').render('pages/auth/homeAuth')
 
 // route pour la page d'acceuil
@@ -201,6 +201,24 @@ router
   .get('/hashtag/:tag', [HashtagsController, 'showHashtags'])
   .as('hashtag.show')
   .use([middleware.auth()])
+
+// les routes pour l'utilisation de grok
+router
+  .group(() => {
+    router.post('/generate', [GrokController, 'generateTweet']).as('grok.generate')
+    router.post('/suggest', [GrokController, 'suggestHashtags']).as('grok.suggest')
+    router.post('/analyze', [GrokController, 'analyzeTweet']).as('grok.analyze')
+  })
+  .prefix('/grok')
+
+// ✅ Route pour afficher la page IA Grok
+router
+  .get('/grok', async ({ view, auth }) => {
+    await auth.check()
+    return view.render('pages/grok')
+  })
+  .as('grok.page')
+  .use(middleware.auth())
 
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW
