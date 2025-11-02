@@ -1,7 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { createAcountValidator } from '#validators/validation_info'
 import User from '#models/user'
-import mail from '@adonisjs/mail/services/main'
+// import mail from '@adonisjs/mail/services/main'
 import crypto from 'node:crypto'
 import env from '#start/env'
 import Tweet from '#models/tweet'
