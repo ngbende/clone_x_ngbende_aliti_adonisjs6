@@ -9,9 +9,9 @@
 </head>
 <body class="bg-blur text-white font-sans min-h-screen flex flex-col">
 
-   @include('partials/header')
+   @include('partials/header'class="bg-bg-black")
        @!component('components/logoutModal')
-<main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 mt-24 lg:mt-0 ml-[25%] lg:ml-[20%] mr-[25%] lg:mr-[20%]">
+    <main id="main_profil" class="relative z-10 ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-[60%] md:w-[55%] lg:w-[50%]">
     <div class="bg-gray-800 p-6 sm:p-8 lg:p-10 rounded-xl shadow-lg space-y-6 max-w-2xl mx-auto">
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-300">🚀 Assistant IA Grok</h1>
@@ -47,7 +47,7 @@
 
     </div>
   </main>
-    @include('partials/sectionFolowSearch')
+    @include('partials/sectionFolowSearch'class="bg-black')
 
   <script>
     const tweetContent = document.getElementById("tweetContent");
