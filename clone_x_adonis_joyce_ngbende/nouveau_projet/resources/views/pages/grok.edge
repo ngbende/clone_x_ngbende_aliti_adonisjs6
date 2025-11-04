@@ -30,14 +30,14 @@
 
       <section class="post_tweets flex flex-col border-b border-gray-700 text-white">
          @each(tweet in tweets)
-          @include('partials/grokForm')
+    
           <div class="max-w-xl mx-auto mt-10 p-4 text-white">
   <h2 class="text-2xl font-bold mb-4 text-center">🤖 Espace IA - Grok</h2>
 
   <!-- Génération de tweets -->
 
   <form id="grokForm" class="flex flex-col sm:flex-row gap-2">
-    <input type="text" id="prompt" name="prompt" placeholder="Sujet du tweet..."
+  {{ csrfField() }}    <input type="text" id="prompt" name="prompt" placeholder="Sujet du tweet..."
            class="flex-1 p-2 rounded text-black w-full" required>
     <button type="submit" class="bg-blue-500 px-4 py-2 rounded w-full sm:w-auto">Générer</button>
   </form>
@@ -48,6 +48,7 @@
   <!-- Analyse de tweet -->
 
   <form id="analyzeForm" class="flex flex-col sm:flex-row gap-2">
+    {{ csrfField() }}
     <input type="text" id="tweetText" name="tweetText" placeholder="Analyse ton tweet..."
            class="flex-1 p-2 rounded text-black w-full" required>
     <button type="submit" class="bg-green-500 px-4 py-2 rounded w-full sm:w-auto">Analyser</button>
@@ -68,193 +69,39 @@
 
     @include('partials/sectionFolowSearch')
 
-    <script>
-  const fileBtn = document.getElementById('openFilePicker')
-  const fileInput = document.getElementById('imageInput')
-  const previewContainer = document.querySelector('.img_section')
-  const preview = document.getElementById('imagePreview')
-
-  fileBtn.addEventListener('click', () => {
-    fileInput.click()
-  })
-
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files[0]
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onload = () => {
-      preview.src = reader.result
-      preview.style.display = 'block'
-      previewContainer.style.display = 'flex'
-    }
-    reader.readAsDataURL(file)
-  })
-
-  const videoBtn = document.getElementById('openVideoPicker')
-const videoInput = document.getElementById('videoInput')
-const videoPreviewContainer = document.querySelector('.video_section')
-const videoPreview = document.getElementById('videoPreview')
-
-videoBtn.addEventListener('click', () => {
-  videoInput.click()
-})
-
-videoInput.addEventListener('change', () => {
-  const file = videoInput.files[0]
-  if (!file) return
-
-  const url = URL.createObjectURL(file)
-  videoPreview.src = url
-  videoPreview.style.display = 'block'
-  videoPreviewContainer.style.display = 'flex'
-
-  videoPreview.onloadedmetadata = () => {
-    console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`)
-  }
-})
-</script>
-
+  
 <script>
-  lucide.createIcons();
-</script>
-<script>
-document.querySelectorAll('.like-btn').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const tweetId = btn.dataset.tweetId
-    const countEl = btn.querySelector('.like-count')
-    const heartEl = btn.querySelector('i')
+  // Génération
+  const grokForm = document.getElementById('grokForm')
+  const result = document.getElementById('result')
 
-    try {
-      const res = await fetch(`/tweets/${tweetId}/like`, {
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-TOKEN': '{{ csrfToken }}'
-        }
-      })
-
-      const data = await res.json()
-
-      if (data.success) {
-        let count = parseInt(countEl.textContent)
-
-        if (data.action === 'liked') {
-          countEl.textContent = count + 1
-          heartEl.classList.remove('text-gray-400')
-          heartEl.classList.add('text-pink-400')
-        } else if (data.action === 'unliked') {
-          countEl.textContent = Math.max(0, count - 1)
-          heartEl.classList.remove('text-pink-400')
-          heartEl.classList.add('text-gray-400')
-        }
-      }
-
-    } catch (err) {
-      console.error('Erreur like:', err)
-    }
-  })
-})
-
-
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  document.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.retweet-btn')
-    if (!btn) return
-
-    const tweetId = btn.dataset.tweetId
-    const countEl = btn.querySelector('.retweet-count')
-    const iconEl = btn.querySelector('i')
-
-    try {
-      const res = await fetch(`/tweets/${tweetId}/retweet`, {
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-TOKEN': '{{ csrfToken }}'
-        }
-      })
-
-      const data = await res.json()
-      console.log('Toggle retweet:', data)
-
-      let count = Number(countEl.textContent)
-
-      if (data.action === 'retweeted') {
-        countEl.textContent = count + 1
-        iconEl.classList.replace('text-gray-400', 'text-green-400')
-      } else {
-        countEl.textContent = Math.max(0, count - 1)
-        iconEl.classList.replace('text-green-400', 'text-gray-400')
-      }
-
-    } catch (err) {
-      console.error('Erreur retweet:', err)
-    }
-  })
-})
-</script>
-{{--  script pour le bouton de suivi   --}}
-<script>
-document.querySelectorAll('.follow-btn').forEach(btn => {
-  btn.addEventListener('click', async e => {
+  grokForm.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const userId = btn.dataset.userId
-
-    try {
-      const res = await fetch(`/follow/${userId}/toggle`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': '{{ csrfToken }}',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      })
-
-      const data = await res.json()
-
-      if (data.status === 'followed') {
-        btn.textContent = 'Suivi ✔️'
-        btn.classList.add('bg-gray-200')
-      } else if (data.status === 'unfollowed') {
-        btn.textContent = 'Suivre'
-        btn.classList.remove('bg-gray-200')
-      }
-    } catch (err) {
-      console.error('Erreur toggle follow:', err)
-    }
-  })
-})
-</script>
-  <div
-      class="div-bar fixed left-[20%] top-0 w-px h-screen bg-gray-700 z-50 sm:block fixed left-67 top-0 w-px h-screen bg-gray-700 z-50"
-    ></div>
-
-    <!-- Ligne entre main et search -->
-    <div
-      class="div-bar hidden sm:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50"
-    ></div>
-  </body>
-</html>
-{{--  <script>
-  document.querySelectorAll('.replyBtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tweetId = btn.dataset.tweetId
-      const userName = btn.dataset.userName
-      const content = btn.dataset.tweetContent
-      const avatar = btn.dataset.userAvatar
-
-      document.getElementById('parentName').innerText = userName
-      document.getElementById('parentContent').innerText = content
-      document.getElementById('parentAvatar').src = avatar
-      document.getElementById('parentIdInput').value = tweetId
-
-      document.getElementById('replyModal').classList.remove('hidden')
+    const prompt = document.getElementById('prompt').value
+    const res = await fetch('/grok/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
     })
+    const data = await res.json()
+    result.textContent = data.content || 'Aucune réponse.'
   })
 
-  document.getElementById('closeReplyModal').addEventListener('click', () => {
-    document.getElementById('replyModal').classList.add('hidden')
+  // Analyse
+  const analyzeForm = document.getElementById('analyzeForm')
+  const analysis = document.getElementById('analysis')
+
+  analyzeForm.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const text = document.getElementById('tweetText').value
+    const res = await fetch('/grok/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    })
+    const data = await res.json()
+    analysis.textContent = data.analysis || 'Aucune analyse.'
   })
-</script>  --}}
+</script>
+
+
