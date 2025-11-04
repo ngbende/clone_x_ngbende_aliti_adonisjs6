@@ -209,7 +209,7 @@ router
     router.post('/suggest', [GrokController, 'suggestHashtags']).as('grok.suggest')
     router.post('/analyze', [GrokController, 'analyzeTweet']).as('grok.analyze')
   })
-  .prefix('/grok')
+  .prefix('/grok') .use(middleware.auth()) // ✅ Protection par authentification
 
 // ✅ Route pour afficher la page IA Grok
 router

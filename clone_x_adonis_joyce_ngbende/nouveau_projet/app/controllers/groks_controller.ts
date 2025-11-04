@@ -5,6 +5,10 @@ import GrokSuggestion from '#models/grok_suggestion'
 export default class GrokController {
   // ➕ Génération automatique de texte
   public async generateTweet({ auth, request, response }: HttpContext) {
+    if (!auth.user) {
+  return response.unauthorized('Vous devez être connecté pour utiliser cette fonctionnalité.')
+}
+
     const prompt = request.input('prompt')
 
     const content = await GrokService.ask(
@@ -12,6 +16,7 @@ export default class GrokController {
     )
 
     await GrokSuggestion.create({
+      
       userId: auth.user!.id,
       generatedContent: content,
       suggestedHashtags: '',
@@ -23,6 +28,10 @@ export default class GrokController {
 
   // ➕ Suggestions de hashtags
   public async suggestHashtags({ auth, request, response }: HttpContext) {
+    if (!auth.user) {
+  return response.unauthorized('Vous devez être connecté pour utiliser cette fonctionnalité.')
+}
+
     const text = request.input('text')
 
     const suggestion = await GrokService.ask(
@@ -41,6 +50,10 @@ export default class GrokController {
 
   // ➕ Analyse de tweet (Grok)
   public async analyzeTweet({ auth, request, response }: HttpContext) {
+    if (!auth.user) {
+  return response.unauthorized('Vous devez être connecté pour utiliser cette fonctionnalité.')
+}
+
     const text = request.input('text')
 
     const analysis = await GrokService.ask(
