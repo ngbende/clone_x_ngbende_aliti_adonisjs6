@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrfToken() }}">
+
     <title>
       Document
     </title>
@@ -72,36 +74,47 @@
   
 <script>
   // Génération
-  const grokForm = document.getElementById('grokForm')
-  const result = document.getElementById('result')
+ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
-  grokForm.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const prompt = document.getElementById('prompt').value
-    const res = await fetch('/grok/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    })
-    const data = await res.json()
-    result.textContent = data.content || 'Aucune réponse.'
+// Génération de tweets
+const grokForm = document.getElementById('grokForm')
+const result = document.getElementById('result')
+
+grokForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const prompt = document.getElementById('prompt').value
+  const res = await fetch('/grok/generate', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken
+    },
+    body: JSON.stringify({ prompt })
   })
+  const data = await res.json()
+  result.textContent = data.content || 'Aucune réponse.'
+})
 
-  // Analyse
-  const analyzeForm = document.getElementById('analyzeForm')
-  const analysis = document.getElementById('analysis')
+// Analyse de tweet
+const analyzeForm = document.getElementById('analyzeForm')
+const analysis = document.getElementById('analysis')
 
-  analyzeForm.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const text = document.getElementById('tweetText').value
-    const res = await fetch('/grok/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    })
-    const data = await res.json()
-    analysis.textContent = data.analysis || 'Aucune analyse.'
+analyzeForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const text = document.getElementById('tweetText').value
+  const res = await fetch('/grok/analyze', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken
+    },
+    body: JSON.stringify({ text })
   })
+  const data = await res.json()
+  analysis.textContent = data.analysis || 'Aucune analyse.'
+})
+
 </script>
-
+</body>
+</html>
 
