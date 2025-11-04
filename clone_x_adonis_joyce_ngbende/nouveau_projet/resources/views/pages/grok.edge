@@ -32,6 +32,7 @@
   <!-- Génération de tweets -->
 
   <form id="grokForm" class="flex flex-col sm:flex-row gap-2">
+   {{ csrfField() }}
     <input type="text" id="prompt" name="prompt" placeholder="Sujet du tweet..."
            class="flex-1 p-2 rounded text-black w-full" required>
     <button type="submit" class="bg-blue-500 px-4 py-2 rounded w-full sm:w-auto">Générer</button>
@@ -43,6 +44,7 @@
   <!-- Analyse de tweet -->
 
   <form id="analyzeForm" class="flex flex-col sm:flex-row gap-2">
+   {{ csrfField() }}
     <input type="text" id="tweetText" name="tweetText" placeholder="Analyse ton tweet..."
            class="flex-1 p-2 rounded text-black w-full" required>
     <button type="submit" class="bg-green-500 px-4 py-2 rounded w-full sm:w-auto">Analyser</button>
