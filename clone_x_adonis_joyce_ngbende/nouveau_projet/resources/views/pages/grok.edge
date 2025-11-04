@@ -3,118 +3,111 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
 
-    <title>
-      Document
-    </title>
-    <script src="https://cdn.tailwindcss.com">
-
-    </script>
+    <title>Espace Grok</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
   </head>
-  <body class="bg-black w-full flex flex-col h-screen">
+  <body class="bg-black w-full flex flex-col min-h-screen">
     @include('partials/header')
-       @!component('components/logoutModal')
+    @!component('components/logoutModal')
 
-    <main id="main_profil" class="relative z-10 ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-[60%] md:w-[55%] lg:w-[50%]">
-      <div
-        class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
-      >
-        <div class="flex flex-row items-center gap-8 sm:gap-x-52">
-          <a class="text-white text-sm">Pour vous</a>
-          <a href="{{route ('tweets.following')}}" class="text-white text-sm">Abonnements</a>
+    <main class="max-w-2xl mx-auto mt-8 text-white p-6 rounded-2xl shadow-lg">
+      <h1 class="text-2xl font-bold mb-4 text-center">
+        Créer un Tweet avec Grok (IA)
+      </h1>
+
+      <!-- Formulaire principal -->
+      <form action="{{ route('tweet.store') }}" method="POST" enctype="multipart/form-data" id="tweetForm">
+        {{ csrfField() }}
+
+        <textarea
+          required
+          name="contenu"
+          id="tweetContent"
+          rows="4"
+          placeholder="Quoi de neuf ?"
+          class="w-full p-3 rounded-xl bg-gray-800 text-white border border-gray-700 focus:border-blue-500"
+        ></textarea>
+
+        <div id="enrichedText" class="mt-3 text-sm text-gray-400 hidden"></div>
+        <div id="suggestions" class="mt-3 text-sm text-blue-400 hidden"></div>
+
+        <div class="mt-4 flex justify-between items-center gap-2">
+          <input type="file" name="photos" class="text-gray-300" />
+
+          <button type="button" id="enrichBtn" class="bg-green-600 px-4 py-2 rounded-xl hover:bg-green-700">
+            Enrichir
+          </button>
+
+          <button type="button" id="hashtagBtn" class="bg-blue-600 px-4 py-2 rounded-xl hover:bg-blue-700">
+            Suggérer hashtags
+          </button>
         </div>
-      </div>
 
-    
-
-      <section class="post_tweets flex flex-col border-b border-gray-700 text-white">
-    
-    
-          <div class="max-w-xl mx-auto mt-10 p-4 text-white">
-  <h2 class="text-2xl font-bold mb-4 text-center">🤖 Espace IA - Grok</h2>
-
-  <!-- Génération de tweets -->
-
-  <form id="grokForm" class="flex flex-col sm:flex-row gap-2">
-  {{ csrfField() }}    <input type="text" id="prompt" name="prompt" placeholder="Sujet du tweet..."
-           class="flex-1 p-2 rounded text-black w-full" required>
-    <button type="submit" class="bg-blue-500 px-4 py-2 rounded w-full sm:w-auto">Générer</button>
-  </form>
-  <div id="result" class="mt-4 bg-gray-800 p-4 rounded break-words"></div>
-
-  <hr class="my-6 border-gray-700">
-
-  <!-- Analyse de tweet -->
-
-  <form id="analyzeForm" class="flex flex-col sm:flex-row gap-2">
-    {{ csrfField() }}
-    <input type="text" id="tweetText" name="text" placeholder="Analyse ton tweet..."
-           class="flex-1 p-2 rounded text-black w-full" required>
-    <button type="submit" class="bg-green-500 px-4 py-2 rounded w-full sm:w-auto">Analyser</button>
-  </form>
-  <div id="analysis" class="mt-4 bg-gray-800 p-4 rounded break-words"></div>
-</div>
-          {{--  @include('partials/grokForm')  --}}
-
-         {{--  @!component('components/reponseForm')  --}}
-         {{--  @!component('components/deleteTweet')  --}}
-
-          {{--  @!component('components/reponseForm')  --}}
-        {{--  @endeach  --}}
-
-        <!-- <div id="icon_reaction" class="flex w-full justify-between p-4"></div> -->
-      </section>
+        <button type="submit" class="w-full mt-4 bg-blue-500 hover:bg-blue-600 py-2 rounded-xl font-semibold">
+          Publier
+        </button>
+      </form>
     </main>
 
     @include('partials/sectionFolowSearch')
 
-  
-<script>
-  // Génération
- const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    <script>
+      const tweetContent = document.getElementById("tweetContent");
+      const enrichedBox = document.getElementById("enrichedText");
+      const suggestionsBox = document.getElementById("suggestions");
+      const csrfToken = document.querySelector('#tweetForm input[name="_csrf"]').value;
 
-// Génération de tweets
-const grokForm = document.getElementById('grokForm')
-const result = document.getElementById('result')
+      // Enrichir tweet
+      document.getElementById("enrichBtn").addEventListener("click", async () => {
+        enrichedBox.classList.remove("hidden");
+        enrichedBox.innerText = "Traitement en cours...";
+        try {
+          const response = await fetch("/grok/enrich-tweet", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken
+            },
+            body: JSON.stringify({ content: tweetContent.value })
+          });
+          if (!response.ok) throw new Error("Erreur réseau ou serveur");
+          const data = await response.json();
+          enrichedBox.innerText = data.enriched.message.content[0].text;
+        } catch (err) {
+          console.error(err);
+          enrichedBox.innerText = "Erreur lors de l’enrichissement.";
+        }
+      });
 
-grokForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const prompt = document.getElementById('prompt').value
-  const res = await fetch('/grok/generate', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': csrfToken
-    },
-    body: JSON.stringify({ prompt })
-  })
-  const data = await res.json()
-  result.textContent = data.content || 'Aucune réponse.'
-})
-
-// Analyse de tweet
-const analyzeForm = document.getElementById('analyzeForm')
-const analysis = document.getElementById('analysis')
-
-analyzeForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const text = document.getElementById('tweetText').value
-  const res = await fetch('/grok/analyze', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': csrfToken
-    },
-    body: JSON.stringify({ text })
-  })
-  const data = await res.json()
-  analysis.textContent = data.analysis || 'Aucune analyse.'
-})
-
-</script>
-</body>
+      // Générer hashtags
+      document.getElementById("hashtagBtn").addEventListener("click", async () => {
+        suggestionsBox.classList.remove("hidden");
+        suggestionsBox.innerText = "Génération en cours...";
+        try {
+          const response = await fetch("/grok/suggest-hashtags", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken
+            },
+            body: JSON.stringify({ content: tweetContent.value })
+          });
+          if (!response.ok) throw new Error("Erreur réseau ou serveur");
+          const data = await response.json();
+          if (data.hashtags.message?.content?.length) {
+            const text = data.hashtags.message.content[0].text;
+            const hashtags = text.split("\n").map(line => line.replace(/^\d+\.\s*/, "").trim()).filter(line => line.length > 0);
+            suggestionsBox.innerHTML = "Hashtags suggérés : " + hashtags.map(tag => `<span class="text-blue-400">#${tag.replace(/^#/, "")}</span>`).join(" ");
+          } else {
+            suggestionsBox.innerText = "Aucune suggestion trouvée.";
+          }
+        } catch (err) {
+          console.error(err);
+          suggestionsBox.innerText = "Erreur lors de la génération des hashtags.";
+        }
+      });
+    </script>
+  </body>
 </html>
-
