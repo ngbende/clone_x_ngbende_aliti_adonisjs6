@@ -1,5 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -105,3 +106,170 @@
 </script>
 
 
+=======
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grok IA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background-color: #b1afaf;
+      color: black;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #chatContainer {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message-user, .message-ia {
+      max-width: 80%;
+      padding: 10px 20px;
+      border-radius: 50px;
+      word-wrap: break-word;
+    }
+
+    .message-user {
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      align-self: flex-end;
+    }
+
+    .message-ia {
+      background-color: #fff;
+      color: #000;
+      align-self: flex-start;
+    }
+
+    #inputContainer {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      background-color: #fffdfd;
+      border-top: 1px solid #ccc;
+    }
+
+    #messageInput {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    #sendBtn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: #3b82f6;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #sendBtn:hover {
+      background-color: #2563eb;
+    }
+
+    pre, code {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="chatContainer"></div>
+
+  <div id="inputContainer">
+    <input type="text" id="messageInput" placeholder="Écris ton message..." required />
+    <button id="sendBtn">Envoyer</button>
+  </div>
+
+  <script>
+    const chatContainer = document.getElementById("chatContainer");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    const apiKey = ""; // <-- METS ICI TA CLE API MISTRAL
+
+    sendBtn.addEventListener("click", async () => {
+      const userText = messageInput.value.trim();
+      if (!userText) return;
+
+      // Ajout message utilisateur
+      const userDiv = document.createElement("div");
+      userDiv.className = "message-user";
+      userDiv.textContent = userText;
+      chatContainer.appendChild(userDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      messageInput.value = "";
+
+      try {
+        const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: "mistral-small-latest",
+            messages: [{ role: "user", content: userText }],
+          }),
+        });
+
+        const data = await res.json();
+        let iaContent = data.choices?.[0]?.message?.content || "Aucune réponse.";
+
+        // Transforme les crochets en LaTeX si besoin
+        iaContent = iaContent.replace(/\[([^\[\]]+)\]/g, (match, p1) => `$$${p1}$$`);
+
+        // Ajout message IA
+        const iaDiv = document.createElement("div");
+        iaDiv.className = "message-ia";
+        iaDiv.innerHTML = marked.parse(iaContent);
+        chatContainer.appendChild(iaDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Highlight code
+        hljs.highlightAll();
+
+        // MathJax rendu
+        if (window.MathJax) {
+          MathJax.typesetPromise();
+        }
+
+      } catch (err) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "message-ia";
+        errorDiv.textContent = "Erreur : " + err.message;
+        chatContainer.appendChild(errorDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    });
+
+    // Support touche Entrée
+    messageInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendBtn.click();
+    });
+  </script>
+
+</body>
+</html>
+>>>>>>> c5f28b7cec13b6737668f85f1b6704789c9bb200
