@@ -3,130 +3,73 @@
     <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="logo_X w-20 h-11 object-contain" />
   </div>
   <nav class="nav-bar flex flex-col gap-5 items-start w-full ml-6">
-    <a href="/home" class=" link-nav flex flex-row items-center gap-4">      <img width="23" height="23" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
-
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Domicile
-      </p></a>
-    <a href="{{ route('search') }}" class="  link-nav flex flex-row items-center gap-4">
-      <img
-        width="27"
-        height="27"
-        src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"
-        alt="search--v1"
-      />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Explorer
-      </p></a>
-    <a href="" class=" link-nav flex flex-row items-center gap-4">
-      <img
-        width="27"
-        height="27"
-        src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/appointment-reminders--v1.png"
-        alt="appointment-reminders--v1"
-      />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Notifications
-      </p>
-    </a>
-    {{-- 🔔 Lien pour les demandes de suivi (visible seulement si compte privé) --}}
-@if(auth.user && auth.user.isPrivate)
-  <a href="{{ route('follow.received') }}" class="link-nav flex flex-row items-center gap-4 ml-4">
-    <img
-      width="25"
-      height="25"
-      src="https://img.icons8.com/ios-filled/50/FFFFFF/add-user-group-man-man.png"
-      alt="follow-requests"
-    />
-    <p class="text-white text-sm w-auto sm:w-[300px]">
-      Demandes de suivi
-    </p>
-  </a>
-@endif
-    <a href="" class=" link-nav flex flex-row items-center gap-4">
-      <img
-        width="23"
-        height="25"
-        src="https://img.icons8.com/ios/50/FFFFFF/new-post--v1.png"
-        alt="new-post--v1"
-      />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Messages
-      </p>
+    
+    <a href="/home" class="link-nav flex flex-row items-center gap-4">
+      <img width="23" height="23" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
+      <p class="text-white text-sm w-auto hidden sm:block">Domicile</p>
     </a>
 
-    <a href="{{ route('grok.page') }}" class=" link-nav flex flex-row items-center gap-4">
+    <a href="{{ route('search') }}" class="link-nav flex flex-row items-center gap-4">
+      <img width="27" height="27" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search--v1" />
+      <p class="text-white text-sm w-auto hidden sm:block">Explorer</p>
+    </a>
+
+    <a href="" class="link-nav flex flex-row items-center gap-4">
+      <img width="27" height="27" src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/appointment-reminders--v1.png" alt="appointment-reminders--v1" />
+      <p class="text-white text-sm w-auto hidden sm:block">Notifications</p>
+    </a>
+
+    @if(auth.user && auth.user.isPrivate)
+    <a href="{{ route('follow.received') }}" class="link-nav flex flex-row items-center gap-4 ml-4">
+      <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/FFFFFF/add-user-group-man-man.png" alt="follow-requests" />
+      <p class="text-white text-sm w-auto hidden sm:block">Demandes de suivi</p>
+    </a>
+    @endif
+
+    <a href="" class="link-nav flex flex-row items-center gap-4">
+      <img width="23" height="25" src="https://img.icons8.com/ios/50/FFFFFF/new-post--v1.png" alt="new-post--v1" />
+      <p class="text-white text-sm w-auto hidden sm:block">Messages</p>
+    </a>
+
+    <a href="{{ route('grok.page') }}" class="link-nav flex flex-row items-center gap-4">
       <img width="27" height="27" src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Grok
-      </p>
+      <p class="text-white text-sm w-auto hidden sm:block">Grok</p>
     </a>
 
-    <a href="" class=" link-nav flex flex-row items-center gap-4">
-      <img
-        width="27"
-        height="27"
-        src="https://img.icons8.com/ios-glyphs/60/FFFFFF/group-foreground-selected.png"
-        alt="group-foreground-selected"
-      />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Communautés
-      </p>
+    <a href="" class="link-nav flex flex-row items-center gap-4">
+      <img width="27" height="27" src="https://img.icons8.com/ios-glyphs/60/FFFFFF/group-foreground-selected.png" alt="group-foreground-selected" />
+      <p class="text-white text-sm w-auto hidden sm:block">Communautés</p>
     </a>
 
-   <a href="/profile" class="link-nav flex flex-row items-center gap-4">
-  <img width="27" height="27"
-       src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png"
-       alt="gender-neutral-user--v1" />
-  <p class="text-white text-sm w-auto sm:w-[300px]">
-    Profil
-  </p>
-</a>
-{{--  le lien que je vais mettre pour le profil du user que je suis ou que je visite   --}}
-{{--  <a href="/users/{{ tweet.user.id }}" class="text-gray-400 hover:underline">
-  @{{ tweet.user.username }}
-</a>  --}}
+    <a href="/profile" class="link-nav flex flex-row items-center gap-4">
+      <img width="27" height="27" src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png" alt="gender-neutral-user--v1" />
+      <p class="text-white text-sm w-auto hidden sm:block">Profil</p>
+    </a>
 
-
-    <a href="" class=" link-nav flex flex-row items-center gap-4">
+    <a href="" class="link-nav flex flex-row items-center gap-4">
       <img width="27" height="27" src="https://img.icons8.com/ios-filled/50/FFFFFF/more.png" alt="more" />
-      <p class="text-white text-sm w-auto sm:w-[300px]">
-        Plus
-      </p>
+      <p class="text-white text-sm w-auto hidden sm:block">Plus</p>
     </a>
-    <a href="" class=" link-nav items-center">
+
+    <a href="" class="link-nav items-center">
       <button>
-        <p class="text-black bg-white border-white border-[2px] rounded-full text-xl p-3 w-[200px]">
+        <p class="text-black bg-white border-white border-[2px] rounded-full text-xl p-3 w-[200px] hidden sm:block">
           Poster
         </p>
-      </button></a>
+      </button>
+    </a>
 
     <div class="user_div flex flex-row mt-6 cursor-pointer">
-
-      <div class="rounded-full border-black border-5 w-10 h-10 bg-[#333639] ">
-        <img src="" alt="photo de profil" class="profile-picture w-full h-full object-cover  rounded-full  " />
+      <div class="rounded-full border-black border-5 w-10 h-10 bg-[#333639]">
+        <img src="" alt="photo de profil" class="profile-picture w-full h-full object-cover rounded-full" />
       </div>
-
       <div id="para-name-user" class="flex flex-col" onclick="openLogoutModal()">
         @if(auth.user)
-        <p id="username" class="text-white text-sm w-[300px] username1">
-      {{ auth.user.nom }}
-        </p>
-        <p class="text-white text-sm w-[300px] username2">
-      {{ auth.user.email }}
-        </p>
+        <p id="username" class="text-white text-sm w-[300px] hidden sm:block">{{ auth.user.nom }}</p>
+        <p class="text-white text-sm w-[300px] hidden sm:block">{{ auth.user.email }}</p>
         @endif
       </div>
-    </a>
-  </div>
-  <!-- popu -->
-  {{--  <div
-    class="popup hidden absolute bg-gray-800 text-white text-sm p-4 rounded-xl shadow-lg z-50 w-60 mt-96"
-  >
-    <a href="login.html" class="block py-1 px-2 rounded hover:bg-gray-700">ajoutez un compte existant</a>
-    <button class="btn_deconex block py-1 px-2 rounded hover:bg-gray-700">
-      Déconnexion
-          </button>
-  </div>  --}}
-</nav>
+    </div>
+
+  </nav>
 </header>
