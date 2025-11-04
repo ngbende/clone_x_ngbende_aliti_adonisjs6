@@ -63,38 +63,67 @@
   </script>
   
 <script>
-  // Génération
+  // Récupère le token CSRF généré par {{ csrfField() }}
+  const csrfToken = document.querySelector('input[name="_csrf"]').value
+
+  // ➤ Génération de tweets
   const grokForm = document.getElementById('grokForm')
   const result = document.getElementById('result')
 
   grokForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     const prompt = document.getElementById('prompt').value
-    const res = await fetch('/grok/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    })
-    const data = await res.json()
-    result.textContent = data.content || 'Aucune réponse.'
+
+    try {
+      const res = await fetch('/grok/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        credentials: 'same-origin', // très important pour envoyer le cookie de session
+        body: JSON.stringify({ prompt })
+      })
+
+      const data = await res.json()
+      result.textContent = data.content || 'Aucune réponse.'
+    } catch (err) {
+      console.error('Erreur fetch Grok:', err)
+      result.textContent = '❌ Erreur lors de la génération.'
+    }
   })
 
-  // Analyse
+  // ➤ Analyse de tweet
   const analyzeForm = document.getElementById('analyzeForm')
   const analysis = document.getElementById('analysis')
 
   analyzeForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     const text = document.getElementById('tweetText').value
-    const res = await fetch('/grok/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
-    })
-    const data = await res.json()
-    analysis.textContent = data.analysis || 'Aucune analyse.'
+
+    try {
+      const res = await fetch('/grok/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ text })
+      })
+
+      const data = await res.json()
+      analysis.textContent = data.analysis || 'Aucune analyse.'
+    } catch (err) {
+      console.error('Erreur fetch Analyse:', err)
+      analysis.textContent = '❌ Erreur lors de l\'analyse.'
+    }
   })
+
+  // Initialise les icônes Lucide
+  lucide.createIcons()
 </script>
+
 
 </body>
 </html>
