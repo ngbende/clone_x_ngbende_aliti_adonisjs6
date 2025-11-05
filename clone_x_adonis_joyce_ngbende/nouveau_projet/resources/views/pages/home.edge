@@ -31,7 +31,7 @@
 
           <div class="flex flex-row p-5 gap-2 w-full">
             <a id="username_profil" class="text-white text-sm">
-              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+              <img src="{{auth.user.photoProfil || 'assets/sug_1.jpg'}}" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
             </a>
             <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data">
             {{ csrfField() }}

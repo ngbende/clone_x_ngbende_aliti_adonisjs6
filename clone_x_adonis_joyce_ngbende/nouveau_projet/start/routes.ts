@@ -189,10 +189,11 @@ router
   .get('/user/editProfil', [ModifProfilesController, 'modifPage'])
   .as('profile.edit')
   .use([middleware.auth()])
+  
 
 // route pour mettre le compte en prive
 router
-  .post('/user/updatePrivate', [ModifProfilesController, 'updatePrivate'])
+  .post('/user/updatePrivate', [ModifProfilesController, 'updateAllProfile'])
   .as('user.updateProfil')
   .use([middleware.auth()])
 

@@ -35,11 +35,17 @@
 
   <!-- Bannière + avatar -->
   <section id="photo_profil" class="relative w-full h-52 bg-gray-700">
-    <img class="object-cover w-full h-full" id="banner-img"/>
-
+        @if(auth.user && auth.user.id === user.id)
+    <img    src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  class="object-cover w-full h-full" id="banner-img"/>
+   
     <img class="absolute -bottom-14 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
          id="profile-img" />
-
+   @else
+    <img    src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  class="object-cover w-full h-full" id="banner-img"/>
+   
+    <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" class="absolute -bottom-14 left-4 w-32 h-32 rounded-full border-4 border-black object-cover"
+         id="profile-img" />
+         @endif
     
   </section>
 

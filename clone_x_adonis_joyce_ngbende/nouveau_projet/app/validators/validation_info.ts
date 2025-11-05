@@ -8,5 +8,7 @@ export const createAcountValidator = vine.compile(
     telephone: vine.string().trim().minLength(10).optional(),
     password: vine.string().minLength(8).confirmed({ confirmationField: 'confirmPassword' }),
     confirmPassword: vine.string(),
+
+ 
   })
 )

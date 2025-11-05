@@ -6,6 +6,8 @@ import Media from '#models/media'
 // import User from '#models/user'
 import { promises as fs } from 'node:fs'
 import Hashtag from '#models/hashtag'
+import { cuid } from '@adonisjs/core/helpers'
+import app from '@adonisjs/core/services/app'
 
 export default class GestionTweetsController {
   public async createTweets({ request, auth, response }: HttpContext) {
@@ -52,23 +54,28 @@ export default class GestionTweetsController {
 
       // 4️⃣ Stocker les médias en Base64
       if (imageFile && imageFile.tmpPath) {
-        const fileBuffer = await fs.readFile(imageFile.tmpPath)
-        const base64Data = fileBuffer.toString('base64')
-
+        const fileName = `${cuid()}.${imageFile.extname}`
+        const filePath = `uploads/${fileName}`
+        await imageFile.move(app.publicPath('uploads'), {
+          name: fileName,
+        })
         await Media.create({
           type: 'image',
-          url: base64Data,
+          url: filePath,
           tweetId: tweet.id,
         })
       }
 
       if (videoFile && videoFile.tmpPath) {
-        const fileBuffer = await fs.readFile(videoFile.tmpPath)
-        const base64Data = fileBuffer.toString('base64')
+          const fileName = `${cuid()}.${videoFile.extname}`
+        const filePath = `uploads/${fileName}`
+        await videoFile.move(app.publicPath('uploads'), {
+          name: fileName,
+        })
 
         await Media.create({
           type: 'video',
-          url: base64Data,
+          url: filePath,
           tweetId: tweet.id,
         })
       }
