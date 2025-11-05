@@ -38,7 +38,7 @@
 
     {{-- Affichage des images --}}
     @if(media.type === 'image')
-      <img src="data:image/png;base64,{{ media.url }}"
+      <img src="/{{ media.url }}"
            alt="Tweet Image"
            class="mt-2 rounded-lg w-full max-w-md object-cover" />
     @endif
@@ -46,7 +46,7 @@
     {{-- Affichage des vidéos --}}
    @if(media.type === 'video')
   <video controls class="mt-2 rounded-lg w-full max-w-md">
-    <source src="/videos/{{ media.url }}" type="video/mp4" />
+    <source src="/{{ media.url }}" type="video/mp4" />
     Ton navigateur ne supporte pas la vidéo.
   </video>
 @endif
