@@ -53,17 +53,30 @@
   <div id="para-name-user_profil" class="mt-16 px-5 text-white">
     <p class="font-semibold username1">{{user.nom}}</p>
     <p class="text-gray-400 text-sm username2">{{ `@${user.nom}` }}</p>
-
+  @if(user.bio)
+  <p class="mt-3 text-white text-sm">{{ user.bio }}</p>
+@endif
     <div class="flex gap-2 items-center mt-2 text-gray-400 text-sm">
+      
+        @if(user.location)
+    <div class="flex items-center gap-1">
+      <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
+      <span>{{ user.location }}</span>
+    </div>
+  @endif
+  
+  @if(user.website)
+    <div class="flex items-center gap-1">
+      <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
+      <a href="{{ user.website }}" class="text-blue-400 hover:underline" target="_blank">
+        {{ user.website.length > 30 ? user.website.substring(0, 30) + '...' : user.website }}
+      </a>
+    </div>
+  @endif
       <img width="15" height="15"
         src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
       <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
-        @if(auth.user && auth.user.id === user.id)
-          <a href="{{ route('profile.edit') }}" 
-             class="absolute bottom-3 right-4 px-4 py-1 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700">
-            Modifier le profil
-          </a>
-        @endif
+       
     </div>
 
     <div class="flex gap-4 mt-2 text-sm">
@@ -82,6 +95,12 @@
     </a>
   </p>
     </div>
+     @if(auth.user && auth.user.id === user.id)
+          <a href="{{ route('profile.edit') }}" 
+             class="absolute bottom-3 right-4 px-4 py-1 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700">
+            Modifier le profil
+          </a>
+        @endif
    @if(auth.user.id !== user.id)
   <form 
     action="{{ route('user.block', { id: user.id }) }}" 
