@@ -39,7 +39,7 @@
 // Ouvrir la modal
 document.querySelectorAll('.openReplyForm').forEach((btn) => {
   btn.addEventListener('click', () => {
-    const tweetId = btn.dataset.id;
+  const tweetId = btn.dataset.id;
     const user = btn.dataset.user;
     const content = btn.dataset.content;
 
@@ -54,7 +54,7 @@ document.querySelectorAll('.openReplyForm').forEach((btn) => {
     document.getElementById('replyParentId').value = tweetId;
     
     const form = document.getElementById('replyForm');
-    form.action = `/tweets/${tweetId}/reply`;
+    form.action = `/tweets/${id:tweetId}/reply`; // ✅ met la vraie URL
 
     document.getElementById('replyFormModal').classList.remove('hidden');
   });

@@ -47,10 +47,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ columnName: 'isPrivate' })
   declare isPrivate: boolean
 
-  @column({ serializeAs: 'photoProfil' })
+  @column({ columnName: 'photoProfil' })
   declare photoProfil: string | null
 
-  @column({ serializeAs: 'coverPicture' })
+  @column({ columnName: 'coverPicture' })
   declare coverPicture: string | null
 
   @column({ serializeAs: 'verified' })
