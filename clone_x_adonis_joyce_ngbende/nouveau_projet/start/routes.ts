@@ -76,14 +76,13 @@ router
 router
   .get('/tweet/:id', [GestionTweetsController, 'show'])
   .as('tweet.show')
-  .use([middleware.auth(), middleware.checkBlocked()])
+  .use([middleware.auth(),  middleware.checkTweetAccess()])
 
 // route pour les reponses aux tweets
 router
   .post('/tweets/:id/reply', [GestionTweetsController, 'reply'])
   .as('tweets.reply')
-  .use([middleware.auth()])
-  // , middleware.checkBlocked(), middleware.checkPrivate()
+  .use([middleware.auth(), middleware.checkTweetAccess()])
 
 // route pour supprimer un tweet
 router

@@ -84,7 +84,7 @@
         });
         if (!response.ok) throw new Error("Erreur réseau ou serveur");
         const data = await response.json();
-       const hashtags = data.hashtags ? data.hashtags.split(" ") : [];
+     const hashtags = data.hashtags ? data.hashtags.split(" ") : [];
 suggestionsBox.innerHTML =
   hashtags.length
     ? "✨ Hashtags suggérés : " + hashtags.map(tag => `<span class="text-blue-400">#${tag.replace(/^#/, "")}</span>`).join(" ")

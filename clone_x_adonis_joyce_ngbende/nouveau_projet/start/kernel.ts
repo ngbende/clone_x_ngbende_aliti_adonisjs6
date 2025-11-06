@@ -49,4 +49,5 @@ export const middleware = router.named({
   checkBlocked: () => import('#middleware/check_blocked_middleware'), // securite blocage
   checkPrivate: () => import('#middleware/check_private_account'),
   // securite prive
+   checkTweetAccess: () => import('#middleware/check_tweet_access_middleware')
 })
