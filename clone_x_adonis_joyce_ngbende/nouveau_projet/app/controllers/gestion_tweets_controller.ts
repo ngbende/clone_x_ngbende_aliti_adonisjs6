@@ -109,6 +109,41 @@ export default class GestionTweetsController {
       if (!tweet) {
         return response.notFound('Tweet introuvable')
       }
+   // #PARTIE POUR LE TWEET PARENT
+    if (tweet.hashtags && tweet.hashtags.length > 0) {
+      let content = tweet.content
+      tweet.hashtags.forEach((h) => {
+        const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+        content = content.replace(
+          regex,
+          `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+        )
+      })
+      tweet.contentClean = content
+    } else {
+      tweet.contentClean = tweet.content
+    }
+
+    // #PARTIE POUR LES RÉPONSES
+    if (tweet.replies && tweet.replies.length > 0) {
+      tweet.replies.forEach((reply) => {
+        if (reply.hashtags && reply.hashtags.length > 0) {
+          let content = reply.content
+          reply.hashtags.forEach((h) => {
+            const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+            content = content.replace(
+              regex,
+              `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+            )
+          })
+          reply.contentClean = content
+        } else {
+          reply.contentClean = reply.content
+        }
+      })
+    }
+
+
       console.log('Tweet data:', {
   id: tweet.id,
   content: tweet.content,

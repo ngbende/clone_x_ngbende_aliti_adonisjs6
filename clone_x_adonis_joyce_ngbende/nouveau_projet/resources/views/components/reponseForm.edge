@@ -1,37 +1,61 @@
-<div id="replyFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-gray-900 text-white w-[600px] rounded-2xl shadow-xl p-6 relative">
-    <button id="closeReplyModal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl font-bold">
-      ×
-    </button>
-
-    <div id="replyParent" class="flex gap-3 mb-5 border-b border-gray-700 pb-4">
-      <img id="replyAvatar" src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png" alt="avatar" class="w-10 h-10 rounded-full" />
-      <div>
-        <p id="replyUser" class="font-semibold"></p>
-        <p id="replyContent" class="text-gray-300"></p>
+<div id="replyFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-gray-900 text-white w-full max-w-[600px] max-h-[90vh] rounded-2xl shadow-xl flex flex-col">
+    <!-- En-tête fixe -->
+    <div class="flex-shrink-0 p-6 pb-4 border-b border-gray-700 relative">
+      <button id="closeReplyModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">
+        ×
+      </button>
+      
+      <div id="replyParent" class="flex gap-3 pr-8">
+        <img id="replyAvatar" src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png" alt="avatar" class="w-10 h-10 rounded-full flex-shrink-0" />
+        <div class="min-w-0 flex-1">
+          <p id="replyUser" class="font-semibold truncate"></p>
+          <p id="replyContent" class="text-gray-300 text-sm line-clamp-2"></p>
+        </div>
       </div>
     </div>
 
-    <form id="replyForm" method="POST" action="" enctype="multipart/form-data" class="flex flex-col gap-4">
-      {{ csrfField() }}
-      <input type="hidden" name="parent_id" id="replyParentId" />
+    <!-- Contenu scrollable -->
+    <div class="flex-1 overflow-y-auto p-6">
+      <form id="replyForm" method="POST" action="" enctype="multipart/form-data" class="flex flex-col gap-4">
+        {{ csrfField() }}
+        <input type="hidden" name="parent_id" id="replyParentId" />
 
-      <textarea name="content" rows="3" class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Postez votre réponse..." required></textarea>
+        <textarea 
+          name="content" 
+          rows="3" 
+          class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" 
+          placeholder="Postez votre réponse..." 
+          required
+        ></textarea>
 
-      <!-- IDs UNIQUES pour la modal -->
-      <img id="modalImagePreview" style="display:none" class="rounded-lg w-full max-h-60 object-cover" />
-      <video id="modalVideoPreview" controls style="display:none" class="rounded-lg w-full max-h-60 object-cover"></video>
+        <!-- Previews des médias -->
+        <img id="modalImagePreview" style="display:none" class="rounded-lg w-full max-h-48 object-cover" />
+        <video id="modalVideoPreview" controls style="display:none" class="rounded-lg w-full max-h-48 object-cover"></video>
 
-      <label for="imageFile" class="text-sm">Choisir une image</label>
-      <input type="file" name="image" id="imageFile" accept="image/*" />
+        <!-- Boutons de fichiers -->
+        <div class="flex gap-4 text-sm">
+          <label for="imageFile" class="flex items-center gap-2 cursor-pointer text-blue-400 hover:text-blue-300">
+            <img src="https://img.icons8.com/ios-filled/50/0084FF/picture.png" alt="image" class="w-5 h-5" />
+            <span>Image</span>
+            <input type="file" name="image" id="imageFile" accept="image/*" class="hidden" />
+          </label>
 
-      <label for="videoFile" class="text-sm">Choisir une vidéo</label>
-      <input type="file" name="video" id="videoFile" accept="video/*" />
+          <label for="videoFile" class="flex items-center gap-2 cursor-pointer text-blue-400 hover:text-blue-300">
+            <img src="https://img.icons8.com/ios-filled/50/0084FF/video.png" alt="video" class="w-5 h-5" />
+            <span>Vidéo</span>
+            <input type="file" name="video" id="videoFile" accept="video/*" class="hidden" />
+          </label>
+        </div>
+      </form>
+    </div>
 
-      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full font-semibold">
+    <!-- Bouton fixe en bas -->
+    <div class="flex-shrink-0 p-6 pt-4 border-t border-gray-700">
+      <button type="submit" form="replyForm" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-full font-semibold transition-colors">
         Répondre
       </button>
-    </form>
+    </div>
   </div>
 </div>
 <script>
