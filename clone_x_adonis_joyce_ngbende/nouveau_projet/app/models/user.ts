@@ -62,6 +62,15 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @hasMany(() => Tweet)
   declare tweets: HasMany<typeof Tweet>
 
+  // Dans User.ts - ajoute cette relation
+@hasMany(() => Tweet, {
+  foreignKey: 'userId',
+  onQuery: (query) => {
+    query.whereNotNull('parentId') // seulement les réponses
+  }
+})
+declare replies: HasMany<typeof Tweet>
+
   @hasMany(() => Retweet)
   declare retweets: HasMany<typeof Retweet>
 

@@ -14,6 +14,7 @@ export default class ProfilesController {
       .where('id', auth.user!.id)
       .preload('followers')
       .preload('following')
+      .preload('replies').preload('tweets')
       .firstOrFail()
 
     if (!user) {

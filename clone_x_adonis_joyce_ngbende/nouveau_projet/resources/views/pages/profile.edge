@@ -25,7 +25,7 @@
 
     <div class="flex flex-col">
       <p class="font-semibold text-white text-sm username1">{{user.nom}}</p>
-      <p class="text-gray-400 text-xs">{{ `${user.replies.length} messages` }}</p>
+      <p class="text-gray-400 text-xs">{{ `${user.replies?.length || 0} messages` }}</p>
     </div>
 
     <div class="ml-auto">
@@ -68,14 +68,14 @@
 
     <div class="flex gap-4 mt-2 text-sm">
        <p>
-    <span class="font-semibold">{{ user.following.length }}</span>
+<span class="font-semibold">{{ user.following?.length || 0 }}</span>
     <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
        class="{{ type === 'followings' ? 'text-blue-400' : '' }}">
       abonnements
     </a>
   </p>
   <p>
-    <span class="font-semibold">{{ user.followers.length }}</span>
+<span class="font-semibold">{{ user.followers?.length || 0 }}</span>
     <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
        class="{{ type === 'followers' ? 'text-blue-400' : '' }}">
       abonnés
