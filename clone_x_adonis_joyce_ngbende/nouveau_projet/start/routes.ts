@@ -82,7 +82,8 @@ router
 router
   .post('/tweets/:id/reply', [GestionTweetsController, 'reply'])
   .as('tweets.reply')
-  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
+  .use([middleware.auth()])
+  // , middleware.checkBlocked(), middleware.checkPrivate()
 
 // route pour supprimer un tweet
 router
