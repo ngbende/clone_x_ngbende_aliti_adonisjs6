@@ -34,36 +34,37 @@
     </form>
   </div>
 </div>
-
 <script>
-// Ouvrir la modal
-document.querySelectorAll('.openReplyForm').forEach((btn) => {
-  btn.addEventListener('click', () => {
-  const tweetId = btn.dataset.id;
-    const user = btn.dataset.user;
-    const content = btn.dataset.content;
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.openReplyForm').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tweetId = btn.dataset.id;
+      const user = btn.dataset.user;
+      const content = btn.dataset.content;
 
-    // Vérifier que les données existent
-    if (!tweetId || !user || !content) {
-      console.error('Données manquantes dans le bouton de réponse');
-      return;
-    }
+      if (!tweetId || !user || !content) {
+        console.error('Données manquantes dans le bouton de réponse');
+        return;
+      }
 
-    document.getElementById('replyUser').textContent = user;
-    document.getElementById('replyContent').textContent = content;
-    document.getElementById('replyParentId').value = tweetId;
-    
-    const form = document.getElementById('replyForm');
-    form.action = `/tweets/${id:tweetId}/reply`; // ✅ met la vraie URL
+      document.getElementById('replyUser').textContent = user;
+      document.getElementById('replyContent').textContent = content;
+      document.getElementById('replyParentId').value = tweetId;
 
-    document.getElementById('replyFormModal').classList.remove('hidden');
+      const form = document.getElementById('replyForm');
+      form.action = `/tweets/${tweetId}/reply`;
+
+      document.getElementById('replyFormModal').classList.remove('hidden');
+    });
+  });
+
+  document.getElementById('closeReplyModal').addEventListener('click', () => {
+    document.getElementById('replyFormModal').classList.add('hidden');
   });
 });
+</script>
 
-// Fermer la modal
-document.getElementById('closeReplyModal').addEventListener('click', () => {
-  document.getElementById('replyFormModal').classList.add('hidden');
-});
+<script>
 
 // Gestion des previews avec IDs UNIQUES
 const imageInput = document.getElementById('imageFile');
