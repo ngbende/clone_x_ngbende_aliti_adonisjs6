@@ -284,6 +284,65 @@ document.querySelectorAll('.follow-btn').forEach(btn => {
     <div
       class="div-bar hidden sm:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50"
     ></div>
+    
+<script>
+// Ouvrir la modal
+document.querySelectorAll('.openReplyForm').forEach((btn) => {
+  btn.addEventListener('click', () => {
+  const tweetId = btn.dataset.id;
+    const user = btn.dataset.user;
+    const content = btn.dataset.content;
+
+    // Vérifier que les données existent
+    if (!tweetId || !user || !content) {
+      console.error('Données manquantes dans le bouton de réponse');
+      return;
+    }
+
+    document.getElementById('replyUser').textContent = user;
+    document.getElementById('replyContent').textContent = content;
+    document.getElementById('replyParentId').value = tweetId;
+    
+    const form = document.getElementById('replyForm');
+    form.action = `/tweets/${id:tweetId}/reply`; // ✅ met la vraie URL
+
+    document.getElementById('replyFormModal').classList.remove('hidden');
+  });
+});
+
+// Fermer la modal
+document.getElementById('closeReplyModal').addEventListener('click', () => {
+  document.getElementById('replyFormModal').classList.add('hidden');
+});
+
+// Gestion des previews avec IDs UNIQUES
+const imageInput = document.getElementById('imageFile');
+const imagePreview = document.getElementById('modalImagePreview'); // ID unique
+const videoInput = document.getElementById('videoFile');
+const videoPreview = document.getElementById('modalVideoPreview'); // ID unique
+
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    imagePreview.src = reader.result;
+    imagePreview.style.display = 'block';
+    videoPreview.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+videoInput.addEventListener('change', () => {
+  const file = videoInput.files[0];
+  if (!file) return;
+
+  videoPreview.src = URL.createObjectURL(file);
+  videoPreview.style.display = 'block';
+  imagePreview.style.display = 'none';
+});
+</script>
   </body>
 </html>
 {{--  <script>
@@ -307,3 +366,4 @@ document.querySelectorAll('.follow-btn').forEach(btn => {
     document.getElementById('replyModal').classList.add('hidden')
   })
 </script>  --}}
+
