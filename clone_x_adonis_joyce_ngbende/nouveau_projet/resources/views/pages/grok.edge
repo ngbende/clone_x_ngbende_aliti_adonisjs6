@@ -84,10 +84,12 @@
         });
         if (!response.ok) throw new Error("Erreur réseau ou serveur");
         const data = await response.json();
-        const hashtags = data.hashtags.split(" ");
-        suggestionsBox.innerHTML =
-          "✨ Hashtags suggérés : " +
-          hashtags.map(tag => `<span class="text-blue-400">#${tag.replace(/^#/, "")}</span>`).join(" ");
+       const hashtags = data.hashtags ? data.hashtags.split(" ") : [];
+suggestionsBox.innerHTML =
+  hashtags.length
+    ? "✨ Hashtags suggérés : " + hashtags.map(tag => `<span class="text-blue-400">#${tag.replace(/^#/, "")}</span>`).join(" ")
+    : "❌ Aucun hashtag disponible.";
+
       } catch (err) {
         suggestionsBox.innerText = "❌ Erreur lors de la génération des hashtags.";
       }
