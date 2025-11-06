@@ -99,13 +99,28 @@ export default class GestionTweetsController {
         .preload('likes')
         .preload('retweets')
         .preload('replies', (repliesQuery) => {
-          repliesQuery.preload('user')
+          repliesQuery.preload('user').preload('medias') 
+          .preload('hashtags') 
+          .preload('likes')
+          .preload('retweets')
         })
         .first()
 
       if (!tweet) {
         return response.notFound('Tweet introuvable')
       }
+      console.log('Tweet data:', {
+  id: tweet.id,
+  content: tweet.content,
+  repliesCount: tweet.replies?.length,
+  replies: tweet.replies?.map(r => ({
+    id: r.id,
+    content: r.content,
+    hasUser: !!r.user,
+    userName: r.user?.nom,
+    mediasCount: r.medias?.length
+  }))
+})
 
       return view.render('pages/reply', { tweet })
     } catch (error) {
