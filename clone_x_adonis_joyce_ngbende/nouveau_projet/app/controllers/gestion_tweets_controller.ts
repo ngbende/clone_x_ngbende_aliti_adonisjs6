@@ -16,7 +16,7 @@ export default class GestionTweetsController {
       if (!user) {
         return response.unauthorized('Utilisateur non authentifié')
       }
-
+     
       // 1️⃣ Valider le contenu du tweet
       const { inputTweet } = await request.validateUsing(createTweetValidator)
 
@@ -174,7 +174,7 @@ export default class GestionTweetsController {
   }
 
   // 4️⃣ Rediriger vers la page précédente
-  return response.redirect().back()
+  return response.redirect().toRoute('home.index', { id: parentId })
 }
 
   public async deleteTweet({ response, auth, params }: HttpContext) {
