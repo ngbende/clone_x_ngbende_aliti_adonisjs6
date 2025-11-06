@@ -57,6 +57,41 @@ export default class ProfilesController {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
+    // - Transformation des hashtags EN contentClean
+allTweets.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+
+  // Aussi pour les réponses si elles existent
+  if (tweet.replies && tweet.replies.length > 0) {
+    tweet.replies.forEach((reply: any) => {
+      if (reply.hashtags && reply.hashtags.length > 0) {
+        let content = reply.content
+        reply.hashtags.forEach((h: any) => {
+          const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+          content = content.replace(
+            regex,
+            `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+          )
+        })
+        reply.contentClean = content
+      } else {
+        reply.contentClean = reply.content
+      }
+    })
+  }
+})
 
     return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false })
   }
@@ -105,6 +140,42 @@ export default class ProfilesController {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
+    // Transformation des hashtags EN contentClean
+   
+allTweets.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+
+  // Aussi pour les réponses si elles existent
+  if (tweet.replies && tweet.replies.length > 0) {
+    tweet.replies.forEach((reply: any) => {
+      if (reply.hashtags && reply.hashtags.length > 0) {
+        let content = reply.content
+        reply.hashtags.forEach((h: any) => {
+          const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+          content = content.replace(
+            regex,
+            `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+          )
+        })
+        reply.contentClean = content
+      } else {
+        reply.contentClean = reply.content
+      }
+    })
+  }
+})
     // Vérifier si l'utilisateur connecté a bloqué ce profil
     const isBlocked = await user.isBlockedBy(auth.user!.id)
     // Dans showUserProfile
