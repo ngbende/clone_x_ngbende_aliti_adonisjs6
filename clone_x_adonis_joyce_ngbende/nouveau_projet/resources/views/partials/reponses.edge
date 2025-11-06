@@ -21,12 +21,20 @@
    @if(tweet.medias)
   @each(media in tweet.medias)
     @if(media.type === 'image')
-      <img src="data:image/png;base64,{{ media.url }}" 
+      <img src="/{{ media.url }}" 
            alt="Tweet Image" 
            class="mt-2 rounded-lg w-full max-w-md object-cover" />
     @endif
+    @if(media.type === 'video')
+  <video controls class="mt-2 rounded-lg w-full max-w-md">
+    <source src="/{{ media.url }}" type="video/mp4" />
+    Ton navigateur ne supporte pas la vidéo.
+  </video>
+@endif
+
   @endeach
 @endif
+
 
         <div class="flex justify-between mt-3 text-gray-500 text-sm">
           <button class="hover:text-blue-500">💬 {{ tweet.replies?.length || 0 }}</button>
@@ -59,8 +67,26 @@
           <span class="text-gray-500 text-sm">@.{{ reply.user?.prenom || prenom }}</span>
           <span class="text-gray-500 text-sm">· {{ reply.createdAt?.toRelative() }}</span>
         </div>
-        <p class="mt-1 text-gray-200">{{ reply.content }}</p>
+        <p class="mt-1 text-gray-200" x-html="reply.contentClean">
+  {{{ reply.contentClean }}}
+</p>
 
+{{-- Médias de la reply --}}
+@if(reply.medias)
+  @each(media in reply.medias)
+    @if(media.type === 'image')
+      <img src="/{{ media.url }}" 
+           alt="Reply Image" 
+           class="mt-2 rounded-lg w-full max-w-md object-cover" />
+    @endif
+    @if(media.type === 'video')
+      <video controls class="mt-2 rounded-lg w-full max-w-md">
+        <source src="/{{ media.url }}" type="video/mp4" />
+        Ton navigateur ne supporte pas la vidéo.
+      </video>
+    @endif
+  @endeach
+@endif
         <!-- Boutons d'interaction pour la réponse -->
         <div class="flex justify-between mt-2 text-gray-500 text-sm">
           <button class="openReplyForm"
@@ -75,19 +101,19 @@
         data-content="{{ tweet.content }}">
       Répondre
     </button>
-          <button class="hover:text-green-500">🔁 {{ reply.retweets?.length || 0 }}</button>
-     <button class="like-btn flex items-center gap-1" data-tweet-id="{{ tweet.id }}">
+          <button data-tweet-id="{{ reply.id }}" class="hover:text-green-500">🔁 {{ reply.retweets?.length || 0 }}</button>
+     <button class="like-btn flex items-center gap-1" data-tweet-id="{{ reply.id }}">
   <i data-lucide="heart" class="w-5 h-5 text-gray-400"></i>
-  <span class="like-count">{{ tweet.likes?.length || 0 }}</span>
+  <span class="like-count">{{ reply.likes?.length || 0 }}</span>
 
 </button>
    <button title="Partager" class="hover:text-blue-300">📤</button>
-   <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')" class="hover:text-red-400">
+   <button onclick="openDeleteModal({{ reply.id }}, '{{ reply.content }}')" class="hover:text-red-400">
   Supprimer
 </button>
  <!-- Bouton Bloquer/Débloquer -->
-  @if(auth.user.id !== tweet.user.id)
-    <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST">
+  @if(auth.user.id !==  reply.user.id)
+    <form action="{{ route('user.block', { id: reply.user.id }) }}" method="POST">
       {{ csrfField() }}
       <button type="submit"
               class="px-3 py-1 rounded-lg text-sm font-semibold

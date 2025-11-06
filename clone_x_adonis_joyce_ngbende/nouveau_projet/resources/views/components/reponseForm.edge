@@ -27,25 +27,37 @@
     </div>
 
     <!-- Formulaire -->
-    <form id="replyForm"  method="POST" action="" class="flex flex-col gap-4">
-      {{ csrfField() }}
-      <input type="hidden" name="parent_id" id="replyParentId" />
-      <textarea
-        name="content"
-        rows="3"
-        class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Postez votre réponse..."
-        required
-      ></textarea>
-      <div class="flex justify-end mt-4">
-        <button
-          type="submit"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full font-semibold"
-        >
-          Répondre
-        </button>
-      </div>
-    </form>
+   <form id="replyForm" method="POST" action="" enctype="multipart/form-data" class="flex flex-col gap-4">
+  {{ csrfField() }}
+  <input type="hidden" name="parent_id" id="replyParentId" />
+
+  <!-- Contenu texte -->
+  <textarea
+    name="content"
+    rows="3"
+    class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Postez votre réponse..."
+    required
+  ></textarea>
+
+  <!-- Preview image -->
+  <img id="imagePreview" style="display:none" class="rounded-lg w-full max-h-60 object-cover" />
+
+  <!-- Preview vidéo -->
+  <video id="videoPreview" controls style="display:none" class="rounded-lg w-full max-h-60 object-cover"></video>
+
+  <!-- Input image -->
+  <label for="imageFile" class="text-sm">Choisir une image</label>
+  <input type="file" name="image" id="imageFile" accept="image/*" />
+
+  <!-- Input vidéo -->
+  <label for="videoFile" class="text-sm">Choisir une vidéo</label>
+  <input type="file" name="video" id="videoFile" accept="video/*" />
+
+  <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full font-semibold">
+    Répondre
+  </button>
+</form>
   </div>
 </div>
 
@@ -72,4 +84,32 @@ document.querySelectorAll('.openReplyForm').forEach((btn) => {
 document.getElementById('closeReplyModal').addEventListener('click', () => {
   document.getElementById('replyFormModal').classList.add('hidden');
 });
+</script>
+<script>
+  const imageInput = document.getElementById('imageFile')
+  const imagePreview = document.getElementById('imagePreview')
+  const videoInput = document.getElementById('videoFile')
+  const videoPreview = document.getElementById('videoPreview')
+
+  imageInput.addEventListener('change', () => {
+    const file = imageInput.files[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      imagePreview.src = reader.result
+      imagePreview.style.display = 'block'
+      videoPreview.style.display = 'none' // cacher la vidéo si on choisit une image
+    }
+    reader.readAsDataURL(file)
+  })
+
+  videoInput.addEventListener('change', () => {
+    const file = videoInput.files[0]
+    if (!file) return
+
+    videoPreview.src = URL.createObjectURL(file)
+    videoPreview.style.display = 'block'
+    imagePreview.style.display = 'none' // cacher l'image si on choisit une vidéo
+  })
 </script>

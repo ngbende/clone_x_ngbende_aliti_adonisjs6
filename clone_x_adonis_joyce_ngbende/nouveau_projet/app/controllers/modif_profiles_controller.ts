@@ -48,8 +48,14 @@ user.website = website ?? null
       // 🟥 3. Mise à jour des fichiers images (photo profil + bannière)
       // Ici pas de validation Vine car ce sont des fichiers
       // ============================
-      const photoProfil = request.file('photoProfil')
-      const coverPicture = request.file('coverPicture')
+     const photoProfil = request.file('photoProfil', {
+  size: '5mb',
+  extnames: ['jpg', 'jpeg', 'png'],
+})
+      const coverPicture = request.file('coverPicture', {
+  size: '5mb',
+  extnames: ['jpg', 'jpeg', 'png'],
+})
 
       // Upload photo de profil si fournie
       if (photoProfil && photoProfil.tmpPath) {
@@ -59,7 +65,9 @@ user.website = website ?? null
           name: fileName,
         })
         user.photoProfil = filePath
-      }
+      }else if (photoProfil && !photoProfil.isValid) {
+  return response.badRequest(photoProfil.errors)
+}
 
       // Upload couverture si fournie
       if (coverPicture && coverPicture.tmpPath) {
@@ -69,7 +77,9 @@ user.website = website ?? null
           name: fileName,
         })
         user.coverPicture = filePath
-      }
+      }else if (coverPicture && !coverPicture.isValid) {
+  return response.badRequest(coverPicture.errors)
+}
 
       // ============================
       // 💾 4. Sauvegarde finale en base

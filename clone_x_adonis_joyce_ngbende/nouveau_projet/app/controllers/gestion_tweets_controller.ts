@@ -4,7 +4,7 @@ import Tweet from '#models/tweet'
 import Media from '#models/media'
 
 // import User from '#models/user'
-import { promises as fs } from 'node:fs'
+// import { promises as fs } from 'node:fs'
 import Hashtag from '#models/hashtag'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
@@ -115,21 +115,67 @@ export default class GestionTweetsController {
   }
 
   public async reply({ request, auth, params, response }: HttpContext) {
-    const user = auth.user
-    if (!user) return response.unauthorized('Non authentifié')
+  const user = auth.user
+  if (!user) return response.unauthorized('Non authentifié')
 
-    const parentId = params.id
-    const content = request.input('content')
+  const parentId = params.id
+  const content = request.input('content')
 
-    // Création de la réponse
-    await Tweet.create({
-      content,
-      userId: user.id,
-      parentId: parentId, // on lie la réponse au parent
-    })
-
-    return response.redirect().back() // retour sur la page où on était
+  if (!content || content.trim() === '') {
+    return response.status(422).send('Le contenu de la réponse est requis')
   }
+
+  // 1️⃣ Créer le tweet réponse
+  const tweet = await Tweet.create({
+    content,
+    userId: user.id,
+    parentId: parentId,
+  })
+
+  // 2️⃣ Gestion des hashtags
+  const hashtags = (content.match(/#\w+/g) || []).map((tag) => tag.toLowerCase())
+  for (const tag of hashtags) {
+    const texteHashtag = tag.replace('#', '')
+    const hashtag = await Hashtag.firstOrCreate({ texteHashtag }, { texteHashtag })
+    await tweet.related('hashtags').sync([hashtag.id], false)
+  }
+
+  // 3️⃣ Gestion des fichiers média
+  const imageFile = request.file('image', {
+    size: '5mb',
+    extnames: ['jpg', 'png', 'jpeg', 'gif'],
+  })
+
+  const videoFile = request.file('video', {
+    size: '20mb',
+    extnames: ['mp4', 'mov', 'avi', 'wmv', 'flv', 'mkv'],
+  })
+
+  if (imageFile && imageFile.tmpPath) {
+    const fileName = `${cuid()}.${imageFile.extname}`
+    const filePath = `uploads/${fileName}`
+    await imageFile.move(app.publicPath('uploads'), { name: fileName })
+    await Media.create({
+      type: 'image',
+      url: filePath,
+      tweetId: tweet.id,
+    })
+  }
+
+  if (videoFile && videoFile.tmpPath) {
+    const fileName = `${cuid()}.${videoFile.extname}`
+    const filePath = `uploads/${fileName}`
+    await videoFile.move(app.publicPath('uploads'), { name: fileName })
+    await Media.create({
+      type: 'video',
+      url: filePath,
+      tweetId: tweet.id,
+    })
+  }
+
+  // 4️⃣ Rediriger vers la page précédente
+  return response.redirect().back()
+}
 
   public async deleteTweet({ response, auth, params }: HttpContext) {
     if (!auth.user) {

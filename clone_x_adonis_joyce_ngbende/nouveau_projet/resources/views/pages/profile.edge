@@ -24,8 +24,8 @@
     </a>
 
     <div class="flex flex-col">
-      <p class="font-semibold text-white text-sm username1">username</p>
-      <p class="text-gray-400 text-xs">0 messages</p>
+      <p class="font-semibold text-white text-sm username1">{{user.nom}}</p>
+      <p class="text-gray-400 text-xs">{{ `${user.replies.length} messages` }}</p>
     </div>
 
     <div class="ml-auto">
@@ -51,13 +51,13 @@
 
   <!-- Infos utilisateur -->
   <div id="para-name-user_profil" class="mt-16 px-5 text-white">
-    <p class="font-semibold username1">username</p>
-    <p class="text-gray-400 text-sm username2">@username</p>
+    <p class="font-semibold username1">{{user.nom}}</p>
+    <p class="text-gray-400 text-sm username2">{{ `@${user.nom}` }}</p>
 
     <div class="flex gap-2 items-center mt-2 text-gray-400 text-sm">
       <img width="15" height="15"
         src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
-      <span>Inscrit en juillet 2025</span>
+      <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
         @if(auth.user && auth.user.id === user.id)
           <a href="{{ route('profile.edit') }}" 
              class="absolute bottom-3 right-4 px-4 py-1 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700">

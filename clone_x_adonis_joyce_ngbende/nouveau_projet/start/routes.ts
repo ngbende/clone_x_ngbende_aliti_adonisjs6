@@ -193,7 +193,7 @@ router
 
 // route pour mettre le compte en prive
 router
-  .post('/user/updatePrivate', [ModifProfilesController, 'updateAllProfile'])
+  .post('/user/updateProfile', [ModifProfilesController, 'updateAllProfile'])
   .as('user.updateProfil')
   .use([middleware.auth()])
 
