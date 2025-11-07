@@ -184,7 +184,7 @@ public async reply({ request, auth, params, response }: HttpContext) {
     })
 
     // 2️⃣ Gestion des hashtags
-    const hashtags = (content.match(/#\w+/g) || []).map((tag) => tag.toLowerCase())
+    const hashtags = (content.match(/#\w+/g) || []).map((tag: string) => tag.toLowerCase())
     for (const tag of hashtags) {
       const texteHashtag = tag.replace('#', '')
       const hashtag = await Hashtag.firstOrCreate({ texteHashtag }, { texteHashtag })
