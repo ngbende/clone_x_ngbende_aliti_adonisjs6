@@ -187,12 +187,12 @@ export default class AuthenthisController {
   public async login({ view, request, response, auth }: HttpContext) {
     const email = request.input('numMail')
     const password = request.input('passwordAuth')
-
+      console.log('🔐 Tentative de connexion:', { email, password })
     try {
       // Vérifie credentials
       const user = await User.verifyCredentials(email, password)
      
-
+        
         // ✅ AJOUT: Vérifie si l'email est vérifié
     if (!user.verified) {
       return view.render('pages/auth/login', {
