@@ -101,12 +101,12 @@ router
 router
   .post('/tweets/:id/like', [InteractionsTweetsController, 'toggleLike'])
   .as('tweets.like')
-  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
+  .use([middleware.auth(), middleware.checkTweetAccess()])
 // route pour les retweets
 router
   .post('/tweets/:id/retweet', [InteractionsTweetsController, 'toggleRetweet'])
   .as('tweets.retweet')
-  .use([middleware.auth(), middleware.checkBlocked(), middleware.checkPrivate()])
+  .use([middleware.auth(), middleware.checkTweetAccess()])
 
 // route pour les reponses aux tweets dans la page profil
 router
@@ -201,7 +201,7 @@ router
 router
   .get('/hashtag/:tag', [HashtagsController, 'showHashtags'])
   .as('hashtag.show')
-  .use([middleware.auth()])
+  .use([middleware.auth(), middleware.checkTweetAccess()])
 
 // les routes pour l'utilisation de grok
 router
