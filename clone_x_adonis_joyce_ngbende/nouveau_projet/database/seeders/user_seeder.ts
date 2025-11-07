@@ -1,6 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import User from '#models/user'
-import Hash from '@adonisjs/core/services/hash'
+import hash from '@adonisjs/core/services/hash'
 
 export default class UserSeeder extends BaseSeeder {
   public async run() {
@@ -20,13 +20,13 @@ export default class UserSeeder extends BaseSeeder {
     ]
 
     for (const userData of testUsers) {
-      // Vérifie si l'utilisateur existe déjà
       const existingUser = await User.findBy('email', userData.email)
       
       if (!existingUser) {
+        // ✅ UTILISE SCrypt POUR LE HASH
         await User.create({
           ...userData,
-          password: await Hash.make(userData.password),
+          password: await hash.use('scrypt').make(userData.password),
           verified: true,
         })
         console.log(`✅ ${userData.nom} créé(e)`)
