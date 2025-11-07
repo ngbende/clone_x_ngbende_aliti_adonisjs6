@@ -1,6 +1,6 @@
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 import User from '#models/user'
-import hash from '@adonisjs/core/services/hash'
+// ⚠️ SUPPRIME l'import de hash
 
 export default class UserSeeder extends BaseSeeder {
   public async run() {
@@ -9,13 +9,13 @@ export default class UserSeeder extends BaseSeeder {
         nom: 'Alice',
         prenom: 'Wonder', 
         email: 'alice@gmail.com',
-        password: 'password123',
+        password: 'password123', // ✅ Reste en clair
       },
       {
         nom: 'Bob',
         prenom: 'Builder',
         email: 'bob@gmail.com',
-        password: 'password123',
+        password: 'password123', // ✅ Reste en clair
       }
     ]
 
@@ -27,13 +27,13 @@ export default class UserSeeder extends BaseSeeder {
         console.log(`🗑️ ${userData.nom} supprimé(e)`)
       }
 
-      // ✅ CORRECTION : Utilisez hash.make() au lieu de hash.use('scrypt').make()
+      // ✅ SOLUTION FINALE : PAS de hash.make(), laisse AdonisJS gérer
       await User.create({
         ...userData,
-        password: await hash.make(userData.password), // ← CHANGEMENT ICI
+        // ⚠️ SUPPRIME cette ligne : password: await hash.make(userData.password),
         verified: true,
       })
-      console.log(`✅ ${userData.nom} créé(e) avec hash standard`)
+      console.log(`✅ ${userData.nom} créé(e) - AdonisJS gère le hash automatiquement`)
     }
   }
 }
