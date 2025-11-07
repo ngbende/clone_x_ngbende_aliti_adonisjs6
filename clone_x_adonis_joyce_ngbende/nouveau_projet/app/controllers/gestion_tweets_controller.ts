@@ -98,6 +98,7 @@ export default class GestionTweetsController {
         .preload('medias')
         .preload('likes')
         .preload('retweets')
+        .preload('hashtags') 
         .preload('replies', (repliesQuery) => {
           repliesQuery.preload('user').preload('medias') 
           .preload('hashtags') 
@@ -123,7 +124,6 @@ export default class GestionTweetsController {
     } else {
       tweet.contentClean = tweet.content
     }
-
     // #PARTIE POUR LES RÉPONSES
     if (tweet.replies && tweet.replies.length > 0) {
       tweet.replies.forEach((reply) => {

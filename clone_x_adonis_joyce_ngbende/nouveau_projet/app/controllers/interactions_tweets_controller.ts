@@ -14,9 +14,9 @@ export default class InteractionsTweetsController {
       if (!tweet) return response.notFound('Tweet introuvable')
 
       // Vérifier si le like existe déjà
-      const existingLike = await Like.query()
-        .where('user_id', user.id)
-        .andWhere('tweet_id', tweetId)
+     const existingLike = await Like.query()
+        .where('userId', user.id)        // camelCase
+        .andWhere('tweetId', tweetId)    // camelCase
         .first()
 
       if (existingLike) {

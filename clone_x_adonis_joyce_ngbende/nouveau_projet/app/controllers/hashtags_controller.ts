@@ -6,10 +6,22 @@ export default class HashtagsController {
     try {
       const texteHashtag = params.tag.toLowerCase()
 
-      const hashtag = await Hashtag.query()
+         const hashtag = await Hashtag.query()
         .where('texteHashtag', texteHashtag)
         .preload('tweets', (query) => {
-          query.preload('user').preload('medias').preload('hashtags') // précharge les hashtags
+          query
+            .preload('user')
+            .preload('medias')
+            .preload('hashtags')
+            .preload('likes')      // ✅ AJOUTEZ
+            .preload('retweets')   // ✅ AJOUTEZ
+            .preload('replies', (repliesQuery) => {
+              repliesQuery
+                .preload('user')
+                .preload('medias')
+                .preload('likes')    // ✅ AJOUTEZ pour les replies
+                .preload('retweets') // ✅ AJOUTEZ pour les replies
+            })
         })
         .firstOrFail()
 

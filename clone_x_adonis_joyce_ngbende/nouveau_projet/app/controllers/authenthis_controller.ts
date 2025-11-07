@@ -13,11 +13,16 @@ export default class AuthenthisController {
     const tweets = await Tweet.query()
       .whereNull('parentId') // 🔹 uniquement les tweets parents
       .preload('user')
-      .preload('medias').preload('replies', (repliesQuery) => {
-    repliesQuery
-      .preload('user')
-      .preload('medias') // <-- important !
-      .preload('hashtags')
+      .preload('medias')
+      .preload('likes')     
+      .preload('retweets')
+      .preload('replies', (repliesQuery) => {
+        repliesQuery
+          .preload('user')
+          .preload('medias') // <-- important !
+          .preload('hashtags')
+          .preload('likes')    
+          .preload('retweets') 
   })
       .preload('hashtags') // pour récupérer l'utilisateur lié
       .orderBy('created_at', 'desc')

@@ -24,14 +24,20 @@ export default class ProfilesController {
     }
 
     // Tweets écrits par le user
-    const tweets = await Tweet.query()
-      .where('user_id', user.id)
-      .whereNull('parent_id')
+ const tweets = await Tweet.query()
+   .where('userId', user.id)      
+  .whereNull('parentId')           
+  .preload('user')
+  .preload('likes')      // ✅
+  .preload('retweets')   // ✅
+  .preload('medias')
+  .preload('replies', (repliesQuery) => {
+    repliesQuery
       .preload('user')
-      .preload('likes')
       .preload('medias')
-      .preload('retweets')
-      .preload('replies')
+      .preload('likes')    // ✅
+      .preload('retweets') // ✅
+  })
 
     // Tweets que le user a retweetés
     const retweetRecords = await Retweet.query()
@@ -107,18 +113,24 @@ allTweets.forEach((tweet) => {
       .firstOrFail()
 
     // Tweets écrits par cet utilisateur
-    const tweets = await Tweet.query()
-      .where('user_id', user.id)
-      .whereNull('parent_id')
+   const tweets = await Tweet.query()
+   .where('userId', user.id)        
+  .whereNull('parentId')      
+  .preload('user')
+  .preload('likes')      // ✅
+  .preload('retweets')   // ✅
+  .preload('medias')
+  .preload('replies', (repliesQuery) => {
+    repliesQuery
       .preload('user')
-      .preload('likes')
       .preload('medias')
-      .preload('retweets')
-      .preload('replies')
+      .preload('likes')    // ✅
+      .preload('retweets') // ✅
+  })
 
     // Tweets qu'il a retweetés
     const retweetRecords = await Retweet.query()
-      .where('user_id', user.id)
+      .where('userId', user.id)
       .preload('tweet', (query) => {
         query
           .preload('user')
