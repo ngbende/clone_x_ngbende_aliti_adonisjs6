@@ -190,30 +190,38 @@ export default class AuthenthisController {
   console.log('🔐 Tentative de connexion:', { email, password })
   
   try {
-    // AJOUTEZ CES LOGS POUR DEBUGGER
     console.log('🔍 Recherche utilisateur avec email:', email)
     const userExists = await User.findBy('email', email)
     console.log('👤 Utilisateur trouvé:', userExists ? `OUI (id: ${userExists.id})` : 'NON')
     
-    if (userExists) {
-      console.log('📧 Email de l\'utilisateur:', userExists.email)
-      console.log('✅ Vérifié:', userExists.verified)
-      console.log('🔐 Hash du mot de passe présent:', !!userExists.password)
-    }
+   if (userExists) {
+  console.log('📧 Email de l\'utilisateur:', userExists.email)
+  console.log('✅ Vérifié:', userExists.verified)
+  console.log('🔐 Hash du mot de passe présent:', !!userExists.password)
+  console.log('📏 Longueur du hash:', userExists.password?.length)
+  
+  // TEST AUTOMATIQUE DU HASH
+  const hashService = await import('@adonisjs/core/services/hash')
+  
+  // Test 1: Vérification directe
+  const isPasswordValid = await hashService.default.verify(userExists.password, password)
+  console.log('🔑 Vérification manuelle du mot de passe:', isPasswordValid)
+  
+  // Test 2: Création d'un nouveau hash pour comparaison
+  const newHash = await hashService.default.make(password)
+  console.log('🆕 Nouveau hash (premiers 30 chars):', newHash.substring(0, 30))
+  console.log('📝 Hash stocké (premiers 30 chars):', userExists.password?.substring(0, 30))
+  console.log('🔍 Hash identique?', userExists.password === newHash)
+  
+  if (!isPasswordValid) {
+    console.log('❌ MOT DE PASSE INVALIDE - Le problème vient du hash!')
+    return view.render('pages/auth/login', {
+      error: 'Email ou mot de passe incorrect.',
+    })
+  }
+}
     
-    if (!userExists) {
-      return view.render('pages/auth/login', {
-        error: 'Aucun compte trouvé avec cet email.',
-      })
-    }
-    
-    if (!userExists.verified) {
-      return view.render('pages/auth/login', {
-        error: 'Veuillez vérifier votre email avant de vous connecter. Vérifiez votre boîte de réception.',
-      })
-    }
-    
-    console.log('🔑 Vérification des credentials...')
+    console.log('🔑 Vérification des credentials via User.verifyCredentials...')
     const user = await User.verifyCredentials(email, password)
     console.log('✅ Credentials valides')
     
@@ -223,18 +231,7 @@ export default class AuthenthisController {
     return response.redirect().toRoute('home.index')
   } catch (error: any) {
     console.error('❌ Erreur détaillée:', error)
-    console.error('🔍 Code erreur:', error.code)
-    console.error('📝 Message erreur:', error.message)
-    
-    if (error.code === 'E_INVALID_CREDENTIALS') {
-      return view.render('pages/auth/login', {
-        error: 'Email ou mot de passe incorrect. Veuillez réessayer.',
-      })
-    }
-
-    return view.render('pages/auth/login', {
-      error: 'Une erreur est survenue. Veuillez réessayer plus tard.',
-    })
+    // ... reste du code
   }
 }
 
