@@ -184,14 +184,22 @@ export default class AuthenthisController {
     })
   }
 
-  public async login({ view, request, response, auth }: HttpContext) {
-   
-    try {
-       const email = request.input('numMail')
-    const password = request.input('passwordAuth')
-      console.log('🔐 Tentative de connexion:', { email, password })
-      // Vérifie credentials
-         const userExists = await User.findBy('email', email)
+ public async login({ view, request, response, auth }: HttpContext) {
+  const email = request.input('numMail')
+  const password = request.input('passwordAuth')
+  console.log('🔐 Tentative de connexion:', { email, password })
+  
+  try {
+    // AJOUTEZ CES LOGS POUR DEBUGGER
+    console.log('🔍 Recherche utilisateur avec email:', email)
+    const userExists = await User.findBy('email', email)
+    console.log('👤 Utilisateur trouvé:', userExists ? `OUI (id: ${userExists.id})` : 'NON')
+    
+    if (userExists) {
+      console.log('📧 Email de l\'utilisateur:', userExists.email)
+      console.log('✅ Vérifié:', userExists.verified)
+      console.log('🔐 Hash du mot de passe présent:', !!userExists.password)
+    }
     
     if (!userExists) {
       return view.render('pages/auth/login', {
@@ -205,30 +213,30 @@ export default class AuthenthisController {
       })
     }
     
-    // ✅ Maintenant vérifiez les credentials
+    console.log('🔑 Vérification des credentials...')
     const user = await User.verifyCredentials(email, password)
+    console.log('✅ Credentials valides')
     
-      // Connecte l'utilisateur
-      await auth.use('web').login(user)
-
-      console.log('User logged in:', user.email)
-      return response.redirect().toRoute('home.index')
-    } catch (error: any) {
-      // Si c'est une erreur de credentials, on affiche un message clair
-      if (error.code === 'E_INVALID_CREDENTIALS') {
-        console.error('Login failed:', error.message)
-        return view.render('pages/auth/login', {
-          error: 'Email ou mot de passe incorrect. Veuillez réessayer.',
-        })
-      }
-
-      // Pour toutes les autres erreurs
-      console.error('Unexpected error during login:', error)
+    await auth.use('web').login(user)
+    console.log('✅ Connexion réussie pour:', user.email)
+    
+    return response.redirect().toRoute('home.index')
+  } catch (error: any) {
+    console.error('❌ Erreur détaillée:', error)
+    console.error('🔍 Code erreur:', error.code)
+    console.error('📝 Message erreur:', error.message)
+    
+    if (error.code === 'E_INVALID_CREDENTIALS') {
       return view.render('pages/auth/login', {
-        error: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+        error: 'Email ou mot de passe incorrect. Veuillez réessayer.',
       })
     }
+
+    return view.render('pages/auth/login', {
+      error: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+    })
   }
+}
 
   public async logout({ auth, response }: HttpContext) {
     await auth.use('web').logout()

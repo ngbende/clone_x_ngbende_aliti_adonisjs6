@@ -4,20 +4,21 @@ import hash from '@adonisjs/core/services/hash'
 
 export default class UserSeeder extends BaseSeeder {
   public async run() {
-    const testUsers = [
-      {
-        nom: 'Alice',
-        prenom: 'Wonder',
-        email: 'alice@example.com',
-        password: 'password123',
-      },
-      {
-        nom: 'Bob', 
-        prenom: 'Builder',
-        email: 'bob@example.com',
-        password: 'password123',
-      }
-    ]
+   // Dans UserSeeder
+const testUsers = [
+  {
+    nom: 'Alice',
+    prenom: 'Wonder', 
+    email: 'alice@gmail.com', // ✅ Changez @example.com par @gmail.com
+    password: 'password123',
+  },
+  {
+    nom: 'Bob',
+    prenom: 'Builder',
+    email: 'bob@gmail.com', // ✅ Changez @example.com par @gmail.com
+    password: 'password123',
+  }
+]
 
     for (const userData of testUsers) {
       // ✅ SUPPRIME d'abord l'utilisateur existant
