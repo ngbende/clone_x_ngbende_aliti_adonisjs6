@@ -23,6 +23,7 @@ import FollowRequestsController from '#controllers/follow_requests_controller'
 import ModifProfilesController from '#controllers/modif_profiles_controller'
 import HashtagsController from '#controllers/hashtags_controller'
 import GrokController from '#controllers/groks_controller'
+import PasswordResetsController from '#controllers/password_resets_controller'
 router.on('/').render('pages/auth/homeAuth')
 
 // route pour la page d'acceuil
@@ -221,6 +222,23 @@ router
   .as('grok.page')
   .use(middleware.auth())
 
+  
+// Routes réinitialisation mot de passe
+router
+  .get('/forgot-password', [PasswordResetsController, 'showForgotPassword'])
+  .as('password.request')
+
+router
+  .post('/forgot-password', [PasswordResetsController, 'sendResetLink'])
+  .as('password.email')
+
+router
+  .get('/reset-password', [PasswordResetsController, 'showResetForm'])
+  .as('password.reset')
+
+router
+  .post('/reset-password', [PasswordResetsController, 'resetPassword'])
+  .as('password.update')
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW
 // router

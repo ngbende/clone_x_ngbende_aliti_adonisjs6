@@ -191,7 +191,14 @@ export default class AuthenthisController {
     try {
       // Vérifie credentials
       const user = await User.verifyCredentials(email, password)
+     
 
+        // ✅ AJOUT: Vérifie si l'email est vérifié
+    if (!user.verified) {
+      return view.render('pages/auth/login', {
+        error: 'Veuillez vérifier votre email avant de vous connecter. Vérifiez votre boîte de réception.',
+      })
+    }
       // Connecte l'utilisateur
       await auth.use('web').login(user)
 
