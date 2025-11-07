@@ -20,19 +20,21 @@ export default class UserSeeder extends BaseSeeder {
     ]
 
     for (const userData of testUsers) {
+      // ✅ SUPPRIME d'abord l'utilisateur existant
       const existingUser = await User.findBy('email', userData.email)
       
-      if (!existingUser) {
-        // ✅ UTILISE SCrypt POUR LE HASH
-        await User.create({
-          ...userData,
-          password: await hash.use('scrypt').make(userData.password),
-          verified: true,
-        })
-        console.log(`✅ ${userData.nom} créé(e)`)
-      } else {
-        console.log(`⏭️ ${userData.nom} existe déjà`)
+      if (existingUser) {
+        await existingUser.delete()
+        console.log(`🗑️ ${userData.nom} supprimé(e)`)
       }
+
+      // ✅ PUIS recrée avec le bon hash
+      await User.create({
+        ...userData,
+        password: await hash.use('scrypt').make(userData.password),
+        verified: true,
+      })
+      console.log(`✅ ${userData.nom} créé(e) avec hash scrypt`)
     }
   }
 }
