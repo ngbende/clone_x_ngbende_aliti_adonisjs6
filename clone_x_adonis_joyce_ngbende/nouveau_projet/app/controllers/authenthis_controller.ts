@@ -185,10 +185,11 @@ export default class AuthenthisController {
   }
 
   public async login({ view, request, response, auth }: HttpContext) {
-    const email = request.input('numMail')
+   
+    try {
+       const email = request.input('numMail')
     const password = request.input('passwordAuth')
       console.log('🔐 Tentative de connexion:', { email, password })
-    try {
       // Vérifie credentials
          const userExists = await User.findBy('email', email)
     
