@@ -94,7 +94,7 @@ export default class AuthenthisController {
     return view.render('pages/auth/login')
   }
 
-  public async createAccount({ view, request, response }: HttpContext) {
+  public async createAccount({ request, response, session }: HttpContext) {
     try {
       const { nom, prenom, email, telephone, password } =
         await request.validateUsing(createAcountValidator)
@@ -102,9 +102,8 @@ export default class AuthenthisController {
       // Vérifie si l'utilisateur existe déjà
       const existingUser = await User.findBy('email', email)
       if (existingUser) {
-        return view.render('pages/auth/signUp', {
-          error: 'Cet email est déjà utilisé. Veuillez en choisir un autre.',
-        })
+       session.flashMessages.set('error', 'Cet email est déjà utilisé. Veuillez en choisir un autre.')
+return response.redirect().toRoute('show.signUp')
       }
 
       // Crée le token de vérification
@@ -151,40 +150,37 @@ export default class AuthenthisController {
       // Redirection vers login, succès optionnel affiché là-bas
       return response.redirect().toRoute('show.login')
     } catch (error) {
-      console.error('Error creating user:', error)
-      return view.render('pages/auth/signUp', {
-        error: 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.',
-      })
-    }
+     console.error('Error creating user:', error)
+    // CORRIGE CELUI-CI
+    session.flashMessages.set('error', 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.')
+    return response.redirect().toRoute('show.signUp')
   }
+}
 
-  public async verifyEmail({ request, view }: HttpContext) {
+  public async verifyEmail({ request, session , response }: HttpContext) {
     const token = request.input('token') // récupère ?token=xxx
 
     if (!token) {
-      return view.render('pages/auth/login', {
-        error: 'Lien de vérification invalide.',
-      })
+      session.flashMessages.set('error', 'Lien de vérification invalide.')
+    return response.redirect().toRoute('show.login')
     }
 
     const user = await User.findBy('verificationToken', token)
 
     if (!user) {
-      return view.render('pages/auth/login', {
-        error: 'Token invalide ou utilisateur non trouvé.',
-      })
+     session.flashMessages.set('error', 'Token invalide ou utilisateur non trouvé.')
+    return response.redirect().toRoute('show.login')
     }
 
     user.verified = true
     user.verificationToken = null
     await user.save()
 
-    return view.render('pages/auth/login', {
-      success: 'Email vérifié ! Vous pouvez maintenant vous connecter.',
-    })
+   session.flashMessages.set('success', 'Email vérifié ! Vous pouvez maintenant vous connecter.')
+return response.redirect().toRoute('show.login')
   }
 
-public async login({ view, request, response, auth }: HttpContext) {
+public async login({ request, response, auth, session }: HttpContext) {
   const email = request.input('numMail')
   const password = request.input('passwordAuth')
   
@@ -194,16 +190,14 @@ public async login({ view, request, response, auth }: HttpContext) {
     if (userExists) {
       // VÉRIFICATION EMAIL - IMPORTANT
       if (!userExists.verified) {
-        return view.render('pages/auth/login', {
-          error: 'Veuillez vérifier votre adresse email avant de vous connecter. Vérifiez votre boîte de réception.',
-        })
+       session.flashMessages.set('error', 'Veuillez vérifier votre adresse email avant de vous connecter.')
+return response.redirect().toRoute('show.login')
       }
     }
     
     if (!userExists) {
-      return view.render('pages/auth/login', {
-        error: 'Aucun compte trouvé avec cet email.',
-      })
+     session.flashMessages.set('error', 'Aucun compte trouvé avec cet email.')
+      return response.redirect().toRoute('show.login')
     }
     
     const user = await User.verifyCredentials(email, password)
@@ -212,13 +206,11 @@ public async login({ view, request, response, auth }: HttpContext) {
     return response.redirect().toRoute('home.index')
   } catch (error: any) {
     if (error.code === 'E_INVALID_CREDENTIALS') {
-      return view.render('pages/auth/login', {
-        error: 'Email ou mot de passe incorrect.',
-      })
+       session.flashMessages.set('error', 'Email ou mot de passe incorrect.')
+      return response.redirect().toRoute('show.login')
     }
-    return view.render('pages/auth/login', {
-      error: 'Une erreur est survenue. Veuillez réessayer plus tard.',
-    })
+    session.flashMessages.set('error', 'Une erreur est survenue. Veuillez réessayer plus tard.')
+    return response.redirect().toRoute('show.login')
   }
 }
 
