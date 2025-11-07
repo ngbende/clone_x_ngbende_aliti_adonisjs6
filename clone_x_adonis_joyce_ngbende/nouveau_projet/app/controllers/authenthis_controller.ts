@@ -190,15 +190,23 @@ export default class AuthenthisController {
       console.log('🔐 Tentative de connexion:', { email, password })
     try {
       // Vérifie credentials
-      const user = await User.verifyCredentials(email, password)
-     
-        
-        // ✅ AJOUT: Vérifie si l'email est vérifié
-    if (!user.verified) {
+         const userExists = await User.findBy('email', email)
+    
+    if (!userExists) {
+      return view.render('pages/auth/login', {
+        error: 'Aucun compte trouvé avec cet email.',
+      })
+    }
+    
+    if (!userExists.verified) {
       return view.render('pages/auth/login', {
         error: 'Veuillez vérifier votre email avant de vous connecter. Vérifiez votre boîte de réception.',
       })
     }
+    
+    // ✅ Maintenant vérifiez les credentials
+    const user = await User.verifyCredentials(email, password)
+    
       // Connecte l'utilisateur
       await auth.use('web').login(user)
 
