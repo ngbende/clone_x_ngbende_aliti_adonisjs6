@@ -18,13 +18,18 @@ export default class PasswordResetsController {
 
     try {
       const user = await User.findBy('email', email)
+      
+      // Toujours afficher le même message pour la sécurité
+      session.flashMessages.set('success', 'Si votre email existe, vous recevrez un lien de réinitialisation.')
+      
       if (!user) {
-        session.flashMessages.set('success', 'Si votre email existe, vous recevrez un lien de réinitialisation.')
         return response.redirect().toRoute('password.request')
       }
 
+      // Supprimer les anciens tokens
       await PasswordResetToken.query().where('user_id', user.id).delete()
       
+      // Créer un nouveau token
       const token = crypto.randomBytes(32).toString('hex')
       const expiresAt = DateTime.now().plus({ hours: 1 })
 
@@ -34,6 +39,7 @@ export default class PasswordResetsController {
         expiresAt,
       })
 
+      // Préparer l'email
       const appUrl = env.get('APP_URL')
       const resetLink = `${appUrl}/reset-password?token=${token}`
 
@@ -53,7 +59,6 @@ export default class PasswordResetsController {
         `,
       })
 
-      session.flashMessages.set('success', 'Si votre email existe, vous recevrez un lien de réinitialisation.')
       return response.redirect().toRoute('password.request')
 
     } catch (error) {
@@ -64,25 +69,35 @@ export default class PasswordResetsController {
   }
 
   // Affiche le formulaire de nouveau mot de passe
-  public async showResetForm({ request, view }: HttpContext) {
+  public async showResetForm({ request, view, session, response }: HttpContext) {
     const token = request.input('token')
     
     if (!token) {
-      return view.render('pages/auth/login', {
-        error: 'Lien de réinitialisation invalide.'
-      })
+      session.flashMessages.set('error', 'Token de réinitialisation manquant.')
+      return response.redirect().toRoute('password.request')
+    }
+
+    // Vérifier si le token est valide
+    const resetToken = await PasswordResetToken.query()
+      .where('token', token)
+      .first()
+
+    if (!resetToken || !resetToken.isValid()) {
+      session.flashMessages.set('error', 'Lien de réinitialisation invalide ou expiré.')
+      return response.redirect().toRoute('password.request')
     }
 
     return view.render('pages/auth/reset_password', { token })
   }
 
-  // Traite la réinitialisation
+  // Traite la réinitialisation - CORRECTION ICI
   public async resetPassword({ request, response, session }: HttpContext) {
     const { token, password, password_confirmation } = request.only([
       'token', 'password', 'password_confirmation'
     ])
 
     try {
+      // Validation des mots de passe
       if (password !== password_confirmation) {
         session.flashMessages.set('error', 'Les mots de passe ne correspondent pas.')
         return response.redirect().toPath(`/reset-password?token=${token}`)
@@ -93,6 +108,7 @@ export default class PasswordResetsController {
         return response.redirect().toPath(`/reset-password?token=${token}`)
       }
 
+      // Chercher le token avec l'utilisateur
       const resetToken = await PasswordResetToken.query()
         .where('token', token)
         .preload('user')
@@ -100,11 +116,14 @@ export default class PasswordResetsController {
 
       if (!resetToken || !resetToken.isValid()) {
         session.flashMessages.set('error', 'Lien de réinitialisation invalide ou expiré.')
-        return response.redirect().toRoute('show.login')
+        return response.redirect().toRoute('password.request')
       }
 
+      // Mettre à jour le mot de passe
       resetToken.user.password = password
       await resetToken.user.save()
+      
+      // Supprimer le token utilisé
       await resetToken.delete()
 
       session.flashMessages.set('success', 'Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.')

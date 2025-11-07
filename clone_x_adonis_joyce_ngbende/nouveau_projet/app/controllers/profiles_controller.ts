@@ -6,9 +6,7 @@ import Follow from '#models/follow'
 import Block from '#models/block'
 
 export default class ProfilesController {
-  /**
-   * Profil de l'utilisateur connecté
-   */
+  // Profil de l'utilisateur connecté
   public async myProfile({ auth, view }: HttpContext) {
     const user = await User.query()
       .where('id', auth.user!.id)
@@ -28,15 +26,15 @@ export default class ProfilesController {
    .where('userId', user.id)      
   .whereNull('parentId')           
   .preload('user')
-  .preload('likes')      // ✅
-  .preload('retweets')   // ✅
+  .preload('likes')      
+  .preload('retweets')   
   .preload('medias')
   .preload('replies', (repliesQuery) => {
     repliesQuery
       .preload('user')
       .preload('medias')
-      .preload('likes')    // ✅
-      .preload('retweets') // ✅
+      .preload('likes')    
+      .preload('retweets') 
   })
 
     // Tweets que le user a retweetés
@@ -63,7 +61,7 @@ export default class ProfilesController {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
-    // - Transformation des hashtags EN contentClean
+    //  Transformation des hashtags EN contentClean
 allTweets.forEach((tweet) => {
   if (tweet.hashtags && tweet.hashtags.length > 0) {
     let content = tweet.content
@@ -102,9 +100,9 @@ allTweets.forEach((tweet) => {
     return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false })
   }
 
-  /**
-   * Profil d'un autre utilisateur
-   */
+  
+  //  Profil d'un autre utilisateur
+   
   public async showUserProfile({ params, view, auth }: HttpContext) {
     const user = await User.query()
       .where('id', params.id)
@@ -117,8 +115,8 @@ allTweets.forEach((tweet) => {
    .where('userId', user.id)        
   .whereNull('parentId')      
   .preload('user')
-  .preload('likes')      // ✅
-  .preload('retweets')   // ✅
+  .preload('likes')      
+  .preload('retweets')   
   .preload('medias')
   .preload('replies', (repliesQuery) => {
     repliesQuery

@@ -3,7 +3,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { updateProfileValidator } from '#validators/update_profile'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
-import hash from '@adonisjs/core/services/hash' // ✅ IMPORT CORRECT
+import hash from '@adonisjs/core/services/hash' 
 export default class ModifProfilesController {
   public async modifPage({ view, auth, response }: HttpContext) {
     const user = await User.query()
@@ -16,11 +16,11 @@ export default class ModifProfilesController {
     }
     return view.render('pages/modifProfil', { user })
   }
-   /**
-   * ✅ Méthode unique pour mettre à jour : bio, localisation, site web, confidentialité et images
-   * - Tous les champs sont optionnels : seules les valeurs envoyées seront modifiées
-   * - Gère 3 types de données : texte, checkbox, fichiers
-   */
+   
+  //  Méthode unique pour mettre à jour : bio, localisation, site web, confidentialité et images
+  //  Tous les champs sont optionnels : seules les valeurs envoyées seront modifiées
+  //  Gère 3 types de données : texte, checkbox, fichiers
+   
   public async updateAllProfile({ auth, request, response,session }: HttpContext) {
     try {
       const user = auth.user!
@@ -29,7 +29,7 @@ export default class ModifProfilesController {
       }
 
       // ============================
-      // 🟦 1. Mise à jour des champs texte (bio, location, website)
+      // Mise à jour des champs texte (bio, location, website)
       // Valide uniquement les données texte via Vine
       // ============================
      const { bio, location, website, current_password, new_password } = await request.validateUsing(updateProfileValidator)
@@ -39,12 +39,12 @@ user.website = website ?? null
 
 
       // ============================
-      // 🟨 2. Mise à jour de la confidentialité du compte (checkbox)
+      // Mise à jour de la confidentialité du compte (checkbox)
       // ============================
       const isPrivate = request.input('isPrivate') ? true : false
       user.isPrivate = isPrivate
 
-            // 🔐 3. GESTION DU MOT DE PASSE - CORRECTION
+            // GESTION DU MOT DE PASSE - CORRECTION
       // ============================
       if (new_password) {
         // Vérifie que le mot de passe actuel est fourni
@@ -64,7 +64,7 @@ user.website = website ?? null
         user.password = new_password
       }
       // ============================
-      // 🟥 3. Mise à jour des fichiers images (photo profil + bannière)
+      // Mise à jour des fichiers images (photo profil + bannière)
       // Ici pas de validation Vine car ce sont des fichiers
       // ============================
      const photoProfil = request.file('photoProfil', {
@@ -101,7 +101,7 @@ user.website = website ?? null
 }
 
       // ============================
-      // 💾 4. Sauvegarde finale en base
+      // Sauvegarde finale en base
       // ============================
       await user.save()
         session.flash('success', 'Profil mis à jour avec succès!')
@@ -109,7 +109,7 @@ user.website = website ?? null
        } catch (error) {
       console.error('Erreur lors de la mise à jour du profil :', error)
       session.flash('errors', { general: 'Une erreur est survenue lors de la mise à jour du profil.' })
-      return response.redirect().back() // ✅ CORRECTION : redirect().back() au lieu de status().send()
+      return response.redirect().back() 
     }
   }
 }
