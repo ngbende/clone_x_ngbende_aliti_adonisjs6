@@ -18,7 +18,7 @@ import BlocksController from '#controllers/blocks_controller'
 
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
-import repl from '@adonisjs/core/services/repl'
+// import repl from '@adonisjs/core/services/repl'
 import FollowRequestsController from '#controllers/follow_requests_controller'
 import ModifProfilesController from '#controllers/modif_profiles_controller'
 import HashtagsController from '#controllers/hashtags_controller'

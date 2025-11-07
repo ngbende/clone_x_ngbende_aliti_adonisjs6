@@ -2,9 +2,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { createTweetValidator } from '#validators/tweet'
 import Tweet from '#models/tweet'
 import Media from '#models/media'
-
-// import User from '#models/user'
-// import { promises as fs } from 'node:fs'
 import Hashtag from '#models/hashtag'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
@@ -92,24 +89,26 @@ export default class GestionTweetsController {
       const tweetId = params.id
 
       // Charger le tweet avec son user + ses replies + leurs users
-      const tweet = await Tweet.query()
-        .where('id', tweetId)
-        .preload('user')
-        .preload('medias')
-        .preload('likes')
-        .preload('retweets')
-        .preload('hashtags') 
-        .preload('replies', (repliesQuery) => {
-          repliesQuery.preload('user').preload('medias') 
+    const tweet = await Tweet.query()
+      .where('id', tweetId)
+      .preload('user')
+      .preload('medias')
+      .preload('likes')
+      .preload('retweets')
+      .preload('hashtags') 
+      .preload('replies', (repliesQuery) => {
+        repliesQuery
+          .preload('user')
+          .preload('medias') 
           .preload('hashtags') 
           .preload('likes')
           .preload('retweets')
-        })
-        .first()
+      })
+      .first()
 
-      if (!tweet) {
-        return response.notFound('Tweet introuvable')
-      }
+    if (!tweet) {
+      return response.notFound('Tweet introuvable')
+    }
    // #PARTIE POUR LE TWEET PARENT
     if (tweet.hashtags && tweet.hashtags.length > 0) {
       let content = tweet.content
@@ -144,18 +143,18 @@ export default class GestionTweetsController {
     }
 
 
-      console.log('Tweet data:', {
-  id: tweet.id,
-  content: tweet.content,
-  repliesCount: tweet.replies?.length,
-  replies: tweet.replies?.map(r => ({
-    id: r.id,
-    content: r.content,
-    hasUser: !!r.user,
-    userName: r.user?.nom,
-    mediasCount: r.medias?.length
-  }))
-})
+         console.log('Tweet data:', {
+        id: tweet.id,
+        content: tweet.content,
+        repliesCount: tweet.replies?.length,
+        replies: tweet.replies?.map(r => ({
+          id: r.id,
+          content: r.content,
+          hasUser: !!r.user,
+          userName: r.user?.nom,
+          mediasCount: r.medias?.length  // ✅ C'est correct!
+        }))
+      })
 
       return view.render('pages/reply', { tweet })
     } catch (error) {

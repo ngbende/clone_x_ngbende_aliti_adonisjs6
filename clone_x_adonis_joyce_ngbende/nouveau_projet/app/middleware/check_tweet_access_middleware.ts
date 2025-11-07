@@ -1,7 +1,7 @@
 import Block from '#models/block'
 import Follow from '#models/follow'
 import Tweet from '#models/tweet'
-import User from '#models/user'
+// import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CheckTweetAccessMiddleware {
