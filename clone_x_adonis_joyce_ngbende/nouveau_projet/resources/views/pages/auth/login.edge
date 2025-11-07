@@ -1,79 +1,79 @@
-@layout.app({ title: "Connexion - X" })
-@slot('meta')
-  <meta name="description" content="Connectez-vous à votre compte X" />
-@endslot
+@layout.app({ title: "Welcome page title" })
+  @slot('meta')
+    <meta name="description" content="A welcome page made with EdgeJS" />
+  @endslot
+  
+         
+  @slot('main')
+    <header>
+      <div class="w-full h-16 mb-6 items-center">
+        <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-full h-full object-contain" />
+      </div>
+      <h1 class="text-white text-3xl flex flex-col mx-auto mb-4 sm:text-2xl text-center">
+        Connectez‑vous à X
+      </h1>
+    </header>
 
-@slot('main')
-  <header>
-    <div class="w-full h-16 mb-6 items-center">
-      <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-full h-full object-contain" />
-    </div>
-    <h1 class="text-white text-3xl flex flex-col mx-auto mb-4 sm:text-2xl text-center">
-      Connectez‑vous à X
-    </h1>
-  </header>
-
-  <main class="w-[400px] flex flex-col justify-center items-center sm:w-full sm:max-w-[320px] md:max-w-[360px]">
-    <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
+    <main
+      class="w-[400px] flex flex-col justify-center items-center sm:w-full sm:max-w-[320px] md:max-w-[360px]"
+    >
+      <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
       {{ csrfField() }}
-      
-      {{-- Afficher les erreurs --}}
       @if(flashMessages.has('error'))
-        <div class="bg-red-500 text-white p-3 rounded-md w-full mb-4">
-          {{ flashMessages.get('error') }}
-        </div>
-      @endif
+  <div class="bg-red-500 text-white p-3 rounded-md w-full mb-4 text-center">
+    {{ flashMessages.get('error') }}
+  </div>
+@endif
+
+@if(flashMessages.has('success'))  
+  <div class="bg-green-500 text-white p-3 rounded-md w-full mb-4 text-center">
+    {{ flashMessages.get('success') }}
+  </div>
+@endif
+        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+          <a href="#" class="text-black">se connecter avec google</a>
+        </button>
+
+        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+          <a href="#" class="text-black">se connecter avec apple</a>
+        </button>
+
+        <p class="text-white text-sm mt-4">
+          OU
+        </p>
+
+        <input
+          type="text"
+          id="num_mail"
+          name="numMail"
+          placeholder="Numéro de Téléphone,adresse email"
       
-      {{-- Afficher les succès --}}
-      @if(flashMessages.has('success'))
-        <div class="bg-green-500 text-white p-3 rounded-md w-full mb-4">
-          {{ flashMessages.get('success') }}
-        </div>
-      @endif
+          class="border-2 p-5 bg-black rounded-md text-sm text-white w-full mb-4 mt-3"
+        />
 
-      <button type="button" class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-        <span class="text-black">se connecter avec google</span>
-      </button>
+          <input
+          id="password2"
+          type="password"
+          name="passwordAuth"
+          placeholder="Mot de passe"
+          class="border-2 p-4 rounded-md text-sm text-white bg-black border-gray-500 w-full"
+        />
 
-      <button type="button" class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-        <span class="text-black">se connecter avec apple</span>
-      </button>
+        <button id="submit_connex" type="submit" class="bg-white rounded-3xl p-3 w-full mt-5">
+          Suivant
+        </button>
 
-      <p class="text-white text-sm mt-4">
-        OU
+        <button class="bg-black border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+          <a href="{{ route('password.request') }}" class="text-white">mot de passe oublié?</a>
+        </button>
+      </form>
+    </main>
+
+    <footer class="w-full flex flex-col justify-center items-center mt-6 mb-5 p-4">
+      <p class="text-gray-100 text-sm sm:text-xs text-center">
+        vous n'avez pas de compte ?
+        <a href="/" class="text-blue-400">Inscrivez‑vous</a>
       </p>
-
-      <input
-        type="text"
-        id="num_mail"
-        name="numMail"
-        placeholder="Numéro de Téléphone, adresse email"
-        value="{{ old('numMail', '') }}"
-        class="border-2 p-5 bg-black rounded-md text-sm text-white w-full mb-4 mt-3"
-      />
-
-      <input
-        id="password2"
-        type="password"
-        name="passwordAuth"
-        placeholder="Mot de passe"
-        class="border-2 p-4 rounded-md text-sm text-white bg-black border-gray-500 w-full"
-      />
-
-      <button id="submit_connex" type="submit" class="bg-white rounded-3xl p-3 w-full mt-5">
-        Suivant
-      </button>
-
-      <button type="button" class="bg-black border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-        <a href="{{ route('password.request') }}" class="text-white">mot de passe oublié?</a>
-      </button>
-    </form>
-  </main>
-
-  <footer class="w-full flex flex-col justify-center items-center mt-6 mb-5 p-4">
-    <p class="text-gray-100 text-sm sm:text-xs text-center">
-      vous n'avez pas de compte ?
-      <a href="/signUp" class="text-blue-400">Inscrivez‑vous</a>
-    </p>
-  </footer>
-@endslot
+    </footer>
+  @endslot
+@end
