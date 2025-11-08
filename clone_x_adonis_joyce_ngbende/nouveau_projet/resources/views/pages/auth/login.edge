@@ -13,71 +13,76 @@
         Connectez‑vous à X
       </h1>
     </header>
-
-    <main
-      class="w-[400px] flex flex-col justify-center items-center sm:w-full sm:max-w-[320px] md:max-w-[360px]"
-    >
-      <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
+  <main class="w-[400px] flex flex-col justify-center items-center sm:w-full sm:max-w-[320px] md:max-w-[360px]">
+    
+    {{-- Formulaire de connexion PRINCIPAL --}}
+    <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
       {{ csrfField() }}
-   @if(flashMessages.has('errors.general'))
-  <div class="bg-red-500 text-white p-3 rounded mb-4">
-    {{ flashMessages.get('errors.general') }}
-      {{-- AJOUT: Bouton pour renvoyer la vérification --}}
-    @if(flashMessages.has('unverified_email'))
-      <form action="{{ route('auth.resend.verification') }}" method="POST" class="mt-2">
-        {{ csrfField() }}
-        <input type="hidden" name="email" value="{{ flashMessages.get('unverified_email') }}">
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          Renvoyer le lien de vérification
-        </button>
-      </form>
-    @endif
-  </div>
-@endif
-
-@if(flashMessages.has('success'))  
-  <div class="bg-green-500 text-white p-3 rounded-md w-full mb-4 text-center">
-    {{ flashMessages.get('success') }}
-  </div>
-@endif
-        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="#" class="text-black">se connecter avec google</a>
-        </button>
-
-        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="#" class="text-black">se connecter avec apple</a>
-        </button>
-
-        <p class="text-white text-sm mt-4">
-          OU
-        </p>
-
-        <input
-          type="text"
-          id="num_mail"
-          name="numMail"
-          placeholder="Numéro de Téléphone,adresse email"
       
-          class="border-2 p-5 bg-black rounded-md text-sm text-white w-full mb-4 mt-3"
-        />
+      {{-- Messages d'erreur normaux (sans email non vérifié) --}}
+      @if(flashMessages.has('errors.general') && !flashMessages.has('unverified_email'))
+        <div class="bg-red-500 text-white p-3 rounded mb-4 w-full text-center">
+          {{ flashMessages.get('errors.general') }}
+        </div>
+      @endif
 
-          <input
-          id="password2"
-          type="password"
-          name="passwordAuth"
-          placeholder="Mot de passe"
-          class="border-2 p-4 rounded-md text-sm text-white bg-black border-gray-500 w-full"
-        />
+      @if(flashMessages.has('success'))  
+        <div class="bg-green-500 text-white p-3 rounded-md w-full mb-4 text-center">
+          {{ flashMessages.get('success') }}
+        </div>
+      @endif
 
-        <button id="submit_connex" type="submit" class="bg-white rounded-3xl p-3 w-full mt-5">
-          Suivant
-        </button>
+      <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+        <a href="#" class="text-black">se connecter avec google</a>
+      </button>
 
-        <button class="bg-black border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="{{ route('password.request') }}" class="text-white">mot de passe oublié?</a>
-        </button>
-      </form>
-    </main>
+      <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+        <a href="#" class="text-black">se connecter avec apple</a>
+      </button>
+
+      <p class="text-white text-sm mt-4">OU</p>
+
+      <input
+        type="text"
+        id="num_mail"
+        name="numMail"
+        placeholder="Numéro de Téléphone,adresse email"
+        class="border-2 p-5 bg-black rounded-md text-sm text-white w-full mb-4 mt-3"
+      />
+
+      <input
+        id="password2"
+        type="password"
+        name="passwordAuth"
+        placeholder="Mot de passe"
+        class="border-2 p-4 rounded-md text-sm text-white bg-black border-gray-500 w-full"
+      />
+
+      <button id="submit_connex" type="submit" class="bg-white rounded-3xl p-3 w-full mt-5">
+        Suivant
+      </button>
+
+      <button class="bg-black border-white border-[2px] rounded-3xl p-3 w-full mt-5">
+        <a href="{{ route('password.request') }}" class="text-white">mot de passe oublié?</a>
+      </button>
+    </form>
+
+    {{-- Formulaire de RENVOI DE VÉRIFICATION SÉPARÉ --}}
+    @if(flashMessages.has('unverified_email'))
+      <div class="bg-red-500 text-white p-3 rounded mb-4 w-full text-center mt-4">
+        {{ flashMessages.get('errors.general') }}
+        
+        <form action="{{ route('auth.resend.verification') }}" method="POST" class="mt-2">
+          {{ csrfField() }}
+          <input type="hidden" name="email" value="{{ flashMessages.get('unverified_email') }}">
+          <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            Renvoyer le lien de vérification
+          </button>
+        </form>
+      </div>
+    @endif
+
+  </main>
 
     <footer class="w-full flex flex-col justify-center items-center mt-6 mb-5 p-4">
       <p class="text-gray-100 text-sm sm:text-xs text-center">
