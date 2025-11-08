@@ -46,6 +46,8 @@ router
 // router.post('/signUp', [AuthenthisController, 'showSignUp']).as('show.signUp')
 router.post('/create', [AuthenthisController, 'createAccount']).as('create.user')
 router.get('/verify-email', [AuthenthisController, 'verifyEmail']).as('auth.verifyEmail')
+//  route pour renvoyer le mail de verification
+router.post('/resend-verification', [AuthenthisController, 'resendVerification']).as('auth.resend.verification')
 
 // route pour afficher la page de saisie de la clé
 
@@ -239,6 +241,9 @@ router
 router
   .post('/reset-password', [PasswordResetsController, 'resetPassword'])
   .as('password.update')
+
+
+
 // ✅ Routes API AUTH pour test avec script externe
 // ✅ Routes API AUTH + FOLLOW
 // router

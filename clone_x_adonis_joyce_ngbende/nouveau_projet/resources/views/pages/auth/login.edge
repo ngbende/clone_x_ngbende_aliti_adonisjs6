@@ -22,6 +22,16 @@
    @if(flashMessages.has('errors.general'))
   <div class="bg-red-500 text-white p-3 rounded mb-4">
     {{ flashMessages.get('errors.general') }}
+      {{-- AJOUT: Bouton pour renvoyer la vérification --}}
+    @if(flashMessages.has('unverified_email'))
+      <form action="{{ route('auth.resend.verification') }}" method="POST" class="mt-2">
+        {{ csrfField() }}
+        <input type="hidden" name="email" value="{{ flashMessages.get('unverified_email') }}">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+          Renvoyer le lien de vérification
+        </button>
+      </form>
+    @endif
   </div>
 @endif
 

@@ -189,10 +189,14 @@ public async login({ request, response, auth, session }: HttpContext) {
     
     if (userExists) {
       // VÉRIFICATION EMAIL - IMPORTANT
-      if (!userExists.verified) {
-       session.flash('errors', { general: 'Veuillez vérifier votre adresse email avant de vous connecter.' })
-       return response.redirect().toRoute('show.login')
-      }
+     if (!userExists.verified) {
+  // AJOUT: Stocker l'email pour le bouton de renvoi
+  session.flash('unverified_email', email)
+  session.flash('errors', { 
+    general: 'Veuillez vérifier votre adresse email avant de vous connecter.' 
+  })
+  return response.redirect().toRoute('show.login')
+}
     }
     
     if (!userExists) {
@@ -223,21 +227,60 @@ public async login({ request, response, auth, session }: HttpContext) {
     return response.redirect().toRoute('show.login')
   }
 
-  // public async verifyKey({ view, request, auth, params, response }: HttpContext) {
-  //   try {
-  //     const password = request.input('passwordAuth')
-  //     const numMail = decodeURIComponent(params.numMail)
-  //     const user = await User.verifyCredentials(numMail, password)
-  //     await auth.use('web').login(user)
-  //     return response.redirect().toRoute('home.index', { email: user.email })
-  //   } catch (error) {
-  //     console.error('Error during key verification:', error)
-  //     return view.render('pages/auth/key', {
-  //       error: 'Une erreur est survenue lors de la vérification de la clé. Veuillez réessayer.',
-  //     })
-  //   }
-  // }
+public async resendVerification({ request, response, session }: HttpContext) {
+  const email = request.input('email')
+
+  try {
+    const user = await User.findBy('email', email)
+    
+    // Même message dans tous les cas pour la sécurité
+    session.flash('success', 'Si votre email existe et n\'est pas vérifié, un nouveau lien de vérification a été envoyé.')
+    
+    if (!user) {
+      console.log('❌ Utilisateur non trouvé pour email:', email)
+      return response.redirect().toRoute('show.login')
+    }
+
+    if (user.verified) {
+      console.log('✅ Utilisateur déjà vérifié:', email)
+      session.flash('success', 'Votre compte est déjà vérifié. Vous pouvez vous connecter.')
+      return response.redirect().toRoute('show.login')
+    }
+
+    // Régénérer le token
+    const verificationToken = crypto.randomBytes(32).toString('hex')
+    user.verificationToken = verificationToken
+    await user.save()
+
+    // Renvoyer l'email
+    const appUrl = env.get('APP_URL')
+    const verificationLink = `${appUrl}/verify-email?token=${verificationToken}`
+
+    sgMail.setApiKey(env.get('SENDGRID_API_KEY')!)
+    
+    await sgMail.send({
+      to: user.email,
+      from: {
+        email: env.get('MAIL_FROM_ADDRESS')!,
+        name: env.get('MAIL_FROM_NAME')!,
+      },
+      subject: 'Nouveau lien de vérification - CloneX',
+      html: `
+        <h1>Nouveau lien de vérification</h1>
+        <p>Voici votre nouveau lien de vérification :</p>
+        <p><a href="${verificationLink}">Vérifier mon adresse e-mail</a></p>
+        <p><small>Ce lien expirera dans 24 heures.</small></p>
+      `,
+    })
+
+    console.log('✅ Nouvel email de vérification envoyé à:', user.email)
+    return response.redirect().toRoute('show.login')
+
+  } catch (error) {
+    console.error('❌ Erreur renvoi vérification:', error)
+    session.flash('errors', { general: 'Une erreur est survenue. Veuillez réessayer.' })
+    return response.redirect().toRoute('show.login')
+  }
 }
-// function route(arg0: string, arg1: { tag: string }) {
-//   throw new Error('Function not implemented.')
-// }
+  
+}
