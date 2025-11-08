@@ -1,15 +1,31 @@
-@each(tweet in tweets)
-  <div class="tweet flex flex-col border-b border-gray-700 text-white p-4">
-    <div class="flex gap-3 items-center">
-      <img src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
-           alt="{{ tweet.user.nom }}" class="w-10 h-10 rounded-full"/>
-      <div class="flex flex-col">
-        <span class="font-bold">{{ tweet.user.nom }} {{ tweet.user.prenom }}</span>
-        <span class="text-gray-400 text-sm">'@'{{ tweet.user.nom }}</span>
-      </div>
-    </div>
+<div class="flex flex-col gap-4  m-4">
+  <img
+    src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"
+    alt="avatar"
+    class="profile-picture w-10 h-10 rounded-full"
+  />
 
-  {{-- Contenu du tweet --}}
+  <div class="text-white">
+    <span class="font-bold">{{ tweet.user.nom }}</span>
+
+    {{-- Affichage si c'est une réponse --}}
+    @if(tweet.parentId)
+      <p class="text-gray-400 text-xs mb-1">
+        Répond à 
+        <a href="{{ route('tweet.show', { id: tweet.parentId }) }}" class="text-blue-400">
+          {{ tweet.user.nom }}
+        </a>
+      </p>
+    @endif
+
+    {{-- Affichage si c'est un retweet --}}
+@if(tweet.$extras?.isRetweet)
+  <p class="text-gray-400 text-xs mb-1 ml-12">
+    🔁 Retweeté par {{ tweet.$extras.retweetedBy }}
+  </p>
+@endif
+
+    {{-- Contenu du tweet --}}
    <p class="mt-1 leading-relaxed" x-html="tweet.contentClean">
   {{{ tweet.contentClean }}}
 </p>
@@ -118,5 +134,7 @@
       </form>
     @endif
   </div>
-  </div>
-@endeach
+</div>
+
+
+
