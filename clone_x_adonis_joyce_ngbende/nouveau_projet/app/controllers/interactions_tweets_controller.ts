@@ -23,13 +23,14 @@ export default class InteractionsTweetsController {
         // Retirer le like (unlike)
         await existingLike.delete()
         console.log('Like supprimé avec succès')
-        return response.json({ success: true, action: 'unliked' })
+        // return response.json({ success: true, action: 'unliked' })
       } else {
         // Créer le like
         await Like.create({ userId: user.id, tweetId: tweetId })
         console.log('Like créé avec succès')
-        return response.json({ success: true, action: 'liked' })
+        // return response.json({ success: true, action: 'liked' })
       }
+      return response.redirect().back()
     } catch (error) {
       console.error('Erreur toggleLike:', error)
       return response.status(500).json({
@@ -58,12 +59,13 @@ export default class InteractionsTweetsController {
       if (existingRetweet) {
         await existingRetweet.delete()
         console.log('Retweet supprimé avec succès')
-        return response.json({ success: true, action: 'unretweeted' })
+        // return response.json({ success: true, action: 'unretweeted' })
       } else {
         await Retweet.create({ userId: user.id, tweetId: tweetId })
         console.log('Retweet créé avec succès')
-        return response.json({ success: true, action: 'retweeted' })
+        // return response.json({ success: true, action: 'retweeted' })
       }
+      return response.redirect().back()
     } catch (error) {
       console.error('Erreur toggleRetweet:', error)
       return response.status(500).json({

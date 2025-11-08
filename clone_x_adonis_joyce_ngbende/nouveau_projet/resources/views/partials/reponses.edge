@@ -37,7 +37,11 @@
 
 
         <div class="flex justify-between mt-3 text-gray-500 text-sm">
-          <button class="hover:text-blue-500">💬 {{ tweet.replies?.length || 0 }}</button>
+           {{-- Nombre de réponses --}}
+    <button class="lengthReply flex items-center gap-1 px-2 py-0.5 rounded">
+      <i data-lucide="message-circle" class="w-4 h-4"></i>
+      {{ tweet.replies?.length || 0 }}
+    </button>
           <!-- Dans partials/tweetSection - REMPLACEZ les boutons JS par des forms -->
 
 {{-- LIKE avec couleur conditionnelle --}}
