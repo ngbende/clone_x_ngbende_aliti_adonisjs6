@@ -102,7 +102,7 @@ export default class AuthenthisController {
       // Vérifie si l'utilisateur existe déjà
       const existingUser = await User.findBy('email', email)
       if (existingUser) {
-       session.flashMessages.set('error', 'Cet email est déjà utilisé. Veuillez en choisir un autre.')
+       session.flash('errors', { general: 'Cet email est déjà utilisé. Veuillez en choisir un autre.' })
 return response.redirect().toRoute('show.signUp')
       }
 
@@ -152,7 +152,7 @@ return response.redirect().toRoute('show.signUp')
     } catch (error) {
      console.error('Error creating user:', error)
     // CORRIGE CELUI-CI
-    session.flashMessages.set('error', 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.')
+   session.flash('errors', { general: 'Une erreur est survenue lors de la création du compte. Veuillez réessayer.' })
     return response.redirect().toRoute('show.signUp')
   }
 }
@@ -161,14 +161,14 @@ return response.redirect().toRoute('show.signUp')
     const token = request.input('token') // récupère ?token=xxx
 
     if (!token) {
-      session.flashMessages.set('error', 'Lien de vérification invalide.')
+      session.flash('errors', { general: 'Lien de vérification invalide.' })
     return response.redirect().toRoute('show.login')
     }
 
     const user = await User.findBy('verificationToken', token)
 
     if (!user) {
-     session.flashMessages.set('error', 'Token invalide ou utilisateur non trouvé.')
+    session.flash('errors', { general: 'Token invalide ou utilisateur non trouvé.' })
     return response.redirect().toRoute('show.login')
     }
 
@@ -176,8 +176,8 @@ return response.redirect().toRoute('show.signUp')
     user.verificationToken = null
     await user.save()
 
-   session.flashMessages.set('success', 'Email vérifié ! Vous pouvez maintenant vous connecter.')
-return response.redirect().toRoute('show.login')
+  session.flash('success', 'Email vérifié ! Vous pouvez maintenant vous connecter.')
+  return response.redirect().toRoute('show.login')
   }
 
 public async login({ request, response, auth, session }: HttpContext) {
@@ -190,13 +190,13 @@ public async login({ request, response, auth, session }: HttpContext) {
     if (userExists) {
       // VÉRIFICATION EMAIL - IMPORTANT
       if (!userExists.verified) {
-       session.flashMessages.set('error', 'Veuillez vérifier votre adresse email avant de vous connecter.')
-return response.redirect().toRoute('show.login')
+       session.flash('errors', { general: 'Veuillez vérifier votre adresse email avant de vous connecter.' })
+       return response.redirect().toRoute('show.login')
       }
     }
     
     if (!userExists) {
-     session.flashMessages.set('error', 'Aucun compte trouvé avec cet email.')
+      session.flash('errors', { general: 'Aucun compte trouvé avec cet email.' })
       return response.redirect().toRoute('show.login')
     }
     
@@ -206,10 +206,10 @@ return response.redirect().toRoute('show.login')
     return response.redirect().toRoute('home.index')
   } catch (error: any) {
     if (error.code === 'E_INVALID_CREDENTIALS') {
-       session.flashMessages.set('error', 'Email ou mot de passe incorrect.')
+      session.flash('errors', { general: 'Email ou mot de passe incorrect.' })
       return response.redirect().toRoute('show.login')
     }
-    session.flashMessages.set('error', 'Une erreur est survenue. Veuillez réessayer plus tard.')
+    session.flash('errors', { general: 'Une erreur est survenue. Veuillez réessayer plus tard.' })
     return response.redirect().toRoute('show.login')
   }
 }

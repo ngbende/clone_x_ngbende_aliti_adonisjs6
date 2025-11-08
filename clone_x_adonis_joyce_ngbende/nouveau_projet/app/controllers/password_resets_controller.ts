@@ -5,7 +5,8 @@ import crypto from 'node:crypto'
 import { DateTime } from 'luxon'
 import sgMail from '@sendgrid/mail'
 import env from '#start/env'
-
+import { passwordResetValidator } from '#validators/password_reset'
+import { errors } from '@vinejs/vine'
 export default class PasswordResetsController {
   // Affiche le formulaire "Mot de passe oublié"
   public async showForgotPassword({ view }: HttpContext) {
@@ -23,7 +24,7 @@ export default class PasswordResetsController {
       const user = await User.findBy('email', email)
       
       // Toujours afficher le même message pour la sécurité
-      session.flashMessages.set('success', 'Si votre email existe, vous recevrez un lien de réinitialisation.')
+      session.flash('success', 'Si votre email existe, vous recevrez un lien de réinitialisation.')
       
       if (!user) {
         console.log('❌ Utilisateur non trouvé pour email:', email)
@@ -91,7 +92,7 @@ export default class PasswordResetsController {
       console.error('❌ Erreur détaillée envoi lien reset:')
       console.error('Message:', error.message)
       console.error('Stack:', error.stack)
-      session.flashMessages.set('error', 'Une erreur est survenue. Veuillez réessayer.')
+      session.flash('errors', { general: 'Une erreur est survenue. Veuillez réessayer.' })
       return response.redirect().toRoute('password.request')
     }
   }
@@ -103,7 +104,7 @@ export default class PasswordResetsController {
     
     if (!token) {
       console.log('❌ Token manquant')
-      session.flashMessages.set('error', 'Token de réinitialisation manquant.')
+      session.flash('errors', { general: 'Token de réinitialisation manquant.' })
       return response.redirect().toRoute('password.request')
     }
 
@@ -123,7 +124,7 @@ export default class PasswordResetsController {
 
       if (!resetToken || !resetToken.isValid()) {
         console.log('❌ Token invalide ou expiré')
-        session.flashMessages.set('error', 'Lien de réinitialisation invalide ou expiré.')
+        session.flash('errors', { general: 'Lien de réinitialisation invalide ou expiré.' })
         return response.redirect().toRoute('password.request')
       }
 
@@ -132,34 +133,32 @@ export default class PasswordResetsController {
 
     } catch (error) {
       console.error('❌ Erreur showResetForm:', error)
-      session.flashMessages.set('error', 'Une erreur est survenue.')
+      session.flash('errors', { general: 'Une erreur est survenue.' })
       return response.redirect().toRoute('password.request')
     }
   }
 
   // Traite la réinitialisation
   public async resetPassword({ request, response, session }: HttpContext) {
-    const { token, password, password_confirmation } = request.only([
-      'token', 'password', 'password_confirmation'
-    ])
+    const { token, password } = await request.validateUsing(passwordResetValidator)
 
     console.log('🔄 Début resetPassword - Token:', token)
     console.log('🔐 Nouveau password:', password ? '***' : 'manquant')
-    console.log('🔐 Password confirmation:', password_confirmation ? '***' : 'manquant')
+    // console.log('🔐 Password confirmation:', password_confirmation ? '***' : 'manquant')
 
     try {
       // Validation des mots de passe
-      if (password !== password_confirmation) {
-        console.log('❌ Mots de passe ne correspondent pas')
-        session.flashMessages.set('error', 'Les mots de passe ne correspondent pas.')
-        return response.redirect().toPath(`/reset-password?token=${token}`)
-      }
+    //   if (password !== password_confirmation) {
+    //     console.log('❌ Mots de passe ne correspondent pas')
+    //     session.flash('errors', { general: 'Les mots de passe ne correspondent pas.' })
+    //     return response.redirect().toPath(`/reset-password?token=${token}`)
+    //   }
 
-      if (password.length < 8) {
-        console.log('❌ Mot de passe trop court:', password.length)
-        session.flashMessages.set('error', 'Le mot de passe doit faire au moins 8 caractères.')
-        return response.redirect().toPath(`/reset-password?token=${token}`)
-      }
+    //   if (password.length < 8) {
+    //     console.log('❌ Mot de passe trop court:', password.length)
+    //     session.flash('errors', { general: 'Le mot de passe doit faire au moins 8 caractères.' })
+    //     return response.redirect().toPath(`/reset-password?token=${token}`)
+    //   }
 
       // Chercher le token avec l'utilisateur
       console.log('🔍 Recherche du token avec user...')
@@ -173,7 +172,7 @@ export default class PasswordResetsController {
 
       if (!resetToken || !resetToken.isValid()) {
         console.log('❌ Token invalide dans resetPassword')
-        session.flashMessages.set('error', 'Lien de réinitialisation invalide ou expiré.')
+        session.flash('errors', { general: 'Lien de réinitialisation invalide ou expiré.' })
         return response.redirect().toRoute('password.request')
       }
 
@@ -187,15 +186,22 @@ export default class PasswordResetsController {
       await resetToken.delete()
 
       console.log('✅ Mot de passe réinitialisé avec succès!')
-      session.flashMessages.set('success', 'Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.')
+      session.flash('success', 'Mot de passe réinitialisé avec succès ! Vous pouvez maintenant vous connecter.')
       return response.redirect().toRoute('show.login')
 
     } catch (error) {
-      console.error('❌ Erreur détaillée reset password:')
-      console.error('Message:', error.message)
-      console.error('Stack:', error.stack)
-      session.flashMessages.set('error', 'Une erreur est survenue. Veuillez réessayer.')
-      return response.redirect().toPath(`/reset-password?token=${token}`)
+     if (error instanceof errors.E_VALIDATION_ERROR) {
+      // Redirige avec le token pour garder le contexte
+      const token = request.input('token')
+      return response.redirect().toPath(`/reset-password?token=${token}`) // ✅ ICI
+    }
+    
+    console.error('❌ Erreur détaillée reset password:')
+    console.error('Message:', error.message)
+    console.error('Stack:', error.stack)
+    session.flash('errors', { general: 'Une erreur est survenue. Veuillez réessayer.' })
+    const token = request.input('token')
+    return response.redirect().toPath(`/reset-password?token=${token}`) // ✅ ICI
     }
   }
 }

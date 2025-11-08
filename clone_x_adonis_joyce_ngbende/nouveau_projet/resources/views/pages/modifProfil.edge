@@ -21,10 +21,10 @@
   </div>
 @endif
 
-{{-- Messages d'erreur généraux --}}
-@if(flashMessages.has('errors.general'))
+{{-- Messages d'erreur spécifiques --}}
+@if(flashMessages.has('errors.current_password'))
   <div class="bg-red-500 text-white p-3 rounded mb-4">
-    {{ flashMessages.get('errors.general') }}
+    {{ flashMessages.get('errors.current_password') }}
   </div>
 @endif
     <form  action="{{ route('user.updateProfil') }}"

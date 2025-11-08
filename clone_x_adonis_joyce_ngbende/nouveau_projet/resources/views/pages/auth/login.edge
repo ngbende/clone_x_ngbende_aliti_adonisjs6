@@ -19,9 +19,9 @@
     >
       <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
       {{ csrfField() }}
-     @if(flashMessages.has('error'))
-  <div class="bg-red-500 text-white p-3 rounded-md w-full mb-4 text-center">
-    {{ flashMessages.get('error') }}
+   @if(flashMessages.has('errors.general'))
+  <div class="bg-red-500 text-white p-3 rounded mb-4">
+    {{ flashMessages.get('errors.general') }}
   </div>
 @endif
 
