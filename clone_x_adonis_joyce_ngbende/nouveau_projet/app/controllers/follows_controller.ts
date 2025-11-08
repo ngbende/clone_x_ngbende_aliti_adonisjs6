@@ -79,11 +79,33 @@ export default class FollowsController {
       const followingIds = followings.map((f) => f.followed.id)
 
       // Récupérer les tweets de ces utilisateurs
-      const tweets = await Tweet.query()
-        .whereIn('user_id', followingIds)
-        .preload('user') // pour les infos de l'auteur
-        .orderBy('created_at', 'desc')
-        .exec()
+         const tweets = await Tweet.query()
+      .whereIn('user_id', followingIds)
+      .preload('user') // pour les infos de l'auteur
+      .preload('medias') // AJOUT: charger les médias
+      .preload('likes') // AJOUT: charger les likes
+      .preload('retweets') // AJOUT: charger les retweets
+      .preload('hashtags') // AJOUT: charger les hashtags
+      .preload('replies') // AJOUT: charger les réponses (optionnel)
+      .orderBy('created_at', 'desc')
+      .exec()
+
+    // ✅ AJOUT: Transformation des hashtags pour chaque tweet
+    tweets.forEach((tweet) => {
+      if (tweet.hashtags && tweet.hashtags.length > 0) {
+        let content = tweet.content
+        tweet.hashtags.forEach((h) => {
+          const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+          content = content.replace(
+            regex,
+            `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+          )
+        })
+        tweet.contentClean = content
+      } else {
+        tweet.contentClean = tweet.content
+      }
+    })
 
       // Récupérer des suggestions (par ex. utilisateurs non suivis)
       const followedIds = followingIds.concat(userId) // exclure déjà suivis + soi-même

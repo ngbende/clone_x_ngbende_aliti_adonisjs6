@@ -32,6 +32,7 @@
 
 
     
+   
     {{-- Médias --}}
   @if(tweet.medias && tweet.medias.length > 0)
   @each(media in tweet.medias)
@@ -49,10 +50,6 @@
     <source src="/{{ media.url }}" type="video/mp4" />
     Ton navigateur ne supporte pas la vidéo.
   </video>
-@endif
-
-
-  @endeach
 @endif
 
 
