@@ -144,6 +144,10 @@
       </div>
         <div id="container-replies" class="hidden flex flex-col">
     <!-- Contenu chargé via fetch -->
+          @include('partials/tweetSection')
+          @!component('components/reponseForm')
+         @!component('components/deleteTweet')
+
   </div>
 
   <div id="container-medias" class="hidden flex flex-col">
