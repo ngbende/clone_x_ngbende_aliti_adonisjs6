@@ -32,7 +32,6 @@
 
 
     
-   
     {{-- Médias --}}
   @if(tweet.medias && tweet.medias.length > 0)
   @each(media in tweet.medias)
@@ -51,7 +50,10 @@
     Ton navigateur ne supporte pas la vidéo.
   </video>
 @endif
-   @endeach
+
+
+  @endeach
+@endif
 
 
 
