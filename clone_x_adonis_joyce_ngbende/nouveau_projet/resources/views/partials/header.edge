@@ -103,14 +103,15 @@
 
     <div class="user_div flex flex-row mt-6 cursor-pointer">
 
-      <div class="rounded-full border-black border-5 w-10 h-10 bg-[#333639] ">
+  
+
+      <div id="para-name-user" class="flex flex-col" onclick="openLogoutModal()">
+            <div class="rounded-full border-black border-5 w-10 h-10 bg-[#333639] ">
            @if(auth.user)
         <img src="{{auth.user.photoProfil || '/images/default-avatar.png'}}" alt="photo de profil" class="profile-picture w-full h-full object-cover  rounded-full  " />
               @endif
 
       </div>
-
-      <div id="para-name-user" class="flex flex-col" onclick="openLogoutModal()">
         @if(auth.user)
         <p id="username" class="text-white text-sm w-[300px] username1">
       {{ auth.user.nom }}
