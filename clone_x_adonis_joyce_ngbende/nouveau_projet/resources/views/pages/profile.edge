@@ -142,20 +142,25 @@
           {{--  @!component('components/reponseForm')  --}}
         @endeach
       </div>
-        <div id="container-replies" class="hidden flex flex-col">
-    <!-- Contenu chargé via fetch -->
-          @include('partials/tweetSection')
-          @!component('components/reponseForm')
-         @!component('components/deleteTweet')
-
+        <!-- Réponses (caché par défaut) -->
+  <div id="container-replies" class="hidden flex flex-col">
+    @each(tweet in userReplies)
+      @include('partials/tweetSection')
+    @endeach
   </div>
 
+   <!-- Médias (caché par défaut) -->
   <div id="container-medias" class="hidden flex flex-col">
-    <!-- Filtrage médias ici si nécessaire -->
+    @each(tweet in userMedias)
+      @include('partials/tweetSection')
+    @endeach
   </div>
 
+   <!-- Likes (caché par défaut) -->
   <div id="container-likes" class="hidden flex flex-col">
-    <!-- Filtrage likes ici si nécessaire -->
+    @each(tweet in userLikes)
+      @include('partials/tweetSection')
+    @endeach
   </div>
   </section>
 
@@ -168,39 +173,31 @@
 </script>
 <script>
 document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', async (e) => {
-    e.preventDefault()
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
 
-    // Onglet actif
+    // Style des onglets
     document.querySelectorAll('.tab').forEach(t => {
-      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold')
-      t.classList.add('text-gray-400')
-    })
-    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold')
-    tab.classList.remove('text-gray-400')
+      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold');
+      t.classList.add('text-gray-400');
+    });
+    
+    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold');
+    tab.classList.remove('text-gray-400');
 
-    const target = tab.dataset.target
-
-    // Cacher tous les containers
-    document.querySelectorAll('#profile-tweets > div').forEach(c => c.classList.add('hidden'))
-
-    if(target === 'replies') {
-      const repliesContainer = document.getElementById('container-replies')
-      repliesContainer.classList.remove('hidden')
-       
-
-      // Si pas déjà chargé, fetch les réponses
-      if(!repliesContainer.innerHTML.trim()) {
-        const res = await fetch(`/profile/tweets/{{ user.id }}/reply`)
-        const html = await res.text()
-        repliesContainer.innerHTML = html
-      }
-    } else {
-      const container = document.getElementById(`container-${target}`)
-      container.classList.remove('hidden')
-    }
-  })
-})
+    // Affichage contenu
+    const target = tab.dataset.target;
+    
+    // Cacher TOUT
+    document.getElementById('container-posts').classList.add('hidden');
+    document.getElementById('container-replies').classList.add('hidden');
+    document.getElementById('container-medias').classList.add('hidden');
+    document.getElementById('container-likes').classList.add('hidden');
+    
+    // Montrer la cible
+    document.getElementById(`container-${target}`).classList.remove('hidden');
+  });
+});
 </script>
   <!-- Ligne entre nav et main -->
    <div

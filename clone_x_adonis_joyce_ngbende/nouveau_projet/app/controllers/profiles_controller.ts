@@ -61,6 +61,41 @@ export default class ProfilesController {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
+
+  // RÉPONSES
+  const userReplies = await Tweet.query()
+    .where('userId', user.id)
+    .whereNotNull('parentId')
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .preload('parent', (parentQuery) => {
+      parentQuery.preload('user')
+    })
+    .orderBy('createdAt', 'desc')
+
+  // MÉDIAS
+  const userMedias = await Tweet.query()
+    .where('userId', user.id)
+     .whereHas('medias', () => {}) 
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .orderBy('createdAt', 'desc')
+
+  // LIKES
+  const userLikes = await Tweet.query()
+    .whereHas('likes', (likeQuery) => {
+      likeQuery.where('userId', user.id)
+    })
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .orderBy('createdAt', 'desc')
+
     //  Transformation des hashtags EN contentClean
 allTweets.forEach((tweet) => {
   if (tweet.hashtags && tweet.hashtags.length > 0) {
@@ -96,8 +131,58 @@ allTweets.forEach((tweet) => {
     })
   }
 })
+// Transformation des hashtags pour USER REPLIES
+userReplies.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
 
-    return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false })
+// Transformation des hashtags pour USER MEDIAS
+userMedias.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
+
+// Transformation des hashtags pour USER LIKES
+userLikes.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
+
+    return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false, userReplies, userMedias, userLikes })  
   }
 
   
@@ -150,8 +235,42 @@ allTweets.forEach((tweet) => {
     const allTweets = [...tweets, ...retweetedTweets].sort(
       (a, b) => b.createdAt.toJSDate().getTime() - a.createdAt.toJSDate().getTime()
     )
+      // RÉPONSES
+  const userReplies = await Tweet.query()
+    .where('userId', user.id)
+    .whereNotNull('parentId')
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .preload('parent', (parentQuery) => {
+      parentQuery.preload('user')
+    })
+    .orderBy('createdAt', 'desc')
+
+  // MÉDIAS
+  const userMedias = await Tweet.query()
+    .where('userId', user.id)
+    .whereHas('medias', () => {})
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .orderBy('createdAt', 'desc')
+
+  // LIKES
+  const userLikes = await Tweet.query()
+    .whereHas('likes', (likeQuery) => {
+      likeQuery.where('userId', user.id)
+    })
+    .preload('user')
+    .preload('likes')
+    .preload('retweets')
+    .preload('medias')
+    .orderBy('createdAt', 'desc')
+
+
     // Transformation des hashtags EN contentClean
-   
 allTweets.forEach((tweet) => {
   if (tweet.hashtags && tweet.hashtags.length > 0) {
     let content = tweet.content
@@ -186,6 +305,56 @@ allTweets.forEach((tweet) => {
     })
   }
 })
+// Transformation des hashtags pour USER REPLIES
+userReplies.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
+
+// Transformation des hashtags pour USER MEDIAS
+userMedias.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
+
+// Transformation des hashtags pour USER LIKES
+userLikes.forEach((tweet) => {
+  if (tweet.hashtags && tweet.hashtags.length > 0) {
+    let content = tweet.content
+    tweet.hashtags.forEach((h) => {
+      const regex = new RegExp(`#${h.texteHashtag}`, 'gi')
+      content = content.replace(
+        regex,
+        `<a href="/hashtag/${h.texteHashtag}" class="text-blue-400 hover:underline">#${h.texteHashtag}</a>`
+      )
+    })
+    tweet.contentClean = content
+  } else {
+    tweet.contentClean = tweet.content
+  }
+})
     // Vérifier si l'utilisateur connecté a bloqué ce profil
     const isBlocked = await user.isBlockedBy(auth.user!.id)
     // Dans showUserProfile
@@ -195,10 +364,10 @@ allTweets.forEach((tweet) => {
       .first()
 
     if (blocked) {
-      return view.render('pages/profile', { user, tweets: [], isBlocked: true })
+      return view.render('pages/profile', { user, tweets: [], userReplies: [], userMedias: [], userLikes: [], isBlocked: true })
     }
 
-    return view.render('pages/profile', { user, tweets: allTweets, isBlocked })
+    return view.render('pages/profile', { user, tweets: allTweets, isBlocked, userReplies, userMedias, userLikes })
   }
 
   public async repliesPartial({ view, params }: HttpContext) {
