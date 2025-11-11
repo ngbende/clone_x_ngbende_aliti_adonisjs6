@@ -72,14 +72,14 @@
       <span class="hidden lg:block text-center font-bold text-sm">Poster</span>
     </button>
     
-    <!-- Section utilisateur avec déconnexion -->
+    <!-- Section utilisateur avec déconnexion - TOUJOURS VISIBLE SUR DESKTOP -->
     <div class="user_div flex flex-row mt-4 cursor-pointer items-center justify-center w-full lg:mt-6 lg:justify-start lg:p-2 rounded-full hover:bg-gray-900 transition" onclick="openLogoutModal()">
       <div class="rounded-full w-8 h-8 bg-[#333639] lg:w-10 lg:h-10">
         @if(auth.user)
         <img src="{{auth.user.photoProfil || '/images/default-avatar.png'}}" alt="photo de profil" class="profile-picture w-full h-full object-cover rounded-full" />
         @endif
       </div>
-      <!-- Infos utilisateur - cachées sur mobile -->
+      <!-- Infos utilisateur - VISIBLE SUR DESKTOP -->
       <div class="hidden lg:flex flex-col ml-3">
         @if(auth.user)
         <p id="username" class="text-white text-sm username1 font-semibold">{{ auth.user.nom }}</p>

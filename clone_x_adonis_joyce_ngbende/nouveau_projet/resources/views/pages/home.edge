@@ -103,11 +103,12 @@
   @!component('components/reponseForm')
   @!component('components/deleteTweet')
 
-  <!-- Lignes de séparation desktop -->
-  <div class="xs:hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
-  <div class="xs:hidden md:block fixed right-64 lg:right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
-
-
+  <!-- UNIQUEMENT 2 LIGNES VERTICALES -->
+  <!-- Ligne entre header et main -->
+  <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
+  
+  <!-- Ligne entre main et search (uniquement quand search est visible) -->
+  <div class="hidden md:block fixed right-64 lg:right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
     <script>
   const fileBtn = document.getElementById('openFilePicker')
   const fileInput = document.getElementById('imageInput')
