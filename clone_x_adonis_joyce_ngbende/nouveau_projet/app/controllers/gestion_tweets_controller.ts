@@ -152,7 +152,7 @@ export default class GestionTweetsController {
           content: r.content,
           hasUser: !!r.user,
           userName: r.user?.nom,
-          mediasCount: r.medias?.length  // ✅ C'est correct!
+          mediasCount: r.medias?.length  // C'est correct!
         }))
       })
 
