@@ -1,119 +1,110 @@
-<!-- MOBILE FIRST - par défaut pour mobile, puis desktop -->
-<header class="w-20 h-full p-4 fixed left-0 top-0 z-50 lg:w-1/4 lg:p-6">
+<!-- Header Mobile - Barre en bas -->
+<header class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-gray-700 h-16">
+  <nav class="flex items-center justify-around h-full px-2">
+    <a href="/home" class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
+    </a>
+    <a href="{{ route('search') }}" class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search" />
+    </a>
+    <button class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/appointment-reminders--v1.png" alt="notifications" />
+    </button>
+    <button class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/new-post--v1.png" alt="messages" />
+    </button>
+    <a href="/profile" class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png" alt="profile" />
+    </a>
+  </nav>
+</header>
+
+<!-- Header Desktop - Sidebar gauche -->
+<header class="hidden md:flex w-16 lg:w-64 h-full p-4 fixed left-0 top-0 z-50 lg:p-6 bg-black border-r border-gray-700">
   
   <!-- Logo -->
-  <div class="w-full h-12 -mt-2 flex justify-center lg:h-16 lg:-mt-4 lg:justify-start">
-    <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="logo_X w-8 h-8 object-contain lg:w-20 lg:h-11" />
+  <div class="w-full h-12 -mt-2 flex justify-center lg:justify-start lg:h-16 lg:-mt-4">
+    <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-8 h-8 object-contain lg:w-12 lg:h-12" />
   </div>
   
-  <!-- Navigation -->
-  <nav class="nav-bar flex flex-col gap-3 items-center w-full lg:gap-5 lg:items-start lg:ml-6">
+  <!-- Navigation - TOUT LE RESTE DE TON CODE EXACTEMENT COMME AVEC LES CLASSES lg: -->
+  <nav class="nav-bar flex flex-col gap-3 items-center w-full lg:gap-4 lg:items-start lg:ml-4 mt-4">
     
     <!-- Premier lien -->
-    <a href="/home" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="/home" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="23" height="23" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
-      <!-- Texte caché sur mobile, visible sur desktop -->
-      <p class="text-white text-sm hidden lg:block">
-        Domicile
-      </p>
+      <p class="text-white text-sm hidden lg:block">Domicile</p>
     </a>
     
     <!-- Deuxième lien -->
-    <a href="{{ route('search') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="{{ route('search') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search--v1" />
-      <p class="text-white text-sm hidden lg:block">
-        Explorer
-      </p>
+      <p class="text-white text-sm hidden lg:block">Explorer</p>
     </a>
     
+    <!-- Continuer avec tous tes liens exactement comme avant... -->
     <!-- Troisième lien -->
-    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/appointment-reminders--v1.png" alt="appointment-reminders--v1" />
-      <p class="text-white text-sm hidden lg:block">
-        Notifications
-      </p>
+      <p class="text-white text-sm hidden lg:block">Notifications</p>
     </a>
     
     <!-- Demandes de suivi -->
     @if(auth.user && auth.user.isPrivate)
-    <a href="{{ route('follow.received') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start lg:ml-4">
+    <a href="{{ route('follow.received') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/FFFFFF/add-user-group-man-man.png" alt="follow-requests" />
-      <p class="text-white text-sm hidden lg:block">
-        Demandes de suivi
-      </p>
+      <p class="text-white text-sm hidden lg:block">Demandes de suivi</p>
     </a>
     @endif
     
     <!-- Messages -->
-    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="23" height="25" src="https://img.icons8.com/ios/50/FFFFFF/new-post--v1.png" alt="new-post--v1" />
-      <p class="text-white text-sm hidden lg:block">
-        Messages
-      </p>
+      <p class="text-white text-sm hidden lg:block">Messages</p>
     </a>
     
     <!-- Grok -->
-    <a href="{{ route('grok.page') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="{{ route('grok.page') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" />
-      <p class="text-white text-sm hidden lg:block">
-        Grok
-      </p>
+      <p class="text-white text-sm hidden lg:block">Grok</p>
     </a>
     
     <!-- Communautés -->
-    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/ios-glyphs/60/FFFFFF/group-foreground-selected.png" alt="group-foreground-selected" />
-      <p class="text-white text-sm hidden lg:block">
-        Communautés
-      </p>
+      <p class="text-white text-sm hidden lg:block">Communautés</p>
     </a>
     
     <!-- Profil -->
-    <a href="/profile" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="/profile" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png" alt="gender-neutral-user--v1" />
-      <p class="text-white text-sm hidden lg:block">
-        Profil
-      </p>
+      <p class="text-white text-sm hidden lg:block">Profil</p>
     </a>
     
     <!-- Plus -->
-    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-4 lg:justify-start">
+    <a href="" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
       <img width="27" height="27" src="https://img.icons8.com/ios-filled/50/FFFFFF/more.png" alt="more" />
-      <p class="text-white text-sm hidden lg:block">
-        Plus
-      </p>
+      <p class="text-white text-sm hidden lg:block">Plus</p>
     </a>
     
     <!-- Bouton Poster -->
-    <a href="" class="link-nav flex items-center justify-center w-full lg:justify-start">
-      <button>
-        <p class="text-black bg-white border-white border-[2px] rounded-full text-sm p-2 w-10 h-10 flex items-center justify-center lg:text-xl lg:p-3 lg:w-[200px]">
-          <span class="lg:hidden">+</span>
-          <span class="hidden lg:inline">Poster</span>
-        </p>
-      </button>
-    </a>
+    <button class="bg-white text-black rounded-full p-2 lg:p-3 w-10 h-10 lg:w-full lg:h-auto flex items-center justify-center lg:justify-start mt-2 hover:bg-gray-200 transition">
+      <span class="lg:hidden text-lg font-bold">+</span>
+      <span class="hidden lg:block text-center lg:text-left font-bold text-sm">Poster</span>
+    </button>
     
     <!-- Section utilisateur -->
-    <div class="user_div flex flex-row mt-4 cursor-pointer items-center justify-center w-full lg:mt-6 lg:justify-start">
-      
-  
-      
-      <!-- Infos utilisateur - cachées sur mobile -->
-      <div id="para-name-user" class="hidden flex-col lg:flex" onclick="openLogoutModal()">
-            <!-- Avatar -->
-      <div class="rounded-full border-black border-5 w-8 h-8 bg-[#333639] lg:w-10 lg:h-10">
+    <div class="user_div flex flex-row mt-4 cursor-pointer items-center justify-center w-full lg:mt-6 lg:justify-start lg:p-2 rounded-full hover:bg-gray-900 transition" onclick="openLogoutModal()">
+      <div class="rounded-full w-8 h-8 bg-[#333639] lg:w-10 lg:h-10">
         @if(auth.user)
         <img src="{{auth.user.photoProfil || '/images/default-avatar.png'}}" alt="photo de profil" class="profile-picture w-full h-full object-cover rounded-full" />
         @endif
       </div>
+      <!-- Infos utilisateur - cachées sur mobile -->
+      <div class="hidden lg:flex flex-col ml-3">
         @if(auth.user)
-        <p id="username" class="text-white text-sm username1">
-          {{ auth.user.nom }}
-        </p>
-        <p class="text-white text-sm username2">
-          {{ auth.user.email }}
-        </p>
+        <p id="username" class="text-white text-sm username1 font-semibold">{{ auth.user.nom }}</p>
+        <p class="text-white text-sm username2 text-gray-500">{{ auth.user.email }}</p>
         @endif
       </div>
     </div>
