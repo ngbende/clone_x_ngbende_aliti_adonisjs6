@@ -1,16 +1,23 @@
-<div class="flex flex-col gap-4  m-4">
+<div class="flex gap-3 p-4 border-b border-gray-700 hover:bg-gray-900/30 transition">
+  <!-- Avatar -->
   <img
     src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"
     alt="avatar"
-    class="profile-picture w-10 h-10 rounded-full"
+    class="w-10 h-10 rounded-full flex-shrink-0"
   />
 
-  <div class="text-white">
-    <span class="font-bold">{{ tweet.user.nom }}</span>
+  <div class="flex-1 min-w-0">
+    <!-- En-tête du tweet -->
+    <div class="flex items-center gap-2 flex-wrap mb-1">
+      <span class="font-bold text-white text-sm">{{ tweet.user.nom }}</span>
+      <span class="text-gray-500 text-sm">@{{ tweet.user.username || tweet.user.id }}</span>
+      <span class="text-gray-500 text-sm">·</span>
+      <span class="text-gray-500 text-sm">2h</span>
+    </div>
 
     {{-- Affichage si c'est une réponse --}}
     @if(tweet.parentId)
-      <p class="text-gray-400 text-xs mb-1">
+      <p class="text-gray-400 text-xs mb-2">
         Répond à 
         <a href="{{ route('tweet.show', { id: tweet.parentId }) }}" class="text-blue-400">
           {{ tweet.user.nom }}
@@ -19,122 +26,146 @@
     @endif
 
     {{-- Affichage si c'est un retweet --}}
-@if(tweet.$extras?.isRetweet)
-  <p class="text-gray-400 text-xs mb-1 ml-12">
-    🔁 Retweeté par {{ tweet.$extras.retweetedBy }}
-  </p>
-@endif
+    @if(tweet.$extras?.isRetweet)
+      <p class="text-gray-400 text-xs mb-2">
+        🔁 Retweeté par {{ tweet.$extras.retweetedBy }}
+      </p>
+    @endif
 
     {{-- Contenu du tweet --}}
-   <p class="mt-1 leading-relaxed" x-html="tweet.contentClean">
-  {{{ tweet.contentClean }}}
-</p>
-
-
+    <p class="text-white text-sm leading-relaxed mb-3 break-words">
+      {{{ tweet.contentClean }}}
+    </p>
     
     {{-- Médias --}}
-  @if(tweet.medias && tweet.medias.length > 0)
-  @each(media in tweet.medias)
+    @if(tweet.medias && tweet.medias.length > 0)
+      @each(media in tweet.medias)
+        {{-- Affichage des images --}}
+        @if(media.type === 'image')
+          <img src="/{{ media.url }}"
+               alt="Tweet Image"
+               class="mb-3 rounded-xl w-full max-w-full object-cover" />
+        @endif
 
-    {{-- Affichage des images --}}
-    @if(media.type === 'image')
-      <img src="/{{ media.url }}"
-           alt="Tweet Image"
-           class="mt-2 rounded-lg w-full max-w-md object-cover" />
+        {{-- Affichage des vidéos --}}
+        @if(media.type === 'video')
+          <video controls class="mb-3 rounded-xl w-full max-w-full">
+            <source src="/{{ media.url }}" type="video/mp4" />
+            Ton navigateur ne supporte pas la vidéo.
+          </video>
+        @endif
+      @endeach
     @endif
 
-    {{-- Affichage des vidéos --}}
-   @if(media.type === 'video')
-  <video controls class="mt-2 rounded-lg w-full max-w-md">
-    <source src="/{{ media.url }}" type="video/mp4" />
-    Ton navigateur ne supporte pas la vidéo.
-  </video>
-@endif
-
-
-  @endeach
-@endif
-
-
-
-
-
-
-  </div>
-
-  <div class="flex flex-wrap justify-start items-center text-gray-400 mt-3 gap-2 text-sm">
-    {{-- Répondre --}}
-    <button class="openReplyForm px-2 py-0.5 rounded flex items-center gap-1 m-4"
-            data-id="{{ tweet.id }}"
-            data-user="{{ tweet.user.nom }}"
-            data-content="{{ tweet.content }}">
-      Répondre
-    </button>
-
-    {{-- Nombre de réponses --}}
-    <button class="lengthReply flex items-center gap-1 px-2 py-0.5 rounded">
-      <i data-lucide="message-circle" class="w-4 h-4"></i>
-      {{ tweet.replies?.length || 0 }}
-    </button>
-
-    {{-- Retweet --}}
-    <!-- Dans partials/tweetSection - REMPLACEZ les boutons JS par des forms -->
-
-{{-- LIKE avec couleur conditionnelle --}}
-<form action="{{ route('tweets.like', { id: tweet.id }) }}" method="POST" class="inline">
-  {{ csrfField() }}
-  <button type="submit" 
-          class="flex items-center gap-1 px-2 py-0.5 rounded
-                 {{ tweet.likes?.some(like => like.userId === auth.user.id) 
-                    ? 'text-pink-400' 
-                    : 'text-gray-400 hover:text-pink-400' }}">
-    <i data-lucide="heart" class="w-4 h-4"></i>
-    <span>{{ tweet.likes?.length || 0 }}</span>
-  </button>
-</form>
-
-{{-- RETWEET avec couleur conditionnelle --}}
-<form action="{{ route('tweets.retweet', { id: tweet.id }) }}" method="POST" class="inline">
-  {{ csrfField() }}
-  <button type="submit"
-          class="flex items-center gap-1 px-2 py-0.5 rounded
-                 {{ tweet.retweets?.some(rt => rt.userId === auth.user.id) 
-                    ? 'text-green-400' 
-                    : 'text-gray-400 hover:text-green-400' }}">
-    <i data-lucide="repeat-2" class="w-4 h-4"></i>
-    <span>{{ tweet.retweets?.length || 0 }}</span>
-  </button>
-</form>
-
-    {{-- Partager --}}
-    <button title="Partager" class="px-2 py-0.5 rounded hover:text-blue-300">📤</button>
-
-    {{-- Supprimer si c'est mon tweet --}}
-    @if(auth.user.id === tweet.user.id)
-      <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
-              class="px-2 py-0.5 rounded hover:text-red-400">
-        Supprimer
+    <!-- Actions des tweets - OPTIMISÉ POUR MOBILE -->
+    <div class="flex justify-between items-center text-gray-400 max-w-full">
+      
+      <!-- Répondre -->
+      <button class="openReplyForm flex items-center gap-1 p-2 rounded-full hover:bg-blue-400/10 hover:text-blue-400 transition group"
+              data-id="{{ tweet.id }}"
+              data-user="{{ tweet.user.nom }}"
+              data-content="{{ tweet.content }}">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        <span class="text-xs group-hover:block">{{ tweet.replies?.length || 0 }}</span>
       </button>
-    @endif
 
-    {{-- Voir le thread --}}
-    <a href="{{ route('tweet.show', { id: tweet.id }) }}" class="px-2 py-0.5 rounded hover:underline">
-      Voir le thread →
-    </a>
-
-    {{-- Bloquer/Débloquer si ce n'est pas mon tweet --}}
-    @if(auth.user.id !== tweet.user.id)
-      <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST" class="inline-block">
+      <!-- Retweet -->
+      <form action="{{ route('tweets.retweet', { id: tweet.id }) }}" method="POST" class="inline">
         {{ csrfField() }}
         <button type="submit"
-                class="px-2 py-0.5 text-xs rounded font-semibold
-                       {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }}">
-          {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+                class="flex items-center gap-1 p-2 rounded-full hover:bg-green-400/10 transition group
+                       {{ tweet.retweets?.some(rt => rt.userId === auth.user.id) 
+                          ? 'text-green-400' 
+                          : 'text-gray-400 hover:text-green-400' }}">
+          <i data-lucide="repeat-2" class="w-4 h-4"></i>
+          <span class="text-xs group-hover:block">{{ tweet.retweets?.length || 0 }}</span>
         </button>
       </form>
-    @endif
+
+      <!-- Like -->
+      <form action="{{ route('tweets.like', { id: tweet.id }) }}" method="POST" class="inline">
+        {{ csrfField() }}
+        <button type="submit" 
+                class="flex items-center gap-1 p-2 rounded-full hover:bg-pink-400/10 transition group
+                       {{ tweet.likes?.some(like => like.userId === auth.user.id) 
+                          ? 'text-pink-400' 
+                          : 'text-gray-400 hover:text-pink-400' }}">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          <span class="text-xs group-hover:block">{{ tweet.likes?.length || 0 }}</span>
+        </button>
+      </form>
+
+      <!-- Partager -->
+      <button title="Partager" class="p-2 rounded-full hover:bg-blue-400/10 hover:text-blue-400 transition">
+        <i data-lucide="share" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Menu options -->
+      <div class="relative">
+        <button class="p-2 rounded-full hover:bg-gray-400/10 transition">
+          <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+        </button>
+        
+        <!-- Menu déroulant pour supprimer/bloquer -->
+        <div class="absolute right-0 top-full hidden bg-black border border-gray-700 rounded-lg shadow-lg z-10 min-w-32">
+          {{-- Supprimer si c'est mon tweet --}}
+          @if(auth.user.id === tweet.user.id)
+            <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
+                    class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800 rounded-t-lg">
+              Supprimer
+            </button>
+          @endif
+          
+          {{-- Bloquer/Débloquer si ce n'est pas mon tweet --}}
+          @if(auth.user.id !== tweet.user.id)
+            <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST" class="w-full">
+              {{ csrfField() }}
+              <button type="submit"
+                      class="w-full text-left px-4 py-2 text-sm {{ isBlocked ? 'text-green-400' : 'text-red-400' }} hover:bg-gray-800 rounded-b-lg">
+                {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+              </button>
+            </form>
+          @endif
+          
+          {{-- Voir le thread --}}
+          <a href="{{ route('tweet.show', { id: tweet.id }) }}" 
+             class="block px-4 py-2 text-sm text-white hover:bg-gray-800 border-t border-gray-700">
+            Voir le thread
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<script>
+// Script pour le menu déroulant
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.relative button').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const menu = this.nextElementSibling;
+      const isVisible = menu.classList.contains('hidden');
+      
+      // Fermer tous les autres menus
+      document.querySelectorAll('.relative > div').forEach(otherMenu => {
+        otherMenu.classList.add('hidden');
+      });
+      
+      // Ouvrir/fermer le menu actuel
+      if (isVisible) {
+        menu.classList.remove('hidden');
+      } else {
+        menu.classList.add('hidden');
+      }
+    });
+  });
 
-
+  // Fermer les menus quand on clique ailleurs
+  document.addEventListener('click', function() {
+    document.querySelectorAll('.relative > div').forEach(menu => {
+      menu.classList.add('hidden');
+    });
+  });
+});
+</script>
