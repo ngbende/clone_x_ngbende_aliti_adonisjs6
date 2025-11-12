@@ -12,12 +12,12 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
   </head>
-  <body class="bg-black w-full flex flex-col h-screen">
+  <body class="bg-black w-full flex flex-col min-h-screen">
     @include('partials/header')
        @!component('components/logoutModal')
 
-    <main id="main_profil"  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
-      <div class="tweet-reply p-4 hover:bg-gray-900 transition border-b border-gray-800">
+    <main  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
+      <div class="tweet-reply flex flex-col">
        @include('partials/reponses')
           @!component('components/reponseForm')
          @!component('components/deleteTweet')
