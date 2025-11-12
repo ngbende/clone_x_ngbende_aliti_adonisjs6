@@ -152,6 +152,70 @@
                 <!-- BOUTONS IDENTIQUES -->
                 <div class="flex flex-wrap justify-start items-center text-gray-400 mt-3 gap-2 text-sm">
                   <!-- Même structure de boutons que ci-dessus -->
+                   {{-- Répondre --}}
+        <button class="openReplyForm px-2 py-0.5 rounded flex items-center gap-1 hover:bg-blue-400/10 hover:text-blue-400 transition"
+                data-id="{{ tweet.id }}"
+                data-user="{{ tweet.user.nom }}"
+                data-content="{{ tweet.content }}">
+          Répondre
+        </button>
+
+        {{-- Nombre de réponses --}}
+        <button class="lengthReply flex items-center gap-1 px-2 py-0.5 rounded hover:bg-gray-400/10 transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          {{ tweet.replies?.length || 0 }}
+        </button>
+
+        {{-- Retweet --}}
+        <form action="{{ route('tweets.retweet', { id: tweet.id }) }}" method="POST" class="inline">
+          {{ csrfField() }}
+          <button type="submit"
+                  class="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-green-400/10 transition
+                        {{ tweet.retweets?.some(rt => rt.userId === auth.user.id) 
+                          ? 'text-green-400' 
+                          : 'text-gray-400 hover:text-green-400' }}">
+            <i data-lucide="repeat-2" class="w-4 h-4"></i>
+            <span>{{ tweet.retweets?.length || 0 }}</span>
+          </button>
+        </form>
+
+        {{-- Like --}}
+        <form action="{{ route('tweets.like', { id: tweet.id }) }}" method="POST" class="inline">
+          {{ csrfField() }}
+          <button type="submit" 
+                  class="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-pink-400/10 transition
+                        {{ tweet.likes?.some(like => like.userId === auth.user.id) 
+                          ? 'text-pink-400' 
+                          : 'text-gray-400 hover:text-pink-400' }}">
+            <i data-lucide="heart" class="w-4 h-4"></i>
+            <span>{{ tweet.likes?.length || 0 }}</span>
+          </button>
+        </form>
+
+        {{-- Partager --}}
+        <button title="Partager" class="px-2 py-0.5 rounded hover:bg-blue-400/10 hover:text-blue-300 transition">
+          📤
+        </button>
+
+        {{-- Supprimer si c'est mon tweet --}}
+        @if(auth.user.id === tweet.user.id)
+          <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
+                  class="px-2 py-0.5 rounded hover:bg-red-400/10 hover:text-red-400 transition">
+            Supprimer
+          </button>
+        @endif
+
+        {{-- Bloquer/Débloquer si ce n'est pas mon tweet --}}
+        @if(auth.user.id !== tweet.user.id)
+          <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST" class="inline-block">
+            {{ csrfField() }}
+            <button type="submit"
+                    class="px-2 py-0.5 text-xs rounded font-semibold hover:opacity-90 transition
+                          {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }}">
+              {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+            </button>
+          </form>
+        @endif
                 </div>
               </div>
             </div>
