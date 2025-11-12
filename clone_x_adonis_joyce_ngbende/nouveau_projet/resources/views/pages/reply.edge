@@ -3,42 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>
+      Document
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+
+    </script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
   </head>
-  <body class="bg-black w-full flex flex-col min-h-screen">
+  <body class="bg-black w-full flex flex-col h-screen">
     @include('partials/header')
-    @!component('components/logoutModal')
+       @!component('components/logoutModal')
 
-    <main id="main_profil" class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
-      
-      <!-- Header sticky comme dans la première page -->
-      <div class="sticky top-16 md:top-0 z-40 bg-black bg-opacity-80 backdrop-blur-md border-b border-gray-700">
-        <div class="flex items-center h-14 px-4">
-          <a href="#" class="text-white font-bold text-sm border-b-2 border-blue-500 pb-3 pt-4">Tweet</a>
-        </div>
-      </div>
-
-      <!-- Section principale avec la même structure responsive -->
-      <section class="max-w-2xl mx-auto w-full">
-        @include('partials/reponses')
+    <main id="main_profil"  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
+      <div class="tweet-reply p-4 hover:bg-gray-900 transition border-b border-gray-800">
+       @include('partials/reponses')
           @!component('components/reponseForm')
-      @!component('components/deleteTweet')
-      </section>
-      
-    
+         @!component('components/deleteTweet')
+
+       </div>
     </main>
 
     @include('partials/sectionFolowSearch')
-
-    <!-- Lignes verticales comme dans la première page -->
-    <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
-    <div class="hidden md:block fixed right-64 lg:right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
-
-    <script>
-      lucide.createIcons();
-    </script>
+    
+<script>
+  lucide.createIcons();
+</script>
   </body>
 </html>
 {{--  <script>
