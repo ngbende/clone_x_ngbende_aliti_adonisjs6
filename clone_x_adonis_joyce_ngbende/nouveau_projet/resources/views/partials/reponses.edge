@@ -167,11 +167,6 @@
           </button>
         @endif
 
-        {{-- Voir le thread --}}
-        <a href="{{ route('tweet.show', { id: tweet.id }) }}" class="px-2 py-0.5 rounded hover:bg-gray-400/10 hover:underline transition">
-          Voir le thread →
-        </a>
-
         {{-- Bloquer/Débloquer si ce n'est pas mon tweet --}}
         @if(auth.user.id !== tweet.user.id)
           <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST" class="inline-block">
