@@ -16,11 +16,13 @@
     @include('partials/header')
        @!component('components/logoutModal')
 
-    <main id="main_profil" class="ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-2/4">
+    <main id="main_profil"  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
+      <!-- Feed des tweets -->
+    <section class="post_tweets flex flex-col">
        @include('partials/reponses')
           @!component('components/reponseForm')
          @!component('components/deleteTweet')
-
+    </section>  
        
     </main>
 
