@@ -1,12 +1,12 @@
-<section class="tweet-thread flex flex-col gap-4 p-4 border-b border-gray-700 hover:bg-gray-900/30 transition">
+<section class="tweet-thread border-x border-gray-700 min-h-screen bg-black text-white max-w-2xl mx-auto w-full">
 
   {{-- Tweet parent --}}
   <div class="tweet-parent ml-6 flex gap-3 ml-4 md:ml-0">
-    <div class="ml-6 flex gap-3 ml-4 md:ml-0">
+    <div class=" flex gap-3 ml-4 md:ml-0">
       <img 
         src="{{ tweet.user.photoProfil || '/images/default-avatar.png' }}" 
         alt="avatar"
-        class="w-10 h-10 ml-6 flex gap-3 ml-4 md:ml-0 rounded-full"
+      class="w-10 h-10 rounded-full ml-12 md:ml-0"
       />
       <div class="flex-1">
         <div class="flex items-center space-x-2">
@@ -80,7 +80,7 @@
     @if(tweet.replies && tweet.replies.length > 0)
       @each(reply in tweet.replies)
        <div class="tweet-reply p-4 hover:bg-gray-900 transition">
-    <div class="flex items-start space-x-3">
+    <div class="tweet-reply p-4 hover:bg-gray-900 transition border-b border-gray-800">
       <img 
         src="{{ reply.user.photoProfil || '/images/default-avatar.png' }}" 
         alt="avatar"
