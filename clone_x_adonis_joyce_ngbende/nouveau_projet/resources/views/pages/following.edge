@@ -11,86 +11,87 @@
     @include('partials/header')
     @!component('components/logoutModal')
 
-    <main id="main_profil" class="w-full flex-1 flex flex-col md:ml-[18%] md:w-[82%] lg:w-2/4">
+    {{-- Conteneur principal avec padding pour le header fixe et nav mobile --}}
+    <main id="main_profil" class="w-full flex-1 flex flex-col pt-0 pb-16 md:pb-0 md:ml-[18%] md:w-[82%] lg:w-2/4">
       {{-- Header sticky --}}
-      <div class="sticky z-50 h-14 sm:h-16 top-0 bg-black bg-opacity-80 backdrop-blur-md text-white flex items-center justify-between sm:justify-around gap-4 sm:gap-10 px-4 sm:p-4 border-b border-gray-700 text-xs sm:text-sm md:text-base">
+      <div class="sticky z-40 h-14 sm:h-16 top-0 bg-black bg-opacity-80 backdrop-blur-md text-white flex items-center justify-between sm:justify-around gap-4 sm:gap-10 px-3 sm:px-4 border-b border-gray-700 text-xs sm:text-sm md:text-base">
         <div class="flex flex-row items-center gap-4 sm:gap-8 md:gap-52">
-          <a href="{{route ('home.index')}}" class="text-white text-xs sm:text-sm hover:text-gray-300">Pour vous</a>
-          <a href="{{route ('tweets.following')}}" class="text-white text-xs sm:text-sm hover:text-gray-300">Abonnements</a>
+          <a href="{{route ('home.index')}}" class="text-white text-xs sm:text-sm hover:text-gray-300 transition">Pour vous</a>
+          <a href="{{route ('tweets.following')}}" class="text-white text-xs sm:text-sm hover:text-gray-300 transition">Abonnements</a>
         </div>
       </div>
 
       {{-- Section composer tweet --}}
-      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full md:h-40">
+      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full md:h-40 border-b border-gray-700">
         <div class="bg-black w-full relative flex flex-col items-start">
-          <div class="flex flex-row gap-2 sm:gap-3 p-3 sm:p-5 w-full">
+          <div class="flex flex-row gap-2 sm:gap-3 p-3 sm:p-4 md:p-5 w-full">
             {{-- Avatar --}}
-            <a id="username_profil" class="flex-shrink-0">
-              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10 sm:w-12 sm:h-12" />
+            <a id="username_profil" class="flex-shrink-0 mt-0.5">
+              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14" />
             </a>
 
             {{-- Formulaire tweet --}}
             <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data" class="flex-1">
               {{ csrfField() }}
 
-              <div class="flex flex-col gap-3 sm:gap-4 w-full">
+              <div class="flex flex-col gap-2 sm:gap-3 md:gap-4 w-full">
                 <input
                   id="tweets"
                   type="text"
                   name="inputTweet"
                   placeholder="Que se passe-t-il?"
-                  class="border-none rounded-md text-sm sm:text-lg md:text-2xl text-white w-full bg-transparent focus:outline-none placeholder-gray-500"
+                  class="border-none rounded-md text-sm sm:text-base md:text-xl text-white w-full bg-transparent focus:outline-none placeholder-gray-500"
                 />
 
                 <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
                 <input type="file" name="video" id="videoInput" accept="video/*" style="display: none" />
 
                 {{-- Section prévisualisation vidéo --}}
-                <section class="video_section flex-col items-center justify-center h-40 sm:h-60 md:h-80 w-full border-b border-gray-700 text-white" style="display:none">
+                <section class="video_section flex-col items-center justify-center h-40 sm:h-52 md:h-64 w-full border-b border-gray-700 text-white" style="display:none">
                   <video id="videoPreview" controls class="rounded-lg w-full h-full object-cover" style="display:none"></video>
                 </section>
 
                 {{-- Section prévisualisation image --}}
-                <section class="img_section flex-col items-center justify-center h-40 sm:h-60 md:h-80 w-full border-b border-gray-700 text-white" style="display: none">
+                <section class="img_section flex-col items-center justify-center h-40 sm:h-52 md:h-64 w-full border-b border-gray-700 text-white" style="display: none">
                   <img id="imagePreview" style="display: none" class="rounded-lg w-full h-full object-cover" />
                 </section>
 
                 {{-- Boutons actions --}}
-                <div class="flex gap-2 sm:gap-4 items-center py-2 sm:py-3 border-b border-gray-700 w-full overflow-x-auto">
+                <div class="flex gap-1.5 sm:gap-2 md:gap-3 items-center py-2 sm:py-3 border-b border-gray-700 w-full overflow-x-auto">
                   {{-- Galerie image --}}
-                  <button type="button" id="openFilePicker" class="cursor-pointer text-white flex-shrink-0 hover:text-blue-400">
+                  <button type="button" id="openFilePicker" class="cursor-pointer text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
 
                   {{-- Galerie vidéo --}}
-                  <button type="button" id="openVideoPicker" class="cursor-pointer text-white flex-shrink-0 hover:text-blue-400">
+                  <button type="button" id="openVideoPicker" class="cursor-pointer text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
 
                   {{-- GIF --}}
-                  <button type="button" class="text-white flex-shrink-0 hover:text-blue-400">
+                  <button type="button" class="text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
 
                   {{-- Sondage --}}
-                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400">
+                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     @include('components/icones/pol')
                   </a>
 
                   {{-- Calendrier --}}
-                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400">
+                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     @include('components/icones/calendrier')
                   </a>
 
                   {{-- Localisation --}}
-                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400">
+                  <a href="#" class="text-white flex-shrink-0 hover:text-blue-400 transition p-1 hover:bg-gray-900 rounded-full">
                     @include('components/icones/localisation')
                   </a>
 
                   {{-- Bouton Poster --}}
                   <button
                     type="submit"
-                    class="btn_post ml-auto text-black bg-white border-white border-[2px] rounded-full text-xs sm:text-sm md:text-lg font-bold px-4 sm:px-6 py-1.5 sm:py-2 hover:bg-gray-200 transition"
+                    class="btn_post ml-auto text-black bg-white border-white border-[2px] rounded-full text-xs sm:text-sm md:text-base font-bold px-3 sm:px-5 md:px-6 py-1 sm:py-1.5 md:py-2 hover:bg-gray-200 transition flex-shrink-0"
                   >
                     <span class="hidden sm:inline">Poster</span>
                     <span class="sm:hidden">Post</span>
@@ -113,7 +114,7 @@
     </main>
 
     {{-- Section search/follow (cachée sur mobile, visible md+) --}}
-    <div class="hidden md:block">
+    <div class="hidden md:block fixed right-0 top-0 h-screen md:w-1/4 md:ml-[82%] pt-0 md:pt-16 overflow-y-auto">
       @include('partials/sectionFolowSearch')
     </div>
     <script>
