@@ -15,7 +15,7 @@
 
       <!-- Header sticky -->
       <div class="sticky top-16 md:top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
-        <a href="/accueil" class="flex-shrink-0">
+        <a href="/home" class="flex-shrink-0">
           <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"/>
         </a>
 
@@ -29,96 +29,96 @@
         </div>
       </div>
 
-      <!-- Bannière + avatar -->
-      <section id="photo_profil" class="relative w-full h-40 md:h-52 bg-gray-700">
-        @if(auth.user && auth.user.id === user.id)
-          <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
-               class="object-cover w-full h-full" id="banner-img"/>
-          <img class="absolute -bottom-12 md:-bottom-14 left-4 w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black object-cover"
-               id="profile-img" />
-        @else
-          <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
-               class="object-cover w-full h-full" id="banner-img"/>
-          <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
-               class="absolute -bottom-12 md:-bottom-14 left-4 w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-black object-cover"
-               id="profile-img" />
-        @endif
-      </section>
+     <!-- Bannière + avatar -->
+<section id="photo_profil" class="relative w-full h-32 sm:h-40 md:h-52 bg-gray-700">
+  @if(auth.user && auth.user.id === user.id)
+    <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
+         class="object-cover w-full h-full" id="banner-img"/>
+    <img class="absolute -bottom-8 sm:-bottom-10 md:-bottom-14 left-3 sm:left-4 w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 rounded-full border-2 sm:border-4 border-black object-cover"
+         id="profile-img" />
+  @else
+    <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
+         class="object-cover w-full h-full" id="banner-img"/>
+    <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
+         class="absolute -bottom-8 sm:-bottom-10 md:-bottom-14 left-3 sm:left-4 w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 rounded-full border-2 sm:border-4 border-black object-cover"
+         id="profile-img" />
+  @endif
+</section>
 
-      <!-- Infos utilisateur -->
-      <div id="para-name-user_profil" class="mt-14 md:mt-16 px-4 md:px-5 text-white relative">
-        
-        <!-- Bouton Modifier le profil - Position corrigée -->
-        @if(auth.user && auth.user.id === user.id)
-          <div class="absolute -top-16 md:-top-20 right-4">
-            <a href="{{ route('profile.edit') }}" 
-               class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition">
-              Modifier le profil
-            </a>
-          </div>
-        @endif
-
-        <p class="font-semibold username1 text-lg md:text-xl">{{user.nom}}</p>
-        <p class="text-gray-400 text-sm username2">{{ `@${user.nom}` }}</p>
-        
-        @if(user.bio)
-          <p class="mt-3 text-white text-sm md:text-base">{{ user.bio }}</p>
-        @endif
-
-        <div class="flex flex-wrap gap-2 items-center mt-3 text-gray-400 text-sm">
-          @if(user.location)
-            <div class="flex items-center gap-1">
-              <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
-              <span class="truncate">{{ user.location }}</span>
-            </div>
-          @endif
+<!-- Infos utilisateur -->
+<div id="para-name-user_profil" class="mt-10 sm:mt-12 md:mt-16 px-3 sm:px-4 md:px-5 text-white relative">
   
-          @if(user.website)
-            <div class="flex items-center gap-1">
-              <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
-              <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate" target="_blank">
-                {{ user.website.length > 20 ? user.website.substring(0, 20) + '...' : user.website }}
-              </a>
-            </div>
-          @endif
+  <!-- Bouton Modifier le profil - Position responsive -->
+  @if(auth.user && auth.user.id === user.id)
+    <div class="absolute -top-10 sm:-top-12 md:-top-16 right-3 sm:right-4">
+      <a href="{{ route('profile.edit') }}" 
+         class="px-3 py-1.5 sm:px-4 sm:py-2 border border-gray-500 rounded-full text-xs sm:text-sm bg-black/70 hover:bg-gray-700 transition">
+        Modifier le profil
+      </a>
+    </div>
+  @endif
 
-          <div class="flex items-center gap-1">
-            <img width="15" height="15" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
-            <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
-          </div>
-        </div>
+  <p class="font-semibold username1 text-base sm:text-lg md:text-xl">{{user.nom}}</p>
+  <p class="text-gray-400 text-xs sm:text-sm username2">{{ `@${user.nom}` }}</p>
+  
+  @if(user.bio)
+    <p class="mt-2 sm:mt-3 text-white text-sm sm:text-base leading-relaxed">{{ user.bio }}</p>
+  @endif
 
-        <div class="flex gap-4 mt-3 text-sm">
-          <p class="flex items-center gap-1">
-            <span class="font-semibold">{{ user.following?.length || 0 }}</span>
-            <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
-               class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-              abonnements
-            </a>
-          </p>
-          <p class="flex items-center gap-1">
-            <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
-            <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
-               class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
-              abonnés
-            </a>
-          </p>
-        </div>
-
-        <!-- Bouton Bloquer - Position corrigée -->
-        @if(auth.user.id !== user.id)
-          <div class="mt-4">
-            <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
-              {{ csrfField() }}
-              <button type="submit"
-                      class="px-4 py-2 rounded-full text-sm font-semibold 
-                             {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
-                {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
-              </button>
-            </form>
-          </div>
-        @endif
+  <div class="flex flex-col sm:flex-row sm:flex-wrap gap-1 sm:gap-2 items-start sm:items-center mt-2 sm:mt-3 text-gray-400 text-xs sm:text-sm">
+    @if(user.location)
+      <div class="flex items-center gap-1">
+        <img width="12" height="12" class="sm:w-4 sm:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
+        <span class="truncate max-w-[120px] sm:max-w-none">{{ user.location }}</span>
       </div>
+    @endif
+
+    @if(user.website)
+      <div class="flex items-center gap-1">
+        <img width="12" height="12" class="sm:w-4 sm:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
+        <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate max-w-[140px] sm:max-w-[200px]" target="_blank">
+          {{ user.website.length > 25 ? user.website.substring(0, 25) + '...' : user.website }}
+        </a>
+      </div>
+    @endif
+
+    <div class="flex items-center gap-1">
+      <img width="12" height="12" class="sm:w-4 sm:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
+      <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
+    </div>
+  </div>
+
+  <div class="flex gap-3 sm:gap-4 mt-2 sm:mt-3 text-xs sm:text-sm">
+    <p class="flex items-center gap-1">
+      <span class="font-semibold">{{ user.following?.length || 0 }}</span>
+      <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
+         class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+        abonnements
+      </a>
+    </p>
+    <p class="flex items-center gap-1">
+      <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
+      <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
+         class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+        abonnés
+      </a>
+    </p>
+  </div>
+
+  <!-- Bouton Bloquer - Position responsive -->
+  @if(auth.user.id !== user.id)
+    <div class="mt-3 sm:mt-4">
+      <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
+        {{ csrfField() }}
+        <button type="submit"
+                class="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold 
+                       {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
+          {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+        </button>
+      </form>
+    </div>
+  @endif
+</div>
 
       <!-- Onglets profil -->
       <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6">
