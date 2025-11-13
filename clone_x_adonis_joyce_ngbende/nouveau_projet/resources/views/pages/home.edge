@@ -56,13 +56,12 @@
         <!-- Actions - CORRIGÉ POUR MOBILE -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
           <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
-            <button id="openFilePicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
-            </button>
-            
-            <button id="openVideoPicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
-            </button>
+           <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+</label>
+<label for="videoInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+</label>
             
             <!-- Tes autres icônes exactement comme avant -->
             <button class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
@@ -116,11 +115,11 @@
   const previewContainer = document.querySelector('.img_section')
   const preview = document.getElementById('imagePreview')
 
-  fileBtn.addEventListener('click', (e) => {
-     e.preventDefault() // ← AJOUT IMPORTANT
-  e.stopPropagation() // ← Évite la propagation
-    fileInput.click()
-  })
+  // fileBtn.addEventListener('click', (e) => {
+  //    e.preventDefault() // ← AJOUT IMPORTANT
+  // e.stopPropagation() // ← Évite la propagation
+  //   fileInput.click()
+  // })
 
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0]
@@ -140,11 +139,11 @@ const videoInput = document.getElementById('videoInput')
 const videoPreviewContainer = document.querySelector('.video_section')
 const videoPreview = document.getElementById('videoPreview')
 
-videoBtn.addEventListener('click', (e) => {
-   e.preventDefault() // ← AJOUT IMPORTANT
-  e.stopPropagation() // ← Évite la propagation
-  videoInput.click()
-})
+// videoBtn.addEventListener('click', (e) => {
+//    e.preventDefault() // ← AJOUT IMPORTANT
+//   e.stopPropagation() // ← Évite la propagation
+//   videoInput.click()
+// })
 
 videoInput.addEventListener('change', () => {
   const file = videoInput.files[0]
