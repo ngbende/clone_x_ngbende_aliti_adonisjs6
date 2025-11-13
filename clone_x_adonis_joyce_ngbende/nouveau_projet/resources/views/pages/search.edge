@@ -8,8 +8,9 @@
 </head>
 
 <body class="flex flex-col min-h-screen text-white bg-black">
-@include('partials/header')
+ @include('partials/headerProfile')
 
+       @!component('components/logoutModal')
 <div class="flex flex-1">
   <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 lg:ml-[20%] lg:w-3/4 xl:w-2/4">
     <!-- Votre contenu principal reste identique -->
