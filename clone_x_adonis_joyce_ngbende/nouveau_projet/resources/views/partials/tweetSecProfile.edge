@@ -94,12 +94,6 @@
             <span>{{ tweet.likes?.length || 0 }}</span>
           </button>
         </form>
-
-        {{-- Partager --}}
-        <button title="Partager" class="px-2 py-0.5 rounded hover:bg-blue-400/10 hover:text-blue-300 transition">
-          📤
-        </button>
-
         {{-- Supprimer si c'est mon tweet --}}
         @if(auth.user.id === tweet.user.id)
           <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
