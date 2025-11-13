@@ -6,10 +6,10 @@
   <title>Recherche</title>
 </head>
 
-<body class="bg-black text-white">
+<body class="flex flex-col min-h-screen text-white bg-black">
 @include('partials/header')
 
-<main class="ml-[20%] w-2/4 border-l border-r border-gray-700 min-h-screen p-4">
+<main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 sm:w-3/4 sm:ml-[20%] md:w-2/4">
 
   <form action="{{ route('search') }}" method="GET" class="mb-4">
     <input
@@ -17,25 +17,25 @@
       name="query"
       value="{{ query }}"
       placeholder="Recherche..."
-      class="w-full p-2 rounded bg-gray-800 border border-gray-600"
+      class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base"
     />
   </form>
 
-  <h2 class="font-bold text-lg mb-3">Utilisateurs</h2>
+  <h2 class="font-bold text-base mb-3 sm:text-lg">Utilisateurs</h2>
   @if(users.length === 0)
-    <p class="text-gray-500 text-sm">Aucun utilisateur trouvé.</p>
+    <p class="text-gray-500 text-xs sm:text-sm">Aucun utilisateur trouvé.</p>
   @endif
 
   @each(user in users)
-<div class="flex items-center gap-3 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors">
-  <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-3 flex-1">
+<div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3">
+  <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 min-w-0">
     <img 
       src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
       alt="avatar" 
-      class="w-10 h-10 rounded-full"
+      class="w-10 h-10 rounded-full flex-shrink-0"
     />
-    <div class="flex flex-col">
-      <p class="text-white font-semibold">{{ user.nom }} {{ user.prenom }}</p>
+    <div class="flex flex-col min-w-0">
+      <p class="text-white font-semibold text-sm truncate sm:text-base">{{ user.nom }} {{ user.prenom }}</p>
     </div>
   </a>
 
@@ -43,22 +43,20 @@
     type="button"
     data-user-id="{{ user.id }}"
     data-is-private="{{ user.isPrivate }}"
-    class="follow-btn text-sm px-3 py-1 rounded-full
+    class="follow-btn flex-shrink-0 text-xs px-2 py-1 rounded-full font-semibold transition-colors
       {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
         : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
-        : 'bg-white text-black' }}">
+        : 'bg-white text-black' }} sm:text-sm sm:px-3">
     {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
       : user.followStatus === 'pending' ? 'En attente ⏳' 
-      : (user.isPrivate ? 'Demander à suivre 🔒' : 'Suivre') }}
+      : (user.isPrivate ? 'Demander 🔒' : 'Suivre') }}
   </button>
 </div>
 @endeach
 
-
-
-  <h2 class="font-bold text-lg mt-6 mb-3">Tweets</h2>
+  <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg">Tweets</h2>
   @if(tweets.length === 0)
-    <p class="text-gray-500 text-sm">Aucun tweet trouvé.</p>
+    <p class="text-gray-500 text-xs sm:text-sm">Aucun tweet trouvé.</p>
   @endif
 
   @each(tweet in tweets)
@@ -67,42 +65,6 @@
 
 </main>
  @include('partials/sectionFolowSearch')
-{{--  <script>
-document.querySelectorAll('.follow-btn').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    e.preventDefault()
-    const userId = btn.dataset.userId
-    const isPrivate = btn.dataset.isPrivate === 'true'
-
-    try {
-      const res = await fetch(`/follow/${userId}/toggle`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': '{{ csrfToken }}',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      })
-
-      const data = await res.json()
-
-      if (data.status === 'followed') {
-        btn.textContent = 'Suivi ✔️'
-        btn.classList.remove('bg-white', 'text-black', 'bg-yellow-500')
-        btn.classList.add('bg-gray-600', 'text-white')
-      } else if (data.status === 'unfollowed') {
-        btn.textContent = isPrivate ? 'Demander à suivre 🔒' : 'Suivre'
-        btn.classList.remove('bg-gray-600', 'text-white', 'bg-yellow-500')
-        btn.classList.add('bg-white', 'text-black')
-      }
-    } catch (err) {
-      console.error('Erreur toggle follow:', err)
-    }
-  })
-})
-
-
-</script>  --}}
-
 
 </body>
 </html>
