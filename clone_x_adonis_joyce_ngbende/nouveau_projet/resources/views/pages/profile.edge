@@ -134,9 +134,11 @@
 
       <!-- Contenu des onglets -->
       <section id="profile-tweets" class="flex w-full  flex-col">
-        <div id="container-posts">
+        <div id="container-posts" class="w-full  flex-col">
           @each(tweet in tweets)
-            @include('partials/tweetSection')
+              <div class="flex gap-3 ml-4 md:ml-0">  <!-- AJOUTÉ -->
+        @include('partials/tweetSection')
+      </div>
           @endeach
         </div>
 
@@ -148,6 +150,7 @@
 
         <div id="container-medias" class="hidden">
           @each(tweet in userMedias)
+          
             @include('partials/tweetSection')
           @endeach
         </div>
