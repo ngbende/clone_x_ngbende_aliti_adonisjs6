@@ -137,27 +137,33 @@
         <div id="container-posts" class="w-full  flex-col">
           @each(tweet in tweets)
               <div class="flex gap-3 ml-4 md:ml-0">  <!-- AJOUTÉ -->
-        @include('partials/tweetSection')
+        @include('partials/tweetSecProfile')
+          @!component('components/reponseForm')
+    @!component('components/deleteTweet')
       </div>
           @endeach
         </div>
 
         <div id="container-replies" class="hidden">
           @each(tweet in userReplies)
-            @include('partials/tweetSection')
+            @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+    @!component('components/deleteTweet')
           @endeach
         </div>
 
         <div id="container-medias" class="hidden">
           @each(tweet in userMedias)
           
-            @include('partials/tweetSection')
+            @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+    @!component('components/deleteTweet')
           @endeach
         </div>
 
         <div id="container-likes" class="hidden">
           @each(tweet in userLikes)
-            @include('partials/tweetSection')
+            @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
     @!component('components/deleteTweet')
           @endeach
