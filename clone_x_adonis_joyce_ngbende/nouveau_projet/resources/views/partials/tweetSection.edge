@@ -1,9 +1,9 @@
 <div class="flex flex-col gap-4 p-4 border-b border-gray-700 hover:bg-gray-900/30 transition">
-  <div class="ml-6 flex gap-3 ml-4 md:ml-0">
+  <div class="flex gap-3 ml-12 sm:ml-4 md:ml-0">
     <img
       src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"
       alt="avatar"
-       class="profile-picture w-10 h-10 rounded-full ml-12 md:ml-0"
+       class="profile-picture w-10 h-10 rounded-full flex-shrink-0"
     />
 
     <div class="flex-1">
@@ -12,7 +12,7 @@
 
         {{-- Affichage si c'est une réponse --}}
         @if(tweet.parentId)
-          <p class="text-gray-400 text-xs mb-1">
+        <p class="text-gray-400 text-xs mb-1 ml-4 sm:ml-0">
             Répond à 
             <a href="{{ route('tweet.show', { id: tweet.parentId }) }}" class="text-blue-400">
               {{ tweet.user.nom }}
@@ -22,13 +22,13 @@
 
         {{-- Affichage si c'est un retweet --}}
         @if(tweet.$extras?.isRetweet)
-          <p class="text-gray-400 text-xs mb-1 ml-12">
+          <p class="text-gray-400 text-xs mb-1 ml-0">
             🔁 Retweeté par {{ tweet.$extras.retweetedBy }}
           </p>
         @endif
 
         {{-- Contenu du tweet --}}
-        <p class="mt-1 leading-relaxed" x-html="tweet.contentClean">
+        <p class="mt-1 leading-relaxed text-sm sm:text-base" x-html="tweet.contentClean">
           {{{ tweet.contentClean }}}
         </p>
 
@@ -53,8 +53,8 @@
         @endif
       </div>
 
-      <!-- EXACTEMENT LA MÊME STRUCTURE DE BOUTONS -->
-      <div class="flex flex-wrap justify-start items-center text-gray-400 mt-3 gap-2 text-sm">
+      <!-- Boutons -->
+      <div class="flex flex-wrap justify-start items-center text-gray-400 mt-3 gap-1 text-xs sm:gap-2 sm:text-sm">
         {{-- Répondre --}}
         <button class="openReplyForm px-2 py-0.5 rounded flex items-center gap-1 hover:bg-blue-400/10 hover:text-blue-400 transition"
                 data-id="{{ tweet.id }}"
