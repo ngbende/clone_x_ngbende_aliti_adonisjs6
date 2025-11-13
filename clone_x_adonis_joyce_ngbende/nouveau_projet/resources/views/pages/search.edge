@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <title>Recherche</title>
 </head>
@@ -9,62 +10,65 @@
 <body class="flex flex-col min-h-screen text-white bg-black">
 @include('partials/header')
 
-<main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 sm:w-3/4 sm:ml-[20%] md:w-2/4">
+<div class="flex flex-1">
+  <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 lg:ml-[20%] lg:w-3/4 xl:w-2/4">
+    <!-- Votre contenu principal reste identique -->
+    <form action="{{ route('search') }}" method="GET" class="mb-4">
+      <input
+        type="text"
+        name="query"
+        value="{{ query }}"
+        placeholder="Recherche..."
+        class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base"
+      />
+    </form>
 
-  <form action="{{ route('search') }}" method="GET" class="mb-4">
-    <input
-      type="text"
-      name="query"
-      value="{{ query }}"
-      placeholder="Recherche..."
-      class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base"
-    />
-  </form>
+    <h2 class="font-bold text-base mb-3 sm:text-lg">Utilisateurs</h2>
+    @if(users.length === 0)
+      <p class="text-gray-500 text-xs sm:text-sm">Aucun utilisateur trouvé.</p>
+    @endif
 
-  <h2 class="font-bold text-base mb-3 sm:text-lg">Utilisateurs</h2>
-  @if(users.length === 0)
-    <p class="text-gray-500 text-xs sm:text-sm">Aucun utilisateur trouvé.</p>
-  @endif
+    @each(user in users)
+    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3">
+      <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 min-w-0">
+        <img 
+          src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+          alt="avatar" 
+          class="w-10 h-10 rounded-full flex-shrink-0"
+        />
+        <div class="flex flex-col min-w-0">
+          <p class="text-white font-semibold text-sm truncate sm:text-base">{{ user.nom }} {{ user.prenom }}</p>
+        </div>
+      </a>
 
-  @each(user in users)
-<div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3">
-  <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 min-w-0">
-    <img 
-      src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
-      alt="avatar" 
-      class="w-10 h-10 rounded-full flex-shrink-0"
-    />
-    <div class="flex flex-col min-w-0">
-      <p class="text-white font-semibold text-sm truncate sm:text-base">{{ user.nom }} {{ user.prenom }}</p>
+      <button
+        type="button"
+        data-user-id="{{ user.id }}"
+        data-is-private="{{ user.isPrivate }}"
+        class="follow-btn flex-shrink-0 text-xs px-2 py-1 rounded-full font-semibold transition-colors
+          {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
+            : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
+            : 'bg-white text-black' }} sm:text-sm sm:px-3">
+        {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
+          : user.followStatus === 'pending' ? 'En attente ⏳' 
+          : (user.isPrivate ? 'Demander 🔒' : 'Suivre') }}
+      </button>
     </div>
-  </a>
+    @endeach
 
-  <button
-    type="button"
-    data-user-id="{{ user.id }}"
-    data-is-private="{{ user.isPrivate }}"
-    class="follow-btn flex-shrink-0 text-xs px-2 py-1 rounded-full font-semibold transition-colors
-      {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
-        : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
-        : 'bg-white text-black' }} sm:text-sm sm:px-3">
-    {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
-      : user.followStatus === 'pending' ? 'En attente ⏳' 
-      : (user.isPrivate ? 'Demander 🔒' : 'Suivre') }}
-  </button>
+    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg">Tweets</h2>
+    @if(tweets.length === 0)
+      <p class="text-gray-500 text-xs sm:text-sm">Aucun tweet trouvé.</p>
+    @endif
+
+    @each(tweet in tweets)
+      @include('partials/tweetSection')
+    @endeach
+  </main>
+
+  <!-- Section droite - Desktop uniquement -->
+  @include('partials/sectionFolowSearch')
 </div>
-@endeach
-
-  <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg">Tweets</h2>
-  @if(tweets.length === 0)
-    <p class="text-gray-500 text-xs sm:text-sm">Aucun tweet trouvé.</p>
-  @endif
-
-  @each(tweet in tweets)
-    @include('partials/tweetSection')
-  @endeach
-
-</main>
- @include('partials/sectionFolowSearch')
 
 </body>
 </html>
