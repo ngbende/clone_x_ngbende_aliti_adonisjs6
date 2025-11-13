@@ -1,0 +1,71 @@
+<!-- HEADER SPÉCIAL POUR PAGE PROFIL -->
+<header class="fixed left-0 top-0 z-50 h-screen w-16 bg-black border-r border-gray-700 md:w-20 lg:w-64 p-4 lg:p-6 overflow-y-auto hidden md:block">
+  
+  <!-- Logo -->
+  <div class="w-full h-12 flex justify-center lg:justify-start mb-4">
+    <img src="assets/logo_twitter.jpg" alt="Logo Twitter" 
+         class="w-8 h-8 object-contain lg:w-10 lg:h-10" />
+  </div>
+  
+  <!-- Navigation principale SIMPLIFIÉE -->
+  <nav class="nav-bar flex flex-col gap-1 md:gap-2 items-center w-full lg:gap-3 lg:items-start lg:ml-2">
+    
+    <!-- Home -->
+    <a href="/home" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
+      <img width="20" height="20" class="md:w-5 md:h-5 lg:w-6 lg:h-6" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
+      <p class="text-white text-sm hidden lg:block">Domicile</p>
+    </a>
+    
+    <!-- Explorer -->
+    <a href="{{ route('search') }}" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full hover:bg-gray-900 transition">
+      <img width="20" height="20" class="md:w-5 md:h-5 lg:w-6 lg:h-6" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search--v1" />
+      <p class="text-white text-sm hidden lg:block">Explorer</p>
+    </a>
+    
+    <!-- Profil (actif) -->
+    <a href="/profile" class="link-nav flex flex-row items-center gap-2 justify-center w-full lg:gap-3 lg:justify-start p-2 lg:p-3 rounded-full bg-gray-900 transition">
+      <img width="20" height="20" class="md:w-5 md:h-5 lg:w-6 lg:h-6" src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png" alt="profile" />
+      <p class="text-white text-sm hidden lg:block">Profil</p>
+    </a>
+    
+    <!-- Bouton Poster -->
+    <button class="bg-white text-black rounded-full p-2 lg:p-3 w-10 h-10 lg:w-full lg:h-12 flex items-center justify-center lg:justify-center mt-2 hover:bg-gray-200 transition">
+      <span class="lg:hidden text-lg font-bold">+</span>
+      <span class="hidden lg:block text-center font-bold text-sm">Poster</span>
+    </button>
+    
+    <!-- Section utilisateur -->
+    <div class="user_div flex flex-row mt-4 cursor-pointer items-center justify-center w-full lg:mt-4 lg:justify-start lg:p-2 rounded-full hover:bg-gray-900 transition" onclick="openLogoutModal()">
+      <div class="rounded-full w-8 h-8 bg-[#333639] lg:w-10 lg:h-10">
+        @if(auth.user)
+        <img src="{{auth.user.photoProfil || '/images/default-avatar.png'}}" alt="photo de profil" class="profile-picture w-full h-full object-cover rounded-full" />
+        @endif
+      </div>
+      <!-- Infos utilisateur - VISIBLE SUR DESKTOP -->
+      <div class="hidden lg:flex flex-col ml-3">
+        @if(auth.user)
+        <p id="username" class="text-white text-sm username1 font-semibold">{{ auth.user.nom }}</p>
+        <p class="text-white text-sm username2 text-gray-500">{{ auth.user.email }}</p>
+        @endif
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Navigation mobile PROFIL (uniquement sur mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-black border-t border-gray-700 h-16">
+  <div class="flex items-center justify-around h-full px-2">
+    <a href="/home" class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/FFFFFF/home.png" alt="home" />
+    </a>
+    <a href="{{ route('search') }}" class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search" />
+    </a>
+    <a href="/profile" class="flex flex-col items-center justify-center w-12 h-12 bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/material/48/FFFFFF/gender-neutral-user--v1.png" alt="profile" />
+    </a>
+    <button class="flex flex-col items-center justify-center w-12 h-12 hover:bg-gray-900 rounded-full transition">
+      <img width="20" height="20" src="https://img.icons8.com/fluency-systems-regular/48/FFFFFF/appointment-reminders--v1.png" alt="notifications" />
+    </button>
+  </div>
+</nav>
