@@ -9,7 +9,6 @@
   </head>
 
   <body class="bg-black w-full flex flex-col min-h-screen">
-    @include('partials/header')
 
     <main id="main_profil" class="flex-1 pb-16 mt-16 border-l border-r border-gray-700 w-full md:ml-16 md:pb-0 md:mt-0 md:max-w-2xl md:mx-auto lg:ml-64">
 
@@ -18,9 +17,12 @@
         <a href="/home" class="flex-shrink-0">
           <i data-lucide="arrow-left" class="w-5 h-5"></i>
         </a>
+        <a href="/search" class="flex-shrink-0">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </a>
 
         <div class="flex flex-col min-w-0 flex-1">
-          <p class="font-semibold text-white text-sm username1 truncate">{{user.nom}}</p>
+          <p class="font-semibold text-white text-sm truncate">{{user.nom}}</p>
           <p class="text-gray-400 text-xs">{{ `${user.replies?.length || 0} messages` }}</p>
         </div>
 
@@ -31,56 +33,41 @@
 
       <!-- Bannière + avatar -->
       <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-52">
-        @if(auth.user && auth.user.id === user.id)
-          <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
-               class="object-cover w-full h-full" id="banner-img" alt="Bannière"/>
-          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 md:-bottom-14 md:w-32 md:h-32 md:border-4"
-               id="profile-img" alt="Avatar"/>
-        @else
-          <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
-               class="object-cover w-full h-full" id="banner-img" alt="Bannière"/>
-          <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
-               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 md:-bottom-14 md:w-32 md:h-32 md:border-4"
-               id="profile-img" alt="Avatar"/>
-        @endif
+        <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"
+             class="object-cover w-full h-full" id="banner-img" alt="Bannière"/>
+        <img src="{{ user.photoProfil || '/images/default-avatar.png' }}"
+             class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 md:-bottom-14 md:w-32 md:h-32 md:border-4"
+             id="profile-img" alt="Avatar"/>
       </section>
 
       <!-- Infos utilisateur -->
       <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 md:mt-16">
-        
-        <!-- Bouton Modifier le profil -->
-        @if(auth.user && auth.user.id === user.id)
-          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-16">
-            <a href="{{ route('profile.edit') }}" 
-               class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition inline-block">
-              Modifier le profil
-            </a>
-          </div>
-        @endif
 
-        <p class="font-semibold username1 text-lg sm:text-xl">{{user.nom}}</p>
-        <p class="text-gray-400 text-sm username2">@{{user.nom}}</p>
-        
-        @if(user.bio)
-          <p class="mt-3 text-white text-sm leading-relaxed sm:text-base">{{ user.bio }}</p>
-        @endif
+        <!-- Bouton Modifier le profil -->
+        <div class="absolute -top-12 right-4 sm:-top-14 md:-top-16">
+          <a href="/profile/edit"
+             class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition inline-block">
+            Modifier le profil
+          </a>
+        </div>
+
+        <p class="font-semibold text-lg sm:text-xl">{{user.nom}}</p>
+        <p class="text-gray-400 text-sm">{{`@ ${user.nom}`}}</p>
+
+        <p class="mt-3 text-white text-sm leading-relaxed sm:text-base">{{ user.bio }}</p>
 
         <div class="flex flex-col gap-2 items-start mt-3 text-gray-400 text-sm sm:flex-row sm:flex-wrap sm:items-center">
-          @if(user.location)
-            <div class="flex items-center gap-1">
-              <i data-lucide="map-pin" class="w-4 h-4"></i>
-              <span>{{ user.location }}</span>
-            </div>
-          @endif
+          <div class="flex items-center gap-1">
+            <i data-lucide="map-pin" class="w-4 h-4"></i>
+            <span>{{ user.location }}</span>
+          </div>
 
-          @if(user.website)
-            <div class="flex items-center gap-1">
-              <i data-lucide="link-2" class="w-4 h-4"></i>
-              <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate max-w-[200px]" target="_blank">
-                {{ user.website.length > 30 ? user.website.substring(0, 30) + '...' : user.website }}
-              </a>
-            </div>
-          @endif
+          <div class="flex items-center gap-1">
+            <i data-lucide="link-2" class="w-4 h-4"></i>
+            <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate max-w-[200px]" target="_blank">
+              {{user.website }}
+            </a>
+          </div>
 
           <div class="flex items-center gap-1">
             <i data-lucide="calendar" class="w-4 h-4"></i>
@@ -91,33 +78,29 @@
         <div class="flex gap-4 mt-3 text-sm">
           <p class="flex items-center gap-1">
             <span class="font-semibold">{{ user.following?.length || 0 }}</span>
-            <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
-               class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+            <a href="/profile/follows?type=followings"
+               class="text-gray-400 hover:text-white">
               abonnements
             </a>
           </p>
           <p class="flex items-center gap-1">
             <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
-            <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
-               class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+            <a href="/profile/follows?type=followers"
+               class="text-gray-400 hover:text-white">
               abonnés
             </a>
           </p>
         </div>
 
         <!-- Bouton Bloquer -->
-        @if(auth.user.id !== user.id)
-          <div class="mt-4">
-            <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
-              {{ csrfField() }}
-              <button type="submit"
-                      class="px-4 py-2 rounded-full text-sm font-semibold 
-                             {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
-                {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
-              </button>
-            </form>
-          </div>
-        @endif
+        <div class="mt-4">
+          <form action="/user/block" method="POST" class="inline-block">
+            <button type="submit"
+                    class="px-4 py-2 rounded-full text-sm font-semibold bg-red-600 hover:opacity-90 transition">
+              Bloquer
+            </button>
+          </form>
+        </div>
       </div>
 
       <!-- Onglets profil -->
@@ -133,39 +116,28 @@
       <!-- Contenu des onglets -->
       <section id="profile-tweets" class="flex flex-col">
         <div id="container-posts">
-          @each(tweet in tweets)
-            @include('partials/tweetSection')
-          @endeach
+          <div class="p-4 border-b border-gray-700 text-white">Premier tweet de test ! 🚀</div>
         </div>
 
         <div id="container-replies" class="hidden">
-          @each(tweet in userReplies)
-            @include('partials/tweetSection')
-          @endeach
+          <div class="p-4 border-b border-gray-700 text-white">Réponse 1</div>
         </div>
 
         <div id="container-medias" class="hidden">
-          @each(tweet in userMedias)
-            @include('partials/tweetSection')
-          @endeach
+          <div class="p-4 border-b border-gray-700 text-white">Media 1</div>
         </div>
 
         <div id="container-likes" class="hidden">
-          @each(tweet in userLikes)
-            @include('partials/tweetSection')
-          @endeach
+          <div class="p-4 border-b border-gray-700 text-white">Like 1</div>
         </div>
       </section>
 
     </main>
 
-    @include('partials/sectionFolowSearch')
-    @!component('components/reponseForm')
-    @!component('components/deleteTweet')
-
     <!-- Lignes verticales desktop -->
     <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64"></div>
     <div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80"></div>
+
 <script>
   lucide.createIcons();
 </script>
