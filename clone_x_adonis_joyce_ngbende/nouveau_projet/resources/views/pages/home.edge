@@ -116,7 +116,9 @@
   const previewContainer = document.querySelector('.img_section')
   const preview = document.getElementById('imagePreview')
 
-  fileBtn.addEventListener('click', () => {
+  fileBtn.addEventListener('click', (e) => {
+     e.preventDefault() // ← AJOUT IMPORTANT
+  e.stopPropagation() // ← Évite la propagation
     fileInput.click()
   })
 
@@ -138,7 +140,9 @@ const videoInput = document.getElementById('videoInput')
 const videoPreviewContainer = document.querySelector('.video_section')
 const videoPreview = document.getElementById('videoPreview')
 
-videoBtn.addEventListener('click', () => {
+videoBtn.addEventListener('click', (e) => {
+   e.preventDefault() // ← AJOUT IMPORTANT
+  e.stopPropagation() // ← Évite la propagation
   videoInput.click()
 })
 

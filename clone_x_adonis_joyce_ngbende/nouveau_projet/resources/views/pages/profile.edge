@@ -37,6 +37,7 @@
           <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
           <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-14 md:w-32 md:h-32"
+          src="{{auth.user.photoProfil || '/images/default-avatar.png' }}"
                id="profile-img" />
         @else
           <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
