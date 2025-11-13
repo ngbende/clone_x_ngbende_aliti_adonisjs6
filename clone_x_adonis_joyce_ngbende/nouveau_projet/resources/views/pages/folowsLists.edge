@@ -3,102 +3,91 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Document
-    </title>
-    <script src="https://cdn.tailwindcss.com">
-
-    </script>
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-
   </head>
-  <body class="bg-black w-full flex flex-col h-screen">
-    @include('partials/header')
+  
+  <body class="bg-black w-full flex flex-col min-h-screen">
+    @include('partials/headerProfile')
 
-<main id="main_profil" class="relative ml-[20%] w-2/4 h-full flex flex-col border-l border-r border-gray-700">
+    <main id="main_profil" class="relative w-full lg:ml-[20%] lg:w-2/4 h-full flex flex-col border-l border-r border-gray-700">
+      
+      <!-- Header sticky -->
+      <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-3 border-b border-gray-700">
+        <a href="/accueil" class="flex-shrink-0">
+          <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"/>
+        </a>
 
-  <!-- Header sticky -->
-  <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
-    <a href="/accueil">
-      <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"/>
-    </a>
+        <div class="flex flex-col min-w-0 flex-1">
+          <p class="font-semibold text-white text-sm username1 truncate">username</p>
+          <p class="text-gray-400 text-xs">0 messages</p>
+        </div>
 
-    <div class="flex flex-col">
-      <p class="font-semibold text-white text-sm username1">username</p>
-      <p class="text-gray-400 text-xs">0 messages</p>
-    </div>
-
-    <div class="ml-auto">
-      <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
-    </div>
-  </div>
-
-
-
-   
-  <div class="flex items-center gap-8 mt-4 justify-around border-b border-gray-700 pb-2 text-sm text-white">
-
-  <!-- Verified (placeholder) -->
-  <p class="font-semibold text-gray-400">
-    Verified
-  </p>
-
-  <!-- Followers -->
-  <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
-     class="flex flex-col items-center {{ type === 'followers' ? 'text-blue-400' : '' }}">
-    <span class="font-bold">{{ user.followers.length }}</span>
-    <span>Followers</span>
-  </a>
-
-  <!-- Following -->
-  <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
-     class="flex flex-col items-center {{ type === 'followings' ? 'text-blue-400' : '' }}">
-    <span class="font-bold">{{ user.following.length }}</span>
-    <span>Following</span>
-  </a>
-
-</div>
-
-
-<!-- Container pour la liste -->
-<div id="container-follows" class="mt-4">
-  @include('partials/followListSections')
-
-</div>
-
-
-  <!-- Onglets profil -->
-  {{--  <section id="post_profil" class="flex w-full border-b border-gray-700 mt-5">
- 
-  </section>  --}}
-
-  <section id="profile-tweets" class="flex flex-col">
-     <div id="container-posts">
-     @each(tweet in tweets)
-          @include('partials/folloListSection')
-         {{--  @!component('components/reponseForm')
-         @!component('components/deleteTweet')  --}}
-
-          {{--  @!component('components/reponseForm')  --}}
-        @endeach
+        <div class="ml-auto flex-shrink-0">
+          <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
+        </div>
       </div>
-        <div id="container-replies" class="hidden flex flex-col">
-    <!-- Contenu chargé via fetch -->
-  </div>
 
-  <div id="container-medias" class="hidden flex flex-col">
-    <!-- Filtrage médias ici si nécessaire -->
-  </div>
+      <!-- Stats Followers/Following -->
+      <div class="flex items-center justify-between sm:justify-around px-4 mt-4 border-b border-gray-700 pb-3 text-sm text-white">
+        
+        <!-- Verified (placeholder) - caché sur mobile, visible à partir de sm -->
+        <p class="hidden sm:block font-semibold text-gray-400">
+          Verified
+        </p>
 
-  <div id="container-likes" class="hidden flex flex-col">
-    <!-- Filtrage likes ici si nécessaire -->
-  </div>
-  </section>
+        <!-- Followers -->
+        <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
+          class="flex flex-col items-center {{ type === 'followers' ? 'text-blue-400' : '' }}">
+          <span class="font-bold text-base">{{ user.followers.length }}</span>
+          <span class="text-xs sm:text-sm">Followers</span>
+        </a>
 
-</main>
+        <!-- Following -->
+        <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
+          class="flex flex-col items-center {{ type === 'followings' ? 'text-blue-400' : '' }}">
+          <span class="font-bold text-base">{{ user.following.length }}</span>
+          <span class="text-xs sm:text-sm">Following</span>
+        </a>
 
+        <!-- Espaceur pour l'alignement -->
+        <div class="hidden sm:block w-20"></div>
+      </div>
 
-@include('partials/sectionFolowSearch')
+      <!-- Container pour la liste -->
+      <div id="container-follows" class="mt-4 px-2 sm:px-0">
+        @include('partials/followListSections')
+      </div>
+
+      <!-- Section Tweets/Replies/Medias/Likes -->
+      <section id="profile-tweets" class="flex flex-col flex-1">
+        <div id="container-posts" class="px-2 sm:px-0">
+          @each(tweet in tweets)
+            @include('partials/folloListSection')
+          @endeach
+        </div>
+
+        <div id="container-replies" class="hidden px-2 sm:px-0">
+          <!-- Contenu chargé via fetch -->
+        </div>
+
+        <div id="container-medias" class="hidden px-2 sm:px-0">
+          <!-- Filtrage médias ici si nécessaire -->
+        </div>
+
+        <div id="container-likes" class="hidden px-2 sm:px-0">
+          <!-- Filtrage likes ici si nécessaire -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Section search/follow - cachée sur mobile, visible à partir de lg -->
+    <div class="hidden lg:block">
+      @include('partials/sectionFolowSearch')
+    </div>
+
 <script>
   lucide.createIcons();
 </script>
