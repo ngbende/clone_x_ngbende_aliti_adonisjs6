@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-      Document
+      page hashtag
     </title>
     <script src="https://cdn.tailwindcss.com">
 
@@ -16,7 +16,7 @@
     @include('partials/header')
        @!component('components/logoutModal')
 
-    <main id="main_profil" class="relative z-10 ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-[60%] md:w-[55%] lg:w-[50%]">
+    <main id="main_profil"  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
       <div
         class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
       >
@@ -26,81 +26,74 @@
         </div>
       </div>
 
-      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full sm:h-40">
-        <div class="bg-black w-auto sm:h-96 relative flex flex-col items-start">
+<!-- Section création de tweet -->
+<section id="photo_profil" class="border-b border-gray-700">
+  <div class="bg-black w-full relative flex flex-col items-start p-4">
+    <div class="flex gap-3 w-full">
+      <a id="username_profil" class="text-white text-sm">
+        <img src="{{auth.user.photoProfil || 'assets/sug_1.jpg'}}" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+      </a>
+      
+      <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data" class="flex-1">
+        {{ csrfField() }}
 
-          <div class="flex flex-row p-5 gap-2 w-full">
-            <a id="username_profil" class="text-white text-sm">
-              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+        <input
+          id="tweets"
+          type="text"
+          name="inputTweet"
+          placeholder="Que se passe-t-il?"
+          class="border-none rounded-md text-xl text-white flex-1 bg-transparent focus:outline-none placeholder-gray-500 w-full mb-4"
+        />
+        
+        <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
+        <input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
+
+        <!-- Prévisualisations -->
+        <section class="video_section flex-col items-center justify-center mb-4" style="display:none">
+          <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover" style="display:none"></video>
+        </section>
+
+        <section class="img_section flex-col items-center justify-center mb-4" style="display: none">
+          <img id="imagePreview" style="display: none" class="rounded-lg w-full max-w-md object-cover" />
+        </section>
+
+        <!-- Actions - CORRIGÉ POUR MOBILE -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
+            <button id="openFilePicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+            </button>
+            
+            <button id="openVideoPicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+            </button>
+            
+            <!-- Tes autres icônes exactement comme avant -->
+            <button class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />
+            </button>
+
+            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              @include('components/icones/pol')
             </a>
-            <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data">
-            {{ csrfField() }}
 
-                <input
-              id="tweets"
-              type="text"
-              name="inputTweet"
-              placeholder="Que se passe-t-il?"
-              class="border-none rounded-md text-base sm:text-2xl text-white flex-1 bg-transparent focus:outline-none"
-            />
-             <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
-             <!-- Input vidéo caché -->
-<input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
-            <button
-            type="submit"
-            class="btn_post right-3 absolute mt-[4.5rem] sm:mt-11 text-black bg-white border-white border-[2px] rounded-full text-sm sm:text-xl p-2 w-[90px] sm:w-[100px]"
-          >
-            Poster
-          </button></form>
+            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              @include('components/icones/calendrier')
+            </a>
+
+            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+              @include('components/icones/localisation')
+            </a>
+          </div>
           
-          </div>
-
-          <!-- Section prévisualisation vidéo -->
-<section class="video_section flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto" style="display:none">
-  <video id="videoPreview" controls class="rounded-lg w-60 h-55 object-cover" style="display:none"></video>
-</section>
-
-          <section
-            class="img_section none flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto"
-            style="display: none"
-          >
-            <img id="imagePreview" style="display: none" class="rounded-lg w-60 h-55 object-cover" />
-          </section>
-
-          <div class="flex px-6 gap-4 mt-5 border-b-2 border-gray-700 w-full pb-3">
-            <img src="assets/galerie_twees.png" alt="" id="image_tweet" class="cursor-pointer" />
-           
-
-           {{-- Galerie (upload image) --}}
-  <button id="openFilePicker" class="cursor-pointer text-white">
- <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
-  </button>
-  
-  <!-- Bouton pour ouvrir le picker vidéo -->
-<button id="openVideoPicker" class="cursor-pointer text-white">
-  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
-</button>
-  {{-- Gif --}}
-  <button class="text-white">
- <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />  </button>
-
-  {{-- Sondage --}}
-  <a href="#" class="text-white">
-    @include('components/icones/pol')
-  </a>
-
-  {{-- Calendrier --}}
-  <a href="#" class="text-white ">
-    @include('components/icones/calendrier')
-  </a>
-
-  {{-- Localisation --}}
-  <a href="#" class="text-white">
-    @include('components/icones/localisation')
-  </a>
-          </div>
+          <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full sm:w-auto">
+            Poster
+          </button>
         </div>
-      </section>
+      </form>
+    </div>
+  </div>
+</section>
 
       <section class="post_tweets flex flex-col border-b border-gray-700 text-white">
          @each(tweet in tweets)
