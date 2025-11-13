@@ -95,14 +95,15 @@
     <section class="post_tweets flex flex-col">
       @each(tweet in tweets)
         @include('partials/tweetSection')
+         @!component('components/reponseForm')
+  @!component('components/deleteTweet')
+
       @endeach
     </section>
   </main>
 
   @include('partials/sectionFolowSearch')
-  @!component('components/reponseForm')
-  @!component('components/deleteTweet')
-
+ 
   <!-- UNIQUEMENT 2 LIGNES VERTICALES -->
   <!-- Ligne entre header et main -->
   <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
