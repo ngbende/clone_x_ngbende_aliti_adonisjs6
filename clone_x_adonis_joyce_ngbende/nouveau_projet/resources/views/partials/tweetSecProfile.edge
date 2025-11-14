@@ -94,6 +94,8 @@
             <span>{{ tweet.likes?.length || 0 }}</span>
           </button>
         </form>
+
+
         {{-- Supprimer si c'est mon tweet --}}
         @if(auth.user.id === tweet.user.id)
           <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
