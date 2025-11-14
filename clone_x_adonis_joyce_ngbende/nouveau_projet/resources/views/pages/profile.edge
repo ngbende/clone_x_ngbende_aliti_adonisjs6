@@ -1,68 +1,74 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-  </head>
+</head>
 
-  <body class="w-full flex flex-col min-h-screen bg-black">
+<body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64">
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:ml-80">
 
-      <!-- Header sticky -->
-      <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-4 border-b border-gray-700">
-        <a href="/home" class="flex-shrink-0">
-         
-        </a>
-        <a href="{{ route('search') }}">
-          
-        </a>
+      <!-- Header sticky - Comme X -->
+      <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
+        <button class="flex-shrink-0 p-2 rounded-full hover:bg-gray-800 transition">
+          <svg viewBox="0 0 24 24" class="w-5 h-5">
+            <path fill="currentColor" d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path>
+          </svg>
+        </button>
+        
         <div class="flex flex-col min-w-0 flex-1">
-          <p class="font-semibold text-white text-sm username1 truncate">{{user.nom}}</p>
-          <p class="text-gray-400 text-xs">{{ `${user.replies?.length || 0} messages` }}</p>
+          <p class="font-bold text-white text-lg username1 truncate">{{user.nom}}</p>
+          <p class="text-gray-400 text-sm">{{ `${user.replies?.length || 0} posts` }}</p>
         </div>
 
-        <div class="ml-auto flex-shrink-0">
-          <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
-        </div>
+        <button class="ml-auto flex-shrink-0 p-2 rounded-full hover:bg-gray-800 transition">
+          <svg viewBox="0 0 24 24" class="w-5 h-5">
+            <path fill="currentColor" d="M10.25 3.75c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5c1.795 0 3.419-.726 4.596-1.904 1.178-1.177 1.904-2.801 1.904-4.596 0-3.59-2.91-6.5-6.5-6.5zm-8.5 6.5c0-4.694 3.806-8.5 8.5-8.5s8.5 3.806 8.5 8.5c0 1.986-.682 3.815-1.824 5.262l4.781 4.781-1.414 1.414-4.781-4.781c-1.447 1.142-3.276 1.824-5.262 1.824-4.694 0-8.5-3.806-8.5-8.5z"></path>
+          </svg>
+        </button>
       </div>
 
-      <!-- Bannière + avatar -->
-      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-52">
+      <!-- Bannière + avatar - Responsive comme X -->
+      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-48 lg:h-52">
         @if(auth.user && auth.user.id === user.id)
           <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
-          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-14 md:w-32 md:h-32"
+          <img class="absolute -bottom-12 left-4 w-20 h-20 rounded-full border-4 border-black object-cover sm:-bottom-14 sm:w-24 sm:h-24 md:-bottom-16 md:w-28 md:h-28 lg:-bottom-20 lg:w-32 lg:h-32"
           src="{{auth.user.photoProfil || '/images/default-avatar.png' }}"
                id="profile-img" />
         @else
           <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
           <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
-               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-14 md:w-32 md:h-32"
+               class="absolute -bottom-12 left-4 w-20 h-20 rounded-full border-4 border-black object-cover sm:-bottom-14 sm:w-24 sm:h-24 md:-bottom-16 md:w-28 md:h-28 lg:-bottom-20 lg:w-32 lg:h-32"
                id="profile-img" />
         @endif
       </section>
 
       <!-- Infos utilisateur -->
-      <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 md:mt-16">
+      <div id="para-name-user_profil" class="mt-14 px-4 text-white relative sm:mt-16 md:mt-20 lg:mt-24">
         
         <!-- Bouton Modifier le profil -->
         @if(auth.user && auth.user.id === user.id)
-          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-16">
+          <div class="absolute -top-16 right-4 sm:-top-18 md:-top-20 lg:-top-24">
             <a href="{{ route('profile.edit') }}" 
-               class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition">
+               class="px-4 py-1.5 border border-gray-500 rounded-full text-sm font-bold bg-black/70 hover:bg-gray-800 transition">
               Modifier le profil
             </a>
           </div>
         @endif
 
-        <p class="font-semibold username1 text-lg sm:text-xl">{{user.nom}}</p>
-        <p class="text-gray-400 text-sm username2">{{ `@${user.nom}` }}</p>
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+          <div class="flex-1 min-w-0">
+            <p class="font-bold username1 text-xl sm:text-2xl truncate">{{user.nom}}</p>
+            <p class="text-gray-400 text-sm username2 mt-1">{{ `@${user.nom}` }}</p>
+          </div>
+        </div>
         
         @if(user.bio)
           <p class="mt-3 text-white text-sm leading-relaxed sm:text-base">{{ user.bio }}</p>
@@ -71,36 +77,42 @@
         <div class="flex flex-col gap-2 items-start mt-3 text-gray-400 text-sm sm:flex-row sm:flex-wrap sm:items-center">
           @if(user.location)
             <div class="flex items-center gap-1">
-              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
+              <svg viewBox="0 0 24 24" class="w-4 h-4">
+                <path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"></path>
+              </svg>
               <span>{{ user.location }}</span>
             </div>
           @endif
 
           @if(user.website)
             <div class="flex items-center gap-1">
-              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
-              <a href="{{ user.website }}" class="text-blue-400 hover:underline" target="_blank">
+              <svg viewBox="0 0 24 24" class="w-4 h-4">
+                <path fill="currentColor" d="M18.36 5.64l-1.23 1.23c-.18.18-.43.29-.7.29H15.5c-.28 0-.53-.11-.71-.29L13.36 5.64c-.18-.18-.29-.43-.29-.7V4.5c0-.55.45-1 1-1h2.57c.27 0 .52.11.7.29l1.23 1.23c.18.18.29.43.29.7v2.57c0 .55-.45 1-1 1h-.86c-.27 0-.52-.11-.7-.29zM7.64 5.64l1.23 1.23c.18.18.43.29.7.29h.86c.55 0 1-.45 1-1V5.93c0-.27-.11-.52-.29-.7L9.93 3.99c-.18-.18-.43-.29-.7-.29H6.66c-.55 0-1 .45-1 1v.86c0 .27.11.52.29.7l1.23 1.23c.18.18.43.29.7.29h.86c.55 0 1-.45 1-1v-.86c0-.27-.11-.52-.29-.7zM20 13h-2c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1-.45 1-1s-.45-1-1-1zM6 13H4c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1-.45 1-1s-.45-1-1-1z"></path>
+              </svg>
+              <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate max-w-[200px]" target="_blank">
                 {{ user.website.length > 30 ? user.website.substring(0, 30) + '...' : user.website }}
               </a>
             </div>
           @endif
 
           <div class="flex items-center gap-1">
-            <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
+            <svg viewBox="0 0 24 24" class="w-4 h-4">
+              <path fill="currentColor" d="M7 4V3h2v1h6V3h2v1h1.5C19.89 4 21 5.12 21 6.5v12c0 1.38-1.11 2.5-2.5 2.5h-13C4.12 21 3 19.88 3 18.5v-12C3 5.12 4.12 4 5.5 4H7zm0 2H5.5c-.27 0-.5.22-.5.5v12c0 .28.23.5.5.5h13c.28 0 .5-.22.5-.5v-12c0-.28-.22-.5-.5-.5H17v1h-2V6H9v1H7V6zm0 6h2v-2H7v2zm0 4h2v-2H7v2zm4-4h2v-2h-2v2zm0 4h2v-2h-2v2zm4-4h2v-2h-2v2z"></path>
+            </svg>
             <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
           </div>
         </div>
 
-        <div class="flex gap-4 mt-3 text-sm">
+        <div class="flex gap-6 mt-3 text-sm">
           <p class="flex items-center gap-1">
-            <span class="font-semibold">{{ user.following?.length || 0 }}</span>
+            <span class="font-bold text-white">{{ user.following?.length || 0 }}</span>
             <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
                class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
               abonnements
             </a>
           </p>
           <p class="flex items-center gap-1">
-            <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
+            <span class="font-bold text-white">{{ user.followers?.length || 0 }}</span>
             <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
                class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
               abonnés
@@ -114,8 +126,8 @@
             <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
               {{ csrfField() }}
               <button type="submit"
-                      class="px-4 py-2 rounded-full text-sm font-semibold 
-                             {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
+                      class="px-4 py-1.5 rounded-full text-sm font-bold 
+                             {{ isBlocked ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700' }} transition">
                 {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
               </button>
             </form>
@@ -123,49 +135,40 @@
         @endif
       </div>
 
-      <!-- Onglets profil -->
+      <!-- Onglets profil - Scrollable comme X -->
       <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6">
-        <nav id="nav_post" class="flex w-full text-sm overflow-x-auto">
-          <a href="#" class="tab flex-1 text-center py-3 font-semibold border-b-2 border-blue-500 active whitespace-nowrap px-4" data-target="posts">Posts</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="replies">Réponses</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="medias">Tweets-marquants</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="likes">J'aime</a>
+        <nav id="nav_post" class="flex w-full text-sm overflow-x-auto scrollbar-hide">
+          <a href="#" class="tab flex-1 text-center py-4 font-bold border-b-2 border-blue-500 text-white whitespace-nowrap px-4 min-w-[80px]" data-target="posts">Posts</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="replies">Réponses</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="medias">Tweets-marquants</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="likes">J'aime</a>
         </nav>
       </section>
 
       <!-- Contenu des onglets -->
-      <section id="profile-tweets" class="flex w-full  flex-col">
-        <div id="container-posts" class="w-full  flex-col">
+      <section id="profile-tweets" class="flex w-full flex-col">
+        <div id="container-posts" class="w-full flex-col">
           @each(tweet in tweets)
-              <div class="flex gap-3 ml-4 md:ml-0">  <!-- AJOUTÉ -->
-        @include('partials/tweetSecProfile')
-          @!component('components/reponseForm')
-    @!component('components/deleteTweet')
-      </div>
+            @include('partials/tweetSecProfile')
           @endeach
         </div>
 
-        <div id="container-replies" class="hidden">
+        <div id="container-replies" class="hidden w-full flex-col">
           @each(tweet in userReplies)
             @include('partials/tweetSecProfile')
-              @!component('components/reponseForm')
-    @!component('components/deleteTweet')
           @endeach
         </div>
 
-        <div id="container-medias" class="hidden">
+        <div id="container-medias" class="hidden w-full flex-col">
           @each(tweet in userMedias)
-          
             @include('partials/tweetSecProfile')
-              @!component('components/reponseForm')
-    @!component('components/deleteTweet')
           @endeach
         </div>
 
-        <div id="container-likes" class="hidden">
+        <div id="container-likes" class="hidden w-full flex-col">
           @each(tweet in userLikes)
             @include('partials/tweetSecProfile')
-              @!component('components/reponseForm')
+                @!component('components/reponseForm')
     @!component('components/deleteTweet')
           @endeach
         </div>
@@ -174,12 +177,10 @@
     </main>
 
     @include('partials/sectionFolowSearch')
-  
 
     <!-- Lignes verticales -->
-    <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64"></div>
+    <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64 xl:left-80"></div>
     <div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80"></div>
-
 <script>
   lucide.createIcons();
 </script>
