@@ -11,7 +11,7 @@
   <body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 md:pb-0 md:mt-0 md:ml-16 md:border-l md:border-r md:border-gray-700 md:mx-auto md:max-w-2xl lg:ml-64 xl:mr-80">
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 xl:pb-0 xl:mt-0 xl:ml-16 xl:border-l xl:border-r xl:border-gray-700 xl:mx-auto xl:max-w-2xl 2xl:ml-64 xl:mr-80">
 
       <!-- Header sticky -->
       <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-4 border-b border-gray-700">
@@ -32,28 +32,28 @@
       </div>
 
       <!-- Bannière + avatar -->
-      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-52">
+      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 xl:h-52">
         @if(auth.user && auth.user.id === user.id)
           <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
-          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-14 md:w-32 md:h-32"
+          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 xl:-bottom-14 xl:w-32 xl:h-32"
           src="{{auth.user.photoProfil || '/images/default-avatar.png' }}"
                id="profile-img" />
         @else
           <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
           <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
-               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-14 md:w-32 md:h-32"
+               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 xl:-bottom-14 xl:w-32 xl:h-32"
                id="profile-img" />
         @endif
       </section>
 
       <!-- Infos utilisateur -->
-      <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 md:mt-16">
+      <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 xl:mt-16">
         
         <!-- Bouton Modifier le profil -->
         @if(auth.user && auth.user.id === user.id)
-          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-16">
+          <div class="absolute -top-12 right-4 sm:-top-14 xl:-top-16">
             <a href="{{ route('profile.edit') }}" 
                class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition">
               Modifier le profil
@@ -178,7 +178,7 @@
 
     </main>
 
-     <!-- Section droite - Desktop uniquement (XL: 1280px+) -->
+    <!-- Section droite - Desktop uniquement (XL: 1280px+) -->
     <section id="search-section" class="hidden xl:flex fixed w-80 h-screen top-0 right-0 flex-col gap-6 p-4 border-l border-gray-700 bg-black overflow-y-auto z-30">
       <!-- Barre de recherche -->
       <div class="sticky top-0 bg-black pt-4 pb-2 z-10">
@@ -279,9 +279,11 @@
     </section>
   
 
-     <!-- Lignes verticales - uniquement sur desktop MD+ -->
-    <div class="hidden md:block fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 lg:left-64"></div>
+      <!-- Lignes verticales - uniquement sur desktop XL+ -->
+    <div class="hidden xl:block fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 2xl:left-64"></div>
     <!-- Ligne droite uniquement XL+ quand la sidebar apparaît -->
+    <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
+
 <script>
   lucide.createIcons();
 </script>
