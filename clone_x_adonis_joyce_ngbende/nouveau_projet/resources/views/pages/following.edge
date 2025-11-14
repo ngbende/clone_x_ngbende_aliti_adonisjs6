@@ -41,17 +41,19 @@
               class="border-none rounded-md text-xl text-white flex-1 bg-transparent focus:outline-none placeholder-gray-500 w-full mb-4"
             />
             
- <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
-        <input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
+<input type="file" name="image" id="imageInput" accept="image/*" class="hidden" />
+<input type="file" name="video" id="videoInput" accept="video/*" class="hidden" />
 
         <!-- Prévisualisations -->
-        <section class="video_section flex-col items-center justify-center mb-4" style="display:none">
-          <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover" style="display:none"></video>
-        </section>
+      <section id="videoPreviewSection" class="video_section flex-col items-center justify-center mb-4 hidden">
+  <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover hidden"></video>
+  <button type="button" onclick="removeVideo()" class="text-red-500 text-sm mt-2">Supprimer la vidéo</button>
+</section>
 
-        <section class="img_section flex-col items-center justify-center mb-4" style="display: none">
-          <img id="imagePreview" style="display: none" class="rounded-lg w-full max-w-md object-cover" />
-        </section>
+<section id="imagePreviewSection" class="img_section flex-col items-center justify-center mb-4 hidden">
+  <img id="imagePreview" class="rounded-lg w-full max-w-md object-cover hidden" />
+  <button type="button" onclick="removeImage()" class="text-red-500 text-sm mt-2">Supprimer l'image</button>
+</section>
 
         <!-- Actions - CORRIGÉ POUR MOBILE -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
@@ -107,54 +109,71 @@
     <!-- Ligne entre main et search (uniquement quand search est visible) -->
     <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
     <script>
-  const fileBtn = document.getElementById('openFilePicker')
-  const fileInput = document.getElementById('imageInput')
-  const previewContainer = document.querySelector('.img_section')
-  const preview = document.getElementById('imagePreview')
+  // Prévisualisation image
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const imagePreviewSection = document.getElementById('imagePreviewSection');
 
-  // fileBtn.addEventListener('click', (e) => {
-  //    e.preventDefault() // ← AJOUT IMPORTANT
-  // e.stopPropagation() // ← Évite la propagation
-  //   fileInput.click()
-  // })
+    imageInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
 
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files[0]
-    if (!file) return
+      // Masquer la prévisualisation vidéo si elle existe
+      hideVideoPreview();
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreview.classList.remove('hidden');
+        imagePreviewSection.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    });
 
-    const reader = new FileReader()
-    reader.onload = () => {
-      preview.src = reader.result
-      preview.style.display = 'block'
-      previewContainer.style.display = 'flex'
+    // Prévisualisation vidéo
+    const videoInput = document.getElementById('videoInput');
+    const videoPreview = document.getElementById('videoPreview');
+    const videoPreviewSection = document.getElementById('videoPreviewSection');
+
+    videoInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+
+      // Masquer la prévisualisation image si elle existe
+      hideImagePreview();
+      
+      const url = URL.createObjectURL(file);
+      videoPreview.src = url;
+      videoPreview.classList.remove('hidden');
+      videoPreviewSection.classList.remove('hidden');
+
+      videoPreview.onloadedmetadata = function() {
+        console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`);
+      };
+    });
+
+    // Fonctions pour supprimer les prévisualisations
+    function removeImage() {
+      imageInput.value = '';
+      hideImagePreview();
     }
-    reader.readAsDataURL(file)
-  })
 
-  const videoBtn = document.getElementById('openVideoPicker')
-const videoInput = document.getElementById('videoInput')
-const videoPreviewContainer = document.querySelector('.video_section')
-const videoPreview = document.getElementById('videoPreview')
+    function removeVideo() {
+      videoInput.value = '';
+      hideVideoPreview();
+    }
 
-// videoBtn.addEventListener('click', (e) => {
-//    e.preventDefault() // ← AJOUT IMPORTANT
-//   e.stopPropagation() // ← Évite la propagation
-//   videoInput.click()
-// })
+    function hideImagePreview() {
+      imagePreview.classList.add('hidden');
+      imagePreviewSection.classList.add('hidden');
+      imagePreview.src = '';
+    }
 
-videoInput.addEventListener('change', () => {
-  const file = videoInput.files[0]
-  if (!file) return
-
-  const url = URL.createObjectURL(file)
-  videoPreview.src = url
-  videoPreview.style.display = 'block'
-  videoPreviewContainer.style.display = 'flex'
-
-  videoPreview.onloadedmetadata = () => {
-    console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`)
-  }
-})
+    function hideVideoPreview() {
+      videoPreview.classList.add('hidden');
+      videoPreviewSection.classList.add('hidden');
+      videoPreview.src = '';
+    }
 </script>
 
 <script>
