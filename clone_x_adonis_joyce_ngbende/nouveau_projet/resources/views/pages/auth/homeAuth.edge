@@ -4,18 +4,18 @@
   @endslot
 
   @slot('main')
-    <main class="flex flex-grow justify-center items-center flex-wrap mt-20 w-full max-w-6xl mx-auto gap-8">
+    <main class="flex flex-col sm:flex-row flex-grow justify-center items-center flex-wrap mt-20 w-full max-w-6xl mx-auto gap-8">
       
-      <!-- Logo - toujours centré -->
-<div class="w-full h-auto flex justify-center">
-  <svg class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 xl:w-14 xl:h-14" viewBox="0 0 24 24" fill="white">
-    <path
-      d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-    />
-  </svg>
-</div>
+      <!-- Logo - centré sur mobile, gauche sur desktop -->
+      <div class="w-full sm:w-1/3 h-auto flex justify-center sm:justify-start">
+        <svg class="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24" viewBox="0 0 24 24" fill="white">
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+          />
+        </svg>
+      </div>
 
-      <!-- Formulaire - 100% largeur -->
+      <!-- Formulaire - 100% largeur mobile, 1/2 desktop -->
       <div class="w-full sm:w-1/2 text-center flex justify-center items-center">
         <form
           action=""
@@ -29,20 +29,20 @@
           </p>
 
           <button
-            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full"
+            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full hover:bg-gray-50 transition-colors"
           >
             <img src="index/assets/SVG.png" alt="Google" class="w-6 h-6" />
             S'inscrire avec Google
           </button>
 
           <button
-            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full"
+            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full hover:bg-gray-50 transition-colors"
           >
             <img src="index/assets/SVG (1).png" alt="Apple" class="w-6 h-6" />
             S'inscrire avec Apple
           </button>
 
-         <div class="flex items-center gap-4 my-6">
+          <div class="flex items-center gap-4 my-6">
             <div class="flex-1 h-px bg-gray-600"></div>
             <p class="text-white text-sm">OU</p>
             <div class="flex-1 h-px bg-gray-600"></div>
@@ -51,7 +51,7 @@
           <a
             href="{{ route('show.signUp') }}"
             id="btn-creer-compte"
-            class="bg-[#1D9BF0] border-2 p-3 rounded-3xl text-sm block text-center w-full"
+            class="bg-[#1D9BF0] border-2 border-[#1D9BF0] p-3 rounded-3xl text-sm font-bold text-white block text-center w-full hover:bg-[#1A8CD8] transition-colors"
           >
             Créer un compte
           </a>
@@ -70,7 +70,7 @@
             <a
               href="{{ route('show.login') }}"
               id="btn-connexion1"
-              class="text-[#1D9BF0] bg-black border-2 p-3 rounded-3xl text-sm border-white block w-full text-center"
+              class="text-[#1D9BF0] bg-black border-2 border-gray-600 p-3 rounded-3xl text-sm font-bold block w-full text-center hover:bg-[#031018] transition-colors"
             >
               Se connecter
             </a>
@@ -81,27 +81,25 @@
 
     <!-- Footer -->
     <footer class="text-gray-100 text-xs w-full max-w-6xl mx-auto flex flex-wrap justify-around items-end gap-2 py-6 mt-12">
-       <!-- liens footer  -->
-      <a href=".x.com/fr" target="_blank">À propos</a>
-      <a href="help.x.com/en/using-x/download-the-x-app"
-        >Téléchargez l'application X</a
-      >
-      <a href="#">Grok</a>
-      <a href="#">Centre d'assistance</a>
-      <a href="#">Conditions d’utilisation</a>
-      <a href="#">Politique de Confidentialité</a>
-      <a href="#">Politique relative aux cookies</a>
-      <a href="#">Accessibilité</a>
-      <a href="#">Informations sur les publicités</a>
-      <a href="#">Blog</a>
-      <a href="#">Carrières</a>
-      <a href="#">Ressources de la marque</a>
-      <a href="#">Publicité</a>
-      <a href="#">Marketing</a>
-      <a href="#">X pour les professionnels</a>
-      <a href="#">Développeurs</a>
-      <a href="#">Répertoire</a>
-      <a href="#">Paramètres</a>
+      <!-- liens footer  -->
+      <a href=".x.com/fr" target="_blank" class="hover:underline">À propos</a>
+      <a href="help.x.com/en/using-x/download-the-x-app" class="hover:underline">Téléchargez l'application X</a>
+      <a href="#" class="hover:underline">Grok</a>
+      <a href="#" class="hover:underline">Centre d'assistance</a>
+      <a href="#" class="hover:underline">Conditions d'utilisation</a>
+      <a href="#" class="hover:underline">Politique de Confidentialité</a>
+      <a href="#" class="hover:underline">Politique relative aux cookies</a>
+      <a href="#" class="hover:underline">Accessibilité</a>
+      <a href="#" class="hover:underline">Informations sur les publicités</a>
+      <a href="#" class="hover:underline">Blog</a>
+      <a href="#" class="hover:underline">Carrières</a>
+      <a href="#" class="hover:underline">Ressources de la marque</a>
+      <a href="#" class="hover:underline">Publicité</a>
+      <a href="#" class="hover:underline">Marketing</a>
+      <a href="#" class="hover:underline">X pour les professionnels</a>
+      <a href="#" class="hover:underline">Développeurs</a>
+      <a href="#" class="hover:underline">Répertoire</a>
+      <a href="#" class="hover:underline">Paramètres</a>
       <div class="w-full text-center mt-5">© 2025 X Corp.</div>
     </footer>
   @endslot
