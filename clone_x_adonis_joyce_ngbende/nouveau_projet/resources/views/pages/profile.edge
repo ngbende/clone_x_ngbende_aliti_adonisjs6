@@ -189,14 +189,14 @@ document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // Style des onglets
+    // Style des onglets - CORRIGÉ POUR COHÉRENCE
     document.querySelectorAll('.tab').forEach(t => {
-      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold');
-      t.classList.add('text-gray-400');
+      t.classList.remove('border-blue-500', 'text-white', 'font-bold'); // CHANGÉ font-semibold → font-bold
+      t.classList.add('text-gray-400', 'font-normal'); // AJOUTÉ font-normal
     });
     
-    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold');
-    tab.classList.remove('text-gray-400');
+    tab.classList.add('border-blue-500', 'text-white', 'font-bold'); // CHANGÉ font-semibold → font-bold
+    tab.classList.remove('text-gray-400', 'font-normal'); // AJOUTÉ font-normal
 
     // Affichage contenu
     const target = tab.dataset.target;
