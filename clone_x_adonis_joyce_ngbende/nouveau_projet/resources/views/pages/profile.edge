@@ -11,7 +11,8 @@
   <body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-<main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:mr-80">
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 md:pb-0 md:mt-0 md:ml-16 md:border-l md:border-r md:border-gray-700 md:mx-auto md:max-w-2xl lg:ml-64">
+
       <!-- Header sticky -->
       <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-4 border-b border-gray-700">
         <a href="/home" class="flex-shrink-0">
@@ -133,39 +134,44 @@
       </section>
 
       <!-- Contenu des onglets -->
-      <section id="profile-tweets" class="flex w-full  flex-col">
-        <div id="container-posts" class="w-full  flex-col">
+      <section id="profile-tweets" class="flex w-full flex-col">
+        <div id="container-posts" class="w-full flex-col">
           @each(tweet in tweets)
-              <div class="flex gap-3 ml-4 md:ml-0">  <!-- AJOUTÉ -->
-        @include('partials/tweetSecProfile')
-          @!component('components/reponseForm')
-    @!component('components/deleteTweet')
-      </div>
+            <div class="flex gap-3 px-4">
+              @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+              @!component('components/deleteTweet')
+            </div>
           @endeach
         </div>
 
         <div id="container-replies" class="hidden">
           @each(tweet in userReplies)
-            @include('partials/tweetSecProfile')
+            <div class="flex gap-3 px-4">
+              @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
-    @!component('components/deleteTweet')
+              @!component('components/deleteTweet')
+            </div>
           @endeach
         </div>
 
         <div id="container-medias" class="hidden">
           @each(tweet in userMedias)
-          
-            @include('partials/tweetSecProfile')
+            <div class="flex gap-3 px-4">
+              @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
-    @!component('components/deleteTweet')
+              @!component('components/deleteTweet')
+            </div>
           @endeach
         </div>
 
         <div id="container-likes" class="hidden">
           @each(tweet in userLikes)
-            @include('partials/tweetSecProfile')
+            <div class="flex gap-3 px-4">
+              @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
-    @!component('components/deleteTweet')
+              @!component('components/deleteTweet')
+            </div>
           @endeach
         </div>
       </section>
@@ -175,9 +181,9 @@
     @include('partials/sectionFolowSearch')
   
 
-    <!-- Lignes verticales -->
-    <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64"></div>
-<div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80 max-xl:hidden"></div>
+     <!-- Lignes verticales - uniquement sur desktop MD+ -->
+    <div class="hidden md:block fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 lg:left-64"></div>
+    <!-- Ligne droite uniquement XL+ quand la sidebar apparaît -->
 <script>
   lucide.createIcons();
 </script>
