@@ -12,7 +12,7 @@
 
        @!component('components/logoutModal')
 <div class="flex flex-1">
-  <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 lg:ml-[20%] lg:w-3/4 xl:w-2/4">
+  <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 md:ml-20 md:max-w-2xl md:mx-auto lg:ml-64 lg:max-w-3xl xl:w-2/4 xl:mx-auto">
     <!-- Votre contenu principal reste identique -->
     <form action="{{ route('search') }}" method="GET" class="mb-4">
       <input
@@ -20,25 +20,25 @@
         name="query"
         value="{{ query }}"
         placeholder="Recherche..."
-        class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base"
+        class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base md:text-lg md:p-3"
       />
     </form>
 
-    <h2 class="font-bold text-base mb-3 sm:text-lg">Utilisateurs</h2>
+    <h2 class="font-bold text-base mb-3 sm:text-lg md:text-xl">Utilisateurs</h2>
     @if(users.length === 0)
-      <p class="text-gray-500 text-xs sm:text-sm">Aucun utilisateur trouvé.</p>
+      <p class="text-gray-500 text-xs sm:text-sm md:text-base">Aucun utilisateur trouvé.</p>
     @endif
 
     @each(user in users)
-    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3">
-      <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 min-w-0">
+    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3">
+      <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 md:gap-4 min-w-0">
         <img 
           src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
           alt="avatar" 
-          class="w-10 h-10 rounded-full flex-shrink-0"
+          class="w-10 h-10 rounded-full flex-shrink-0 md:w-12 md:h-12"
         />
         <div class="flex flex-col min-w-0">
-          <p class="text-white font-semibold text-sm truncate sm:text-base">{{ user.nom }} {{ user.prenom }}</p>
+          <p class="text-white font-semibold text-sm truncate sm:text-base md:text-lg">{{ user.nom }} {{ user.prenom }}</p>
         </div>
       </a>
 
@@ -49,7 +49,7 @@
         class="follow-btn flex-shrink-0 text-xs px-2 py-1 rounded-full font-semibold transition-colors
           {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
             : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
-            : 'bg-white text-black' }} sm:text-sm sm:px-3">
+            : 'bg-white text-black' }} sm:text-sm sm:px-3 md:text-base md:px-4 md:py-2">
         {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
           : user.followStatus === 'pending' ? 'En attente ⏳' 
           : (user.isPrivate ? 'Demander 🔒' : 'Suivre') }}
@@ -57,9 +57,9 @@
     </div>
     @endeach
 
-    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg">Tweets</h2>
+    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl">Tweets</h2>
     @if(tweets.length === 0)
-      <p class="text-gray-500 text-xs sm:text-sm">Aucun tweet trouvé.</p>
+      <p class="text-gray-500 text-xs sm:text-sm md:text-base">Aucun tweet trouvé.</p>
     @endif
 
     @each(tweet in tweets)
