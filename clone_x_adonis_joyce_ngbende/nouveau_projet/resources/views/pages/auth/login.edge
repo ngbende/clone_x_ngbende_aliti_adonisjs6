@@ -4,68 +4,68 @@
   @endslot
   
   @slot('main')
-    <div class="flex flex-col w-full min-h-screen">
+    <div class="flex flex-col w-full min-h-screen bg-black">
       <!-- Header -->
       <header class="w-full border-b border-gray-700 p-4 md:p-6 lg:p-8 sticky top-0 bg-black/80 backdrop-blur">
-        <div class="max-w-md mx-auto">
+        <div class="max-w-sm sm:max-w-md mx-auto">
           <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-8 h-8 md:w-10 md:h-10 object-contain" />
         </div>
       </header>
 
       <!-- Main Content -->
-      <main class="flex-grow flex justify-center items-start w-full p-4 md:p-6 lg:p-8">
-        <div class="w-full max-w-md">
+      <main class="flex-grow flex justify-center items-start w-full p-4 sm:p-6 md:p-8">
+        <div class="w-full max-w-sm sm:max-w-md mx-auto bg-black rounded-xl p-6 sm:p-8 border border-gray-800 sm:border-none">
           
           <!-- Page Title -->
-          <div class="mb-8 md:mb-10">
-            <h1 class="text-white text-2xl md:text-3xl lg:text-4xl font-bold text-center leading-tight">
+          <div class="mb-6 sm:mb-8 md:mb-10">
+            <h1 class="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center sm:text-left leading-tight">
               Connectez‑vous à X
             </h1>
           </div>
 
           <!-- Login Form -->
-          <form action="{{ route('auth.login') }}" method="POST" class="space-y-4 md:space-y-5">
+          <form action="{{ route('auth.login') }}" method="POST" class="space-y-4 sm:space-y-5">
             {{ csrfField() }}
             
             <!-- Error Messages -->
             @if(flashMessages.has('errors.general') && !flashMessages.has('unverified_email'))
-              <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 md:p-4 rounded-lg text-sm md:text-base text-center">
+              <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 sm:p-4 rounded-lg text-xs sm:text-sm md:text-base text-center">
                 {{ flashMessages.get('errors.general') }}
               </div>
             @endif
 
             @if(flashMessages.has('success'))  
-              <div class="bg-green-500/20 border border-green-500 text-green-400 p-3 md:p-4 rounded-lg text-sm md:text-base text-center">
+              <div class="bg-green-500/20 border border-green-500 text-green-400 p-3 sm:p-4 rounded-lg text-xs sm:text-sm md:text-base text-center">
                 {{ flashMessages.get('success') }}
               </div>
             @endif
 
             <!-- Social Login Buttons -->
-            <div class="space-y-3 md:space-y-4">
-              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 md:py-3.5 text-base md:text-lg font-bold transition-colors">
+            <div class="space-y-3 sm:space-y-4">
+              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors">
                 <a href="#" class="block">Se connecter avec Google</a>
               </button>
 
-              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 md:py-3.5 text-base md:text-lg font-bold transition-colors">
+              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors">
                 <a href="#" class="block">Se connecter avec Apple</a>
               </button>
             </div>
 
             <!-- Divider -->
-            <div class="flex items-center gap-4 my-5 md:my-6">
+            <div class="flex items-center gap-3 sm:gap-4 my-4 sm:my-5 md:my-6">
               <div class="flex-1 h-px bg-gray-700"></div>
-              <p class="text-gray-400 text-sm md:text-base">OU</p>
+              <p class="text-gray-400 text-xs sm:text-sm md:text-base">OU</p>
               <div class="flex-1 h-px bg-gray-700"></div>
             </div>
 
             <!-- Form Fields -->
-            <div class="space-y-4">
+            <div class="space-y-3 sm:space-y-4">
               <input
                 type="text"
                 id="num_mail"
                 name="numMail"
                 placeholder="Numéro de téléphone, adresse email"
-                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base focus:border-[#1D9BF0] focus:outline-none transition-colors"
+                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 py-3 text-sm focus:border-[#1D9BF0] focus:outline-none transition-colors"
               />
 
               <input
@@ -73,7 +73,7 @@
                 type="password"
                 name="passwordAuth"
                 placeholder="Mot de passe"
-                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 md:px-5 py-3 md:py-3.5 text-sm md:text-base focus:border-[#1D9BF0] focus:outline-none transition-colors"
+                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 py-3 text-sm focus:border-[#1D9BF0] focus:outline-none transition-colors"
               />
             </div>
 
@@ -81,7 +81,7 @@
             <button 
               id="submit_connex" 
               type="submit" 
-              class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-3 md:py-3.5 text-base md:text-lg transition-colors mt-6 md:mt-8"
+              class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-3 text-sm sm:text-base md:text-lg transition-colors mt-4 sm:mt-6 md:mt-8"
             >
               Suivant
             </button>
@@ -89,7 +89,7 @@
             <!-- Forgot Password Button -->
             <button 
               type="button" 
-              class="w-full border border-gray-600 bg-black text-[#1D9BF0] hover:bg-gray-950 rounded-full py-3 md:py-3.5 text-base md:text-lg font-bold transition-colors"
+              class="w-full border border-gray-600 bg-black text-[#1D9BF0] hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors mt-3"
             >
               <a href="{{ route('password.request') }}" class="block">Mot de passe oublié ?</a>
             </button>
@@ -97,15 +97,15 @@
 
           <!-- Unverified Email Message -->
           @if(flashMessages.has('unverified_email'))
-            <div class="bg-red-500/20 border border-red-500 text-red-400 p-4 md:p-5 rounded-lg mt-6 md:mt-8">
-              <p class="text-sm md:text-base mb-4">{{ flashMessages.get('errors.general') }}</p>
+            <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 sm:p-4 md:p-5 rounded-lg mt-4 sm:mt-6 md:mt-8">
+              <p class="text-xs sm:text-sm md:text-base mb-3 sm:mb-4">{{ flashMessages.get('errors.general') }}</p>
               
               <form action="{{ route('auth.resend.verification') }}" method="POST">
                 {{ csrfField() }}
                 <input type="hidden" name="email" value="{{ flashMessages.get('unverified_email') }}">
                 <button 
                   type="submit" 
-                  class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-2 md:py-3 text-sm md:text-base transition-colors"
+                  class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-2 sm:py-3 text-xs sm:text-sm md:text-base transition-colors"
                 >
                   Renvoyer le lien de vérification
                 </button>
@@ -117,8 +117,8 @@
 
       <!-- Footer -->
       <footer class="w-full border-t border-gray-700 p-4 md:p-6 lg:p-8">
-        <div class="max-w-md mx-auto text-center">
-          <p class="text-gray-400 text-sm md:text-base">
+        <div class="max-w-sm sm:max-w-md mx-auto text-center">
+          <p class="text-gray-400 text-xs sm:text-sm md:text-base">
             Vous n'avez pas de compte ?
             <a href="/" class="text-[#1D9BF0] hover:underline font-bold">Inscrivez‑vous</a>
           </p>
