@@ -110,6 +110,11 @@
 
     @include('partials/sectionFolowSearch')
 
+ <!-- Ligne entre header et main -->
+  <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
+  
+  <!-- Ligne entre main et search (uniquement quand search est visible) -->
+    <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
   <script>
   const fileBtn = document.getElementById('openFilePicker')
   const fileInput = document.getElementById('imageInput')
@@ -269,11 +274,7 @@ document.querySelectorAll('.follow-btn').forEach(btn => {
   })
 })
 </script>
- <!-- Ligne entre sidebar et main - Desktop uniquement -->
-<div class="div-bar hidden lg:block fixed left-[20%] top-0 w-px h-screen bg-gray-700 z-50"></div>
 
-<!-- Ligne entre main et search - Desktop uniquement -->
-<div class="div-bar hidden lg:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50"></div>
   </body>
 </html>
 {{--  <script>
