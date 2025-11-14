@@ -11,7 +11,8 @@
 <body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-<main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:ml-80 max-lg:mx-auto">
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:ml-80">
+
       <!-- Header sticky - Comme X -->
       <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
         <button class="flex-shrink-0 p-2 rounded-full hover:bg-gray-800 transition">
@@ -134,15 +135,15 @@
         @endif
       </div>
 
-     <!-- Onglets profil - Scrollable comme X -->
-<section id="post_profil" class="flex w-full border-b border-gray-700 mt-6">
-  <nav id="nav_post" class="flex w-full text-sm overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-    <a href="#" class="tab flex-1 text-center py-4 font-bold border-b-2 border-blue-500 text-white whitespace-nowrap px-4 min-w-[80px] snap-start" data-target="posts">Posts</a>
-    <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px] snap-start" data-target="replies">Réponses</a>
-    <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px] snap-start" data-target="medias">Tweets-marquants</a>
-    <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px] snap-start" data-target="likes">J'aime</a>
-  </nav>
-</section>
+      <!-- Onglets profil - Scrollable comme X -->
+      <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6">
+        <nav id="nav_post" class="flex w-full text-sm overflow-x-auto scrollbar-hide">
+          <a href="#" class="tab flex-1 text-center py-4 font-bold border-b-2 border-blue-500 text-white whitespace-nowrap px-4 min-w-[80px]" data-target="posts">Posts</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="replies">Réponses</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="medias">Tweets-marquants</a>
+          <a href="#" class="tab flex-1 text-center py-4 text-gray-400 hover:text-white whitespace-nowrap px-4 min-w-[80px]" data-target="likes">J'aime</a>
+        </nav>
+      </section>
 
       <!-- Contenu des onglets -->
       <section id="profile-tweets" class="flex w-full flex-col">
@@ -167,8 +168,6 @@
         <div id="container-likes" class="hidden w-full flex-col">
           @each(tweet in userLikes)
             @include('partials/tweetSecProfile')
-                @!component('components/reponseForm')
-    @!component('components/deleteTweet')
           @endeach
         </div>
       </section>
@@ -177,10 +176,9 @@
 
     @include('partials/sectionFolowSearch')
 
-  
     <!-- Lignes verticales -->
-<div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64 xl:left-80 max-lg:hidden"></div>
-<div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80 max-lg:hidden"></div>
+    <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64 xl:left-80"></div>
+    <div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80"></div>
 <script>
   lucide.createIcons();
 </script>
@@ -189,14 +187,14 @@ document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', (e) => {
     e.preventDefault();
 
-    // Style des onglets - CORRIGÉ POUR COHÉRENCE
+    // Style des onglets
     document.querySelectorAll('.tab').forEach(t => {
-      t.classList.remove('border-blue-500', 'text-white', 'font-bold'); // CHANGÉ font-semibold → font-bold
-      t.classList.add('text-gray-400', 'font-normal'); // AJOUTÉ font-normal
+      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold');
+      t.classList.add('text-gray-400');
     });
     
-    tab.classList.add('border-blue-500', 'text-white', 'font-bold'); // CHANGÉ font-semibold → font-bold
-    tab.classList.remove('text-gray-400', 'font-normal'); // AJOUTÉ font-normal
+    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold');
+    tab.classList.remove('text-gray-400');
 
     // Affichage contenu
     const target = tab.dataset.target;
