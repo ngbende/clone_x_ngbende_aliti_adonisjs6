@@ -4,10 +4,10 @@
   @endslot
 
   @slot('main')
-    <main class="flex flex-col justify-center items-center w-full max-w-6xl mx-auto gap-4 sm:gap-8 py-8">
+    <main class="flex flex-grow justify-center items-center flex-wrap mt-20 w-full max-w-6xl mx-auto gap-8">
       
       <!-- Logo - toujours centré -->
-      <div class="w-full h-auto flex justify-center">
+      <div class="w-full sm:w-1/3 h-auto flex justify-center sm:justify-start">
         <img
           src="index/assets/logo_twitter.jpg"
           alt="logo_twitter"
@@ -19,30 +19,30 @@
       <div class="w-full sm:w-1/2 text-center flex justify-center items-center">
         <form
           action=""
-          class="w-full max-w-md flex flex-col space-y-6"
+          class="w-full max-w-md flex flex-col mt-14 space-y-6 px-4"
         >
-          <h1 class="font-bold text-3xl sm:text-4xl md:text-5xl text-white mb-2 text-center sm:text-left">
+          <h1 class="font-bold text-4xl sm:text-5xl text-white mb-3 text-left">
             Ça se passe maintenant
           </h1>
-          <p class="text-white text-xl sm:text-2xl md:text-3xl mb-4 text-center sm:text-left">
+          <p class="text-white text-2xl sm:text-3xl mb-6 text-left">
             Inscrivez‑vous.
           </p>
 
           <button
-            class="bg-white flex justify-center items-center gap-3 border-2 p-4 rounded-3xl text-base sm:text-sm text-black w-full hover:bg-gray-50 transition-colors"
+            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full"
           >
             <img src="index/assets/SVG.png" alt="Google" class="w-6 h-6" />
             S'inscrire avec Google
           </button>
 
           <button
-            class="bg-white flex justify-center items-center gap-3 border-2 p-4 rounded-3xl text-base sm:text-sm text-black w-full hover:bg-gray-50 transition-colors"
+            class="bg-white flex justify-center gap-2 border-2 p-3 rounded-3xl text-sm text-black w-full"
           >
             <img src="index/assets/SVG (1).png" alt="Apple" class="w-6 h-6" />
             S'inscrire avec Apple
           </button>
 
-          <div class="flex items-center gap-3 my-4">
+         <div class="flex items-center gap-4 my-6">
             <div class="flex-1 h-px bg-gray-600"></div>
             <p class="text-white text-sm">OU</p>
             <div class="flex-1 h-px bg-gray-600"></div>
@@ -51,12 +51,12 @@
           <a
             href="{{ route('show.signUp') }}"
             id="btn-creer-compte"
-            class="bg-[#1D9BF0] border-2 border-[#1D9BF0] p-4 rounded-3xl text-base sm:text-sm font-bold text-white block text-center w-full hover:bg-[#1A8CD8] transition-colors"
+            class="bg-[#1D9BF0] border-2 p-3 rounded-3xl text-sm block text-center w-full"
           >
             Créer un compte
           </a>
 
-          <p class="text-white text-xs mt-4 text-center leading-relaxed">
+          <p class="text-white text-xs mt-4 text-center">
             En vous inscrivant, vous acceptez les
             <a href="#" class="text-[#1D9BF0] hover:underline">Conditions d'utilisation</a> et
             la
@@ -65,12 +65,12 @@
             <a href="#" class="text-[#1D9BF0] hover:underline">l'Utilisation des cookies</a>.
           </p>
 
-          <div class="mt-8">
-            <p class="text-white mb-4 text-base font-bold text-center sm:text-left">Vous avez déjà un compte ?</p>
+          <div class="mt-11">
+            <p class="text-white mb-4">Vous avez déjà un compte ?</p>
             <a
               href="{{ route('show.login') }}"
               id="btn-connexion1"
-              class="text-[#1D9BF0] bg-black border-2 border-gray-600 p-4 rounded-3xl text-base sm:text-sm font-bold block w-full text-center hover:bg-[#031018] transition-colors"
+              class="text-[#1D9BF0] bg-black border-2 p-3 rounded-3xl text-sm border-white block w-full text-center"
             >
               Se connecter
             </a>
@@ -80,27 +80,29 @@
     </main>
 
     <!-- Footer -->
-    <footer class="text-gray-100 text-xs w-full max-w-6xl mx-auto flex flex-wrap justify-center sm:justify-around items-center gap-3 py-6 mt-8 px-2">
-      <!-- liens footer -->
-      <a href=".x.com/fr" target="_blank" class="hover:underline">À propos</a>
-      <a href="help.x.com/en/using-x/download-the-x-app" class="hover:underline">Téléchargez l'application X</a>
-      <a href="#" class="hover:underline">Grok</a>
-      <a href="#" class="hover:underline">Centre d'assistance</a>
-      <a href="#" class="hover:underline">Conditions d'utilisation</a>
-      <a href="#" class="hover:underline">Politique de Confidentialité</a>
-      <a href="#" class="hover:underline">Politique relative aux cookies</a>
-      <a href="#" class="hover:underline">Accessibilité</a>
-      <a href="#" class="hover:underline">Informations sur les publicités</a>
-      <a href="#" class="hover:underline">Blog</a>
-      <a href="#" class="hover:underline">Carrières</a>
-      <a href="#" class="hover:underline">Ressources de la marque</a>
-      <a href="#" class="hover:underline">Publicité</a>
-      <a href="#" class="hover:underline">Marketing</a>
-      <a href="#" class="hover:underline">X pour les professionnels</a>
-      <a href="#" class="hover:underline">Développeurs</a>
-      <a href="#" class="hover:underline">Répertoire</a>
-      <a href="#" class="hover:underline">Paramètres</a>
-      <div class="w-full text-center mt-4">© 2025 X Corp.</div>
+    <footer class="text-gray-100 text-xs w-full max-w-6xl mx-auto flex flex-wrap justify-around items-end gap-2 py-6 mt-12">
+       <!-- liens footer  -->
+      <a href=".x.com/fr" target="_blank">À propos</a>
+      <a href="help.x.com/en/using-x/download-the-x-app"
+        >Téléchargez l'application X</a
+      >
+      <a href="#">Grok</a>
+      <a href="#">Centre d'assistance</a>
+      <a href="#">Conditions d’utilisation</a>
+      <a href="#">Politique de Confidentialité</a>
+      <a href="#">Politique relative aux cookies</a>
+      <a href="#">Accessibilité</a>
+      <a href="#">Informations sur les publicités</a>
+      <a href="#">Blog</a>
+      <a href="#">Carrières</a>
+      <a href="#">Ressources de la marque</a>
+      <a href="#">Publicité</a>
+      <a href="#">Marketing</a>
+      <a href="#">X pour les professionnels</a>
+      <a href="#">Développeurs</a>
+      <a href="#">Répertoire</a>
+      <a href="#">Paramètres</a>
+      <div class="w-full text-center mt-5">© 2025 X Corp.</div>
     </footer>
   @endslot
 @end
