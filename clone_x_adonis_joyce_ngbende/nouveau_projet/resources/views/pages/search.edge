@@ -12,7 +12,7 @@
 
        @!component('components/logoutModal')
 <div class="flex flex-1">
-  <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 md:ml-20 md:max-w-2xl md:mx-auto lg:ml-64 lg:max-w-3xl xl:w-2/4 xl:mx-auto xl:mt-4">
+  <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 md:ml-20 md:max-w-2xl md:mx-auto lg:ml-64 lg:max-w-3xl xl:w-2/4 xl:mx-auto xl:mt-8 xl:pt-4">
     <!-- Votre contenu principal reste identique -->
     <form action="{{ route('search') }}" method="GET" class="mb-4">
       <input
@@ -24,13 +24,13 @@
       />
     </form>
 
-    <h2 class="font-bold text-base mb-3 sm:text-lg md:text-xl xl:mt-6">Utilisateurs</h2>
+    <h2 class="font-bold text-base mb-3 sm:text-lg md:text-xl xl:mt-8">Utilisateurs</h2>
     @if(users.length === 0)
-      <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-2">Aucun utilisateur trouvé.</p>
+      <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-4">Aucun utilisateur trouvé.</p>
     @endif
 
     @each(user in users)
-    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3 xl:px-2">
+    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3 xl:px-4">
       <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 md:gap-4 min-w-0">
         <img 
           src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
@@ -57,9 +57,9 @@
     </div>
     @endeach
 
-    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl xl:mt-8">Tweets</h2>
+    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl xl:mt-12">Tweets</h2>
     @if(tweets.length === 0)
-      <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-2">Aucun tweet trouvé.</p>
+      <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-4">Aucun tweet trouvé.</p>
     @endif
 
     @each(tweet in tweets)
