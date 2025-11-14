@@ -11,8 +11,7 @@
 <body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:ml-80">
-
+<main id="main_profil" class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64 xl:ml-80 max-lg:mx-auto">
       <!-- Header sticky - Comme X -->
       <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-4 p-3 border-b border-gray-700">
         <button class="flex-shrink-0 p-2 rounded-full hover:bg-gray-800 transition">
@@ -178,9 +177,10 @@
 
     @include('partials/sectionFolowSearch')
 
+  
     <!-- Lignes verticales -->
-    <div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64 xl:left-80"></div>
-    <div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80"></div>
+<div class="hidden fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:left-64 xl:left-80 max-lg:hidden"></div>
+<div class="hidden fixed right-64 top-0 w-px h-screen bg-gray-700 z-40 md:block lg:right-80 max-lg:hidden"></div>
 <script>
   lucide.createIcons();
 </script>
