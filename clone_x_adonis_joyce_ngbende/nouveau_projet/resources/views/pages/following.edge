@@ -41,28 +41,28 @@
               class="border-none rounded-md text-xl text-white flex-1 bg-transparent focus:outline-none placeholder-gray-500 w-full mb-4"
             />
             
-            <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
-            <input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
+ <input type="file" name="image" id="imageInput" accept="image/*" style="display: none" />
+        <input type="file" name="video" id="videoInput" accept="video/*" style="display:none" />
 
-            <!-- Prévisualisations - MÊME QUE LA PREMIÈRE PAGE -->
-            <section class="video_section flex-col items-center justify-center mb-4" style="display:none">
-              <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover" style="display:none"></video>
-            </section>
+        <!-- Prévisualisations -->
+        <section class="video_section flex-col items-center justify-center mb-4" style="display:none">
+          <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover" style="display:none"></video>
+        </section>
 
-            <section class="img_section flex-col items-center justify-center mb-4" style="display: none">
-              <img id="imagePreview" style="display: none" class="rounded-lg w-full max-w-md object-cover" />
-            </section>
+        <section class="img_section flex-col items-center justify-center mb-4" style="display: none">
+          <img id="imagePreview" style="display: none" class="rounded-lg w-full max-w-md object-cover" />
+        </section>
 
-            <!-- Actions - MÊME QUE LA PREMIÈRE PAGE -->
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
-              <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
-                <button id="openFilePicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-                  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
-                </button>
-                
-                <button id="openVideoPicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-                  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
-                </button>
+        <!-- Actions - CORRIGÉ POUR MOBILE -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
+          <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
+           <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+</label>
+<label for="videoInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
+  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+</label>
+            
                 
                 <button class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
                   <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />
@@ -104,17 +104,19 @@
 
   <!-- Lignes de séparation - MÊME QUE LA PREMIÈRE PAGE -->
   <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
-  <div class="hidden md:block fixed right-64 lg:right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
-
+    <!-- Ligne entre main et search (uniquement quand search est visible) -->
+    <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
     <script>
   const fileBtn = document.getElementById('openFilePicker')
   const fileInput = document.getElementById('imageInput')
   const previewContainer = document.querySelector('.img_section')
   const preview = document.getElementById('imagePreview')
 
-  fileBtn.addEventListener('click', () => {
-    fileInput.click()
-  })
+  // fileBtn.addEventListener('click', (e) => {
+  //    e.preventDefault() // ← AJOUT IMPORTANT
+  // e.stopPropagation() // ← Évite la propagation
+  //   fileInput.click()
+  // })
 
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0]
@@ -134,9 +136,11 @@ const videoInput = document.getElementById('videoInput')
 const videoPreviewContainer = document.querySelector('.video_section')
 const videoPreview = document.getElementById('videoPreview')
 
-videoBtn.addEventListener('click', () => {
-  videoInput.click()
-})
+// videoBtn.addEventListener('click', (e) => {
+//    e.preventDefault() // ← AJOUT IMPORTANT
+//   e.stopPropagation() // ← Évite la propagation
+//   videoInput.click()
+// })
 
 videoInput.addEventListener('change', () => {
   const file = videoInput.files[0]
