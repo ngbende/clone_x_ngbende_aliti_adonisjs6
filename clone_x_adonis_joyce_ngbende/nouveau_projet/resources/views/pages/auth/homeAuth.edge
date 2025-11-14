@@ -2,15 +2,14 @@
   @slot('meta')
     <meta name="description" content="A welcome page made with EdgeJS" />
   @endslot
-  
+
   @slot('main')
-    <!-- === TON BODY PRINCIPAL RESPONSIVE === -->
     <main class="min-h-screen w-full flex flex-col bg-black">
 
-      <!-- Container principal (toute largeur sur mobile) -->
-      <div class="flex flex-col lg:flex-row flex-grow w-full lg:max-w-7xl mx-auto">
+      <!-- Container principal -->
+      <div class="flex flex-col w-full flex-grow max-w-full mx-auto lg:flex-row lg:max-w-7xl">
 
-        <!-- Logo Desktop -->
+        <!-- Logo Desktop (caché sur mobile) -->
         <div class="hidden lg:flex lg:w-1/2 xl:w-[55%] items-center justify-center p-8">
           <img
             src="index/assets/logo_twitter.jpg"
@@ -20,13 +19,13 @@
         </div>
 
         <!-- Formulaire -->
-        <div class="flex items-center justify-center w-full lg:w-1/2 xl:w-[45%] p-4 sm:p-6 md:p-8 lg:p-12">
-          <div class="w-full sm:max-w-md mx-auto bg-black rounded-xl p-6 sm:p-8 md:p-10 border border-gray-800">
+        <div class="flex flex-col items-center justify-center w-full lg:w-1/2 xl:w-[45%] p-4 sm:p-6 md:p-8 lg:p-12">
+          <div class="w-full sm:max-w-md bg-black rounded-xl p-6 sm:p-8 md:p-10 border border-gray-800">
 
             <form class="w-full space-y-4 sm:space-y-5">
 
               <!-- Logo Mobile -->
-              <div class="lg:hidden mb-6 flex justify-center">
+              <div class="flex lg:hidden justify-center mb-6">
                 <img
                   src="index/assets/logo_twitter.jpg"
                   alt="logo_twitter"
@@ -34,11 +33,11 @@
                 />
               </div>
 
-              <h1 class="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white text-center sm:text-left">
+              <h1 class="font-bold text-2xl sm:text-3xl md:text-4xl text-white text-center sm:text-left lg:text-5xl">
                 Ça se passe maintenant
               </h1>
 
-              <p class="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl text-center sm:text-left">
+              <p class="text-white text-lg sm:text-xl md:text-2xl text-center sm:text-left lg:text-3xl">
                 Inscrivez-vous.
               </p>
 
