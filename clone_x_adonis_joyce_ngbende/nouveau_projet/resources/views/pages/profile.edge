@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,96 +12,94 @@
   <body class="w-full flex flex-col min-h-screen bg-black">
     @include('partials/headerProfile')
 
-    <main id="main_profil" class="flex-1 w-full pb-16 md:pb-0 md:mt-0 md:ml-16 md:border-l md:border-r md:border-gray-700 md:mx-auto md:max-w-2xl 2xl:ml-64 xl:mr-80">
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 md:pb-0 md:mt-0 md:ml-20 md:border-l md:border-r md:border-gray-700 md:mx-auto md:max-w-2xl lg:ml-64 xl:mr-80">
 
-      <!-- Header sticky - AMÉLIORÉ -->
-      <div class="sticky top-0 z-50 bg-black/90 backdrop-blur-md text-white flex items-center gap-3 p-3 border-b border-gray-700">
+      <!-- Header sticky -->
+      <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-4 md:p-6 border-b border-gray-700">
         <a href="/home" class="flex-shrink-0">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
         </a>
-        
+        <a href="{{ route('search') }}">
+        </a>
         <div class="flex flex-col min-w-0 flex-1">
-          <p class="font-semibold text-white text-sm username1 truncate">{{user.nom}}</p>
-          <p class="text-gray-400 text-xs">{{ `${user.replies?.length || 0} messages` }}</p>
+          <p class="font-semibold text-white text-sm md:text-base username1 truncate">{{user.nom}}</p>
+          <p class="text-gray-400 text-xs md:text-sm">{{ `${user.replies?.length || 0} messages` }}</p>
         </div>
 
-        <a href="{{ route('search') }}" class="ml-auto flex-shrink-0">
-          <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" alt="search"/>
-        </a>
+        <div class="ml-auto flex-shrink-0">
+          <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
+        </div>
       </div>
 
-      <!-- Bannière + avatar - OPTIMISÉ -->
-      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 md:h-48">
+      <!-- Bannière + avatar -->
+      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-44 lg:h-48 xl:h-52">
         @if(auth.user && auth.user.id === user.id)
           <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
-          <img class="absolute -bottom-12 left-4 w-24 h-24 rounded-full border-4 border-black object-cover md:-bottom-14 md:w-28 md:h-28"
+          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-11 md:w-22 md:h-22 lg:-bottom-12 lg:w-24 lg:h-24 xl:-bottom-14 xl:w-32 xl:h-32"
           src="{{auth.user.photoProfil || '/images/default-avatar.png' }}"
                id="profile-img" />
         @else
           <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
                class="object-cover w-full h-full" id="banner-img"/>
           <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
-               class="absolute -bottom-12 left-4 w-24 h-24 rounded-full border-4 border-black object-cover md:-bottom-14 md:w-28 md:h-28"
+               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-11 md:w-22 md:h-22 lg:-bottom-12 lg:w-24 lg:h-24 xl:-bottom-14 xl:w-32 xl:h-32"
                id="profile-img" />
         @endif
       </section>
 
-      <!-- Infos utilisateur - RESTRUCTURÉ -->
-      <div id="para-name-user_profil" class="mt-14 px-4 text-white relative md:mt-16">
+      <!-- Infos utilisateur -->
+      <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 md:mt-14 lg:mt-16 xl:mt-16">
         
-        <!-- Bouton Modifier le profil - REPOSITIONNÉ -->
+        <!-- Bouton Modifier le profil -->
         @if(auth.user && auth.user.id === user.id)
-          <div class="absolute -top-10 right-4 md:-top-12">
+          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-16 lg:-top-16 xl:-top-16">
             <a href="{{ route('profile.edit') }}" 
-               class="px-4 py-1.5 border border-gray-500 rounded-full text-xs md:text-sm bg-black/70 hover:bg-gray-700 transition font-semibold">
+               class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition">
               Modifier le profil
             </a>
           </div>
         @endif
 
-        <p class="font-bold username1 text-lg md:text-xl">{{user.nom}}</p>
-        <p class="text-gray-400 text-sm username2 mb-2">{{ `@${user.nom}` }}</p>
+        <p class="font-semibold username1 text-lg sm:text-xl md:text-xl lg:text-2xl">{{user.nom}}</p>
+        <p class="text-gray-400 text-sm md:text-base lg:text-base username2">{{ `@${user.nom}` }}</p>
         
         @if(user.bio)
-          <p class="mt-2 text-white text-sm leading-relaxed md:text-base">{{ user.bio }}</p>
+          <p class="mt-3 text-white text-sm leading-relaxed sm:text-base md:text-base lg:text-lg">{{ user.bio }}</p>
         @endif
 
-        <div class="flex flex-col gap-2 items-start mt-3 text-gray-400 text-xs md:text-sm md:flex-row md:flex-wrap md:items-center">
+        <div class="flex flex-col gap-2 items-start mt-3 text-gray-400 text-sm sm:flex-row sm:flex-wrap sm:items-center md:text-base">
           @if(user.location)
             <div class="flex items-center gap-1">
-              <img width="14" height="14" class="md:w-4 md:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png" alt="location"/>
+              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
               <span>{{ user.location }}</span>
             </div>
           @endif
 
           @if(user.website)
             <div class="flex items-center gap-1">
-              <img width="14" height="14" class="md:w-4 md:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png" alt="link"/>
-              <a href="{{ user.website }}" class="text-blue-400 hover:underline truncate max-w-[200px]" target="_blank">
+              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
+              <a href="{{ user.website }}" class="text-blue-400 hover:underline" target="_blank">
                 {{ user.website.length > 30 ? user.website.substring(0, 30) + '...' : user.website }}
               </a>
             </div>
           @endif
 
           <div class="flex items-center gap-1">
-            <img width="14" height="14" class="md:w-4 md:h-4" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png" alt="calendar"/>
+            <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
             <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
           </div>
         </div>
 
-        <div class="flex gap-4 mt-3 text-sm">
+        <div class="flex gap-4 mt-3 text-sm md:text-base">
           <p class="flex items-center gap-1">
-            <span class="font-bold">{{ user.following?.length || 0 }}</span>
+            <span class="font-semibold">{{ user.following?.length || 0 }}</span>
             <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
                class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
               abonnements
             </a>
           </p>
           <p class="flex items-center gap-1">
-            <span class="font-bold">{{ user.followers?.length || 0 }}</span>
+            <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
             <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
                class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
               abonnés
@@ -114,7 +113,7 @@
             <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
               {{ csrfField() }}
               <button type="submit"
-                      class="px-4 py-2 rounded-full text-sm font-semibold 
+                      class="px-4 py-2 rounded-full text-sm font-semibold md:text-base
                              {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
                 {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
               </button>
@@ -124,12 +123,12 @@
       </div>
 
       <!-- Onglets profil -->
-      <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6">
-        <nav id="nav_post" class="flex w-full text-xs md:text-sm overflow-x-auto scrollbar-hide">
-          <a href="#" class="tab flex-1 text-center py-3 font-semibold border-b-2 border-blue-500 active whitespace-nowrap min-w-[80px]" data-target="posts">Posts</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap min-w-[80px]" data-target="replies">Réponses</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap min-w-[100px]" data-target="medias">Marquants</a>
-          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap min-w-[80px]" data-target="likes">J'aime</a>
+      <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6 md:mt-8">
+        <nav id="nav_post" class="flex w-full text-sm md:text-base overflow-x-auto">
+          <a href="#" class="tab flex-1 text-center py-3 font-semibold border-b-2 border-blue-500 active whitespace-nowrap px-4" data-target="posts">Posts</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="replies">Réponses</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="medias">Tweets-marquants</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="likes">J'aime</a>
         </nav>
       </section>
 
@@ -137,7 +136,7 @@
       <section id="profile-tweets" class="flex w-full flex-col">
         <div id="container-posts" class="w-full flex-col">
           @each(tweet in tweets)
-            <div class="w-full">
+            <div class="flex gap-3 px-4 md:px-6">
               @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
               @!component('components/deleteTweet')
@@ -147,7 +146,7 @@
 
         <div id="container-replies" class="hidden">
           @each(tweet in userReplies)
-            <div class="w-full">
+            <div class="flex gap-3 px-4 md:px-6">
               @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
               @!component('components/deleteTweet')
@@ -157,7 +156,7 @@
 
         <div id="container-medias" class="hidden">
           @each(tweet in userMedias)
-            <div class="w-full">
+            <div class="flex gap-3 px-4 md:px-6">
               @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
               @!component('components/deleteTweet')
@@ -167,7 +166,7 @@
 
         <div id="container-likes" class="hidden">
           @each(tweet in userLikes)
-            <div class="w-full">
+            <div class="flex gap-3 px-4 md:px-6">
               @include('partials/tweetSecProfile')
               @!component('components/reponseForm')
               @!component('components/deleteTweet')
@@ -277,20 +276,11 @@
         <p class="mt-2">© 2025 X Corp.</p>
       </footer>
     </section>
-  
-    <!-- Lignes verticales - uniquement sur desktop XL+ -->
-    <div class="hidden xl:block fixed left-16 top-0 w-px h-screen bg-gray-700 z-40 2xl:left-64"></div>
+
+    <!-- Lignes verticales - alignées avec le header -->
+    <div class="hidden md:block fixed left-20 top-0 w-px h-screen bg-gray-700 z-40 lg:left-64"></div>
     <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
 
-<style>
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-</style>
 <script>
   lucide.createIcons();
 </script>
