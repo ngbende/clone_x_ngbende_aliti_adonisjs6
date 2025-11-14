@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,18 +5,14 @@
     <title>
       {{ title || "Your default title" }}
     </title>
-    <!-- Tailwind via CDN -->
-    <script src="https://cdn.tailwindcss.com">
-
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
 
     @if ($slots.meta)
       {{{ await $slots.meta() }}}
     @endif
     
   </head>
-  <body class="w-full bg-black flex justify-center items-center min-h-screen flex-col px-4">
-
+  <body class="w-full bg-black flex flex-col min-h-screen px-4">
     {{{ await $slots.main() }}}
   </body>
 </html>
