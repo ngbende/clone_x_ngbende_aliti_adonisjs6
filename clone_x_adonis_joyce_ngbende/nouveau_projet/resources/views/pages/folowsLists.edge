@@ -11,78 +11,77 @@
 <body class="bg-black w-full flex flex-col min-h-screen">
   @include('partials/headerProfile')
 
-  <main id="main_profil" class="relative w-full lg:ml-[20%] lg:w-2/4 h-full flex flex-col border-l border-r border-gray-700">
+  <main id="main_profil" class="relative w-full md:ml-20 md:max-w-2xl md:mx-auto lg:ml-[20%] lg:w-2/4 h-full flex flex-col border-l border-r border-gray-700">
     
     <!-- Header sticky -->
-    <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-3 border-b border-gray-700">
+    <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-3 border-b border-gray-700 md:p-4">
       <a href="/accueil" class="flex-shrink-0">
-        <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"/>
+        <img width="20" height="20" src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png" class="md:w-6 md:h-6"/>
       </a>
 
       <div class="flex flex-col min-w-0 flex-1">
         <div class="flex items-center gap-1">
-          <p class="font-bold text-white text-sm username1 truncate">username</p>
+          <p class="font-bold text-white text-sm username1 truncate md:text-base">username</p>
           <!-- Badge check Twitter-like -->
-          <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-blue-400 flex-shrink-0 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"/>
           </svg>
         </div>
-        <p class="text-gray-400 text-xs mt-1">0 messages</p>
+        <p class="text-gray-400 text-xs mt-1 md:text-sm">0 messages</p>
       </div>
 
       <div class="ml-auto flex-shrink-0">
-        <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
+        <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png" class="md:w-5 md:h-5"/>
       </div>
     </div>
 
     <!-- Stats équilibrées -->
-    <div class="flex items-center justify-around px-4 mt-4 border-b border-gray-700 pb-3 text-sm text-white">
+    <div class="flex items-center justify-around px-4 mt-4 border-b border-gray-700 pb-3 text-sm text-white md:text-base">
       <!-- Followers -->
       <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
         class="flex flex-col items-center {{ type === 'followers' ? 'text-blue-400' : '' }}">
-        <span class="font-bold text-base">{{ user.followers.length }}</span>
-        <span class="text-xs sm:text-sm">Followers</span>
+        <span class="font-bold text-base md:text-lg">{{ user.followers.length }}</span>
+        <span class="text-xs sm:text-sm md:text-base">Followers</span>
       </a>
 
       <!-- Following -->
       <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
         class="flex flex-col items-center {{ type === 'followings' ? 'text-blue-400' : '' }}">
-        <span class="font-bold text-base">{{ user.following.length }}</span>
-        <span class="text-xs sm:text-sm">Following</span>
+        <span class="font-bold text-base md:text-lg">{{ user.following.length }}</span>
+        <span class="text-xs sm:text-sm md:text-base">Following</span>
       </a>
     </div>
-        <!-- Espaceur pour l'alignement -->
-        <div class="hidden sm:block w-20"></div>
+
+    <!-- Espaceur pour l'alignement -->
+    <div class="hidden sm:block w-20 md:w-24"></div>
+
+    <!-- Container pour la liste -->
+    <div id="container-follows" class="mt-4 px-2 sm:px-0 md:px-4">
+      @include('partials/followListSections')
+    </div>
+
+    <!-- Section Tweets/Replies/Medias/Likes -->
+    <section id="profile-tweets" class="flex flex-col flex-1">
+      <div id="container-posts" class="px-2 sm:px-0 md:px-4">
+        @each(tweet in tweets)
+          @include('partials/folloListSection')
+        @endeach
       </div>
 
-      <!-- Container pour la liste -->
-      <div id="container-follows" class="mt-4 px-2 sm:px-0">
-        @include('partials/followListSections')
+      <div id="container-replies" class="hidden px-2 sm:px-0 md:px-4">
+        <!-- Contenu chargé via fetch -->
       </div>
 
-      <!-- Section Tweets/Replies/Medias/Likes -->
-      <section id="profile-tweets" class="flex flex-col flex-1">
-        <div id="container-posts" class="px-2 sm:px-0">
-          @each(tweet in tweets)
-            @include('partials/folloListSection')
-          @endeach
-        </div>
+      <div id="container-medias" class="hidden px-2 sm:px-0 md:px-4">
+        <!-- Filtrage médias ici si nécessaire -->
+      </div>
 
-        <div id="container-replies" class="hidden px-2 sm:px-0">
-          <!-- Contenu chargé via fetch -->
-        </div>
+      <div id="container-likes" class="hidden px-2 sm:px-0 md:px-4">
+        <!-- Filtrage likes ici si nécessaire -->
+      </div>
+    </section>
 
-        <div id="container-medias" class="hidden px-2 sm:px-0">
-          <!-- Filtrage médias ici si nécessaire -->
-        </div>
-
-        <div id="container-likes" class="hidden px-2 sm:px-0">
-          <!-- Filtrage likes ici si nécessaire -->
-        </div>
-      </section>
-
-    </main>
-
+  </main>
     <!-- Section search/follow - cachée sur mobile, visible à partir de lg -->
     <div class="hidden lg:block">
       @include('partials/sectionFolowSearch')

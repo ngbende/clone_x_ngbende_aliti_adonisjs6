@@ -154,7 +154,7 @@ router
   .use([middleware.auth(), middleware.checkBlocked()])
 
 // route pour la recherche
-router.get('/search', [SearchController, 'index']).as('search')
+router.get('/search', [SearchController, 'index']).as('search').use([middleware.auth(), middleware.checkBlocked(), middleware.checkTweetAccess()])
 
 // routes pour les blocages
 router
