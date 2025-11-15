@@ -57,39 +57,40 @@
           <img id="imagePreview" style="display: none" class="rounded-lg w-full max-w-md object-cover" />
         </section>
 
-        <!-- Actions - CORRIGÉ POUR MOBILE -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
-          <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
-            <button id="openFilePicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
-            </button>
-            
-            <button id="openVideoPicker" type="button" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
-            </button>
-            
-            <!-- Tes autres icônes exactement comme avant -->
-            <button class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />
-            </button>
+         <!-- Actions (mobile-first) -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3">
+  <!-- Icônes à gauche -->
+  <div class="flex items-center gap-1 sm:gap-2 flex-wrap">
+    <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+    </label>
+    
+    <label for="videoInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+    </label>
+    
+    <button type="button" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />
+    </button>
 
-            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              @include('components/icones/pol')
-            </a>
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden sm:block">
+      @include('components/icones/pol')
+    </a>
 
-            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              @include('components/icones/calendrier')
-            </a>
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden sm:block">
+      @include('components/icones/calendrier')
+    </a>
 
-            <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-              @include('components/icones/localisation')
-            </a>
-          </div>
-          
-          <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full sm:w-auto">
-            Poster
-          </button>
-        </div>
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden lg:block">
+      @include('components/icones/localisation')
+    </a>
+  </div>
+  
+  <!-- Bouton Poster aligné à droite -->
+  <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full sm:w-auto order-first sm:order-last">
+    Poster
+  </button>
+</div>
       </form>
     </div>
   </div>
