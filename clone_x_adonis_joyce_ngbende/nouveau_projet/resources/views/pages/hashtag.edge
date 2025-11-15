@@ -17,17 +17,16 @@
        @!component('components/logoutModal')
 
     <main id="main_profil"  class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
-    <!-- Header sticky - Même largeur que le main avec bon centrage -->
+    <!-- Header sticky - Simple et efficace -->
 <div class="sticky z-50 top-0 bg-black/60 backdrop-blur-md border-b border-gray-700/50">
-  <!-- Conteneur qui suit exactement la même largeur que le main -->
-  <div class="w-full md:ml-16 lg:ml-64">
-    <div class="flex items-center justify-around h-14 p-4 gap-10">
-      <!-- Navigation links -->
-      <div class="flex flex-row items-center gap-8 sm:gap-x-52">
-        <a href="{{route ('home.index')}}" class="text-white font-bold text-sm sm:text-base border-b-2 border-blue-500 pb-3 pt-3 hover:text-white transition whitespace-nowrap">
+  <div class="w-auto mx-4 md:mx-16 lg:mx-64">
+    <div class="flex items-center h-14">
+      <!-- Navigation links - Largeur automatique et centrée -->
+ <div class="flex w-auto justify-around items-center justify-center">
+  <a href="{{route ('home.index')}}" class="px-8 text-center text-white font-bold text-sm sm:text-base border-b-2 border-blue-500 pb-3 pt-3 hover:text-white transition whitespace-nowrap">
           Pour vous
         </a>
-        <a href="{{route ('tweets.following')}}" class="text-gray-500 font-bold text-sm sm:text-base pb-3 pt-3 hover:text-white transition border-b-2 border-transparent hover:border-gray-400 whitespace-nowrap">
+        <a href="{{route ('tweets.following')}}" class="px-8 text-center text-gray-500 font-bold text-sm sm:text-base pb-3 pt-3 hover:text-white transition border-b-2 border-transparent hover:border-gray-400 whitespace-nowrap">
           Abonnements
         </a>
       </div>
