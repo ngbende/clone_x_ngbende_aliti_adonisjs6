@@ -39,7 +39,7 @@
         <img src="{{auth.user.photoProfil || 'assets/sug_1.jpg'}}" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
       </a>
       
-     <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data" class="bg-black w-auto sm:h-96 relative flex flex-col items-start">
+     <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data" class="flex-1">
   {{ csrfField() }}
 
   <!-- Zone de saisie -->
@@ -72,7 +72,7 @@
   </section>
 
   <!-- Actions (mobile-first) -->
-  <div class="flex items-center justify-between border-t border-gray-700 pt-3">
+  <div class="flex items-center justify-arround border-t border-gray-700 pt-3">
     <!-- Icônes à gauche -->
     <div class="flex items-center gap-1 sm:gap-2">
       <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition">
