@@ -15,8 +15,9 @@
   <main id="main_profil" class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0">
     
     <!-- Header sticky - MÊME QUE LA PREMIÈRE PAGE -->
-    <div class="sticky top-0 z-40 bg-black bg-opacity-80 backdrop-blur-md border-b border-gray-700">
-      <div class="flex items-center justify-around h-14 px-4">
+    <div class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 
+    backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base">
+      <div class="flex flex-row items-center gap-8 sm:gap-x-52">
         <a href="{{route ('home.index')}}" class="text-white font-bold text-sm border-b-2 border-blue-500 pb-3 pt-4">Pour vous</a>
         <a href="{{route ('tweets.following')}}" class="text-gray-500 font-bold text-sm hover:text-white transition pb-3 pt-4">Abonnements</a>
       </div>
@@ -41,29 +42,18 @@
               class="border-none rounded-md text-xl text-white flex-1 bg-transparent focus:outline-none placeholder-gray-500 w-full mb-4"
             />
             
-<input type="file" name="image" id="imageInput" accept="image/*" class="hidden" />
-<input type="file" name="video" id="videoInput" accept="video/*" class="hidden" />
+<input type="file" name="image" class="imageInput" accept="image/*" class="hidden" />
+<input type="file" name="video" class="videoInput" accept="video/*" class="hidden" />
 
-        <!-- Prévisualisations -->
-      <section id="videoPreviewSection" class="video_section flex-col items-center justify-center mb-4 hidden">
-  <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover hidden"></video>
-  <button type="button" onclick="removeVideo()" class="text-red-500 text-sm mt-2">Supprimer la vidéo</button>
+<section class="videoPreviewSection flex-col items-center justify-center mb-4 hidden">
+  <video class="videoPreview" controls class="rounded-lg w-full max-w-md object-cover hidden"></video>
+  <button type="button" class="removeVideoBtn text-red-500 text-sm mt-2">Supprimer la vidéo</button>
 </section>
 
-<section id="imagePreviewSection" class="img_section flex-col items-center justify-center mb-4 hidden">
-  <img id="imagePreview" class="rounded-lg w-full max-w-md object-cover hidden" />
-  <button type="button" onclick="removeImage()" class="text-red-500 text-sm mt-2">Supprimer l'image</button>
+<section class="imagePreviewSection flex-col items-center justify-center mb-4 hidden">
+  <img class="imagePreview" class="rounded-lg w-full max-w-md object-cover hidden" />
+  <button type="button" class="removeImageBtn text-red-500 text-sm mt-2">Supprimer l'image</button>
 </section>
-
-        <!-- Actions - CORRIGÉ POUR MOBILE -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-t border-gray-700 pt-3 gap-3 sm:gap-0">
-          <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-blue-400">
-           <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
-</label>
-<label for="videoInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
-  <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
-</label>
             
                 
                 <button class="text-white p-2 rounded-full hover:bg-blue-400/10 transition flex-shrink-0">
@@ -83,9 +73,9 @@
                 </a>
               </div>
               
-              <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full sm:w-auto">
-                Poster
-              </button>
+           <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full md:w-auto">
+            Poster
+          </button>
             </div>
           </form>
         </div>
@@ -111,72 +101,67 @@
     <script>
   // Prévisualisation image
   document.addEventListener('DOMContentLoaded', function() {
-    const imageInput = document.getElementById('imageInput');
-    const imagePreview = document.getElementById('imagePreview');
-    const imagePreviewSection = document.getElementById('imagePreviewSection');
+  // Utilise querySelector pour cibler les éléments dans le formulaire actuel
+  const imageInput = document.querySelector('.imageInput');
+  const imagePreview = document.querySelector('.imagePreview');
+  const imagePreviewSection = document.querySelector('.imagePreviewSection');
+  
+  const videoInput = document.querySelector('.videoInput');
+  const videoPreview = document.querySelector('.videoPreview');
+  const videoPreviewSection = document.querySelector('.videoPreviewSection');
 
-    imageInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (!file) return;
+  // Ajoute les événements aux boutons de suppression
+  document.querySelector('.removeImageBtn')?.addEventListener('click', removeImage);
+  document.querySelector('.removeVideoBtn')?.addEventListener('click', removeVideo);
 
-      // Masquer la prévisualisation vidéo si elle existe
-      hideVideoPreview();
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        imagePreview.src = e.target.result;
-        imagePreview.classList.remove('hidden');
-        imagePreviewSection.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    });
+  // Le reste du code reste le même...
+  imageInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    hideVideoPreview();
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      imagePreview.src = e.target.result;
+      imagePreview.classList.remove('hidden');
+      imagePreviewSection.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  });
 
-    // Prévisualisation vidéo
-    const videoInput = document.getElementById('videoInput');
-    const videoPreview = document.getElementById('videoPreview');
-    const videoPreviewSection = document.getElementById('videoPreviewSection');
+  videoInput.addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    hideImagePreview();
+    
+    const url = URL.createObjectURL(file);
+    videoPreview.src = url;
+    videoPreview.classList.remove('hidden');
+    videoPreviewSection.classList.remove('hidden');
+  });
 
-    videoInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (!file) return;
+  function removeImage() {
+    imageInput.value = '';
+    hideImagePreview();
+  }
 
-      // Masquer la prévisualisation image si elle existe
-      hideImagePreview();
-      
-      const url = URL.createObjectURL(file);
-      videoPreview.src = url;
-      videoPreview.classList.remove('hidden');
-      videoPreviewSection.classList.remove('hidden');
+  function removeVideo() {
+    videoInput.value = '';
+    hideVideoPreview();
+  }
 
-      videoPreview.onloadedmetadata = function() {
-        console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`);
-      };
-    });
+  function hideImagePreview() {
+    imagePreview.classList.add('hidden');
+    imagePreviewSection.classList.add('hidden');
+    imagePreview.src = '';
+  }
 
-    // Fonctions pour supprimer les prévisualisations
-    function removeImage() {
-      imageInput.value = '';
-      hideImagePreview();
-    }
-
-    function removeVideo() {
-      videoInput.value = '';
-      hideVideoPreview();
-    }
-
-    function hideImagePreview() {
-      imagePreview.classList.add('hidden');
-      imagePreviewSection.classList.add('hidden');
-      imagePreview.src = '';
-    }
-
-    function hideVideoPreview() {
-      videoPreview.classList.add('hidden');
-      videoPreviewSection.classList.add('hidden');
-      videoPreview.src = '';
-    }
-
-    });
+  function hideVideoPreview() {
+    videoPreview.classList.add('hidden');
+    videoPreviewSection.classList.add('hidden');
+    videoPreview.src = '';
+  }
+});
 </script>
 
 <script>
