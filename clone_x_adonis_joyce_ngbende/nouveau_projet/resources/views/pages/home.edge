@@ -13,17 +13,16 @@
   @!component('components/logoutModal')
 
  <main id="main_profil" class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
-  <!-- Header sticky - Largeur adaptative avec sticky sur tous les écrans -->
+  <!-- Header sticky - Simple et efficace -->
 <div class="sticky z-50 top-0 bg-black/60 backdrop-blur-md border-b border-gray-700/50">
-  <!-- Conteneur avec largeur limitée sur desktop -->
-  <div class="w-full max-w-2xl mx-auto md:max-w-3xl lg:max-w-4xl">
+  <div class="w-auto mx-4 md:mx-16 lg:mx-64">
     <div class="flex items-center h-14">
-      <!-- Navigation links -->
-      <div class="flex w-full">
-        <a href="{{route ('home.index')}}" class="w-1/2 text-center text-white font-bold text-sm sm:text-base border-b-2 border-blue-500 pb-3 pt-3 hover:text-white transition whitespace-nowrap">
+      <!-- Navigation links - Largeur automatique et centrée -->
+      <div class="flex w-auto mx-auto">
+        <a href="{{route ('home.index')}}" class="px-8 text-center text-white font-bold text-sm sm:text-base border-b-2 border-blue-500 pb-3 pt-3 hover:text-white transition whitespace-nowrap">
           Pour vous
         </a>
-        <a href="{{route ('tweets.following')}}" class="w-1/2 text-center text-gray-500 font-bold text-sm sm:text-base pb-3 pt-3 hover:text-white transition border-b-2 border-transparent hover:border-gray-400 whitespace-nowrap">
+        <a href="{{route ('tweets.following')}}" class="px-8 text-center text-gray-500 font-bold text-sm sm:text-base pb-3 pt-3 hover:text-white transition border-b-2 border-transparent hover:border-gray-400 whitespace-nowrap">
           Abonnements
         </a>
       </div>
