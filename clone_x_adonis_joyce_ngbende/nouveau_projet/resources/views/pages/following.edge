@@ -110,6 +110,7 @@
     <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
     <script>
   // Prévisualisation image
+  document.addEventListener('DOMContentLoaded', function() {
     const imageInput = document.getElementById('imageInput');
     const imagePreview = document.getElementById('imagePreview');
     const imagePreviewSection = document.getElementById('imagePreviewSection');
@@ -174,6 +175,8 @@
       videoPreviewSection.classList.add('hidden');
       videoPreview.src = '';
     }
+
+    });
 </script>
 
 <script>
