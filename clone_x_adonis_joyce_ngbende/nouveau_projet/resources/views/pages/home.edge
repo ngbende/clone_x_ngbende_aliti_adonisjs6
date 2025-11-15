@@ -14,13 +14,13 @@
 
  <main id="main_profil" class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0 mt-16 md:mt-0">
     
-  <!-- Header sticky - Même largeur que le main sur tous les écrans -->
+   <!-- Header sticky - Même largeur que le main avec bon centrage -->
 <div class="sticky z-50 top-0 bg-black/60 backdrop-blur-md border-b border-gray-700/50">
   <!-- Conteneur qui suit exactement la même largeur que le main -->
   <div class="w-full md:ml-16 lg:ml-64">
-    <div class="flex items-center justify-center h-14 px-4">
+    <div class="flex items-center justify-around h-14 p-4 gap-10">
       <!-- Navigation links -->
-      <div class="flex items-center gap-4 sm:gap-8 md:gap-12">
+      <div class="flex flex-row items-center gap-8 sm:gap-x-52">
         <a href="{{route ('home.index')}}" class="text-white font-bold text-sm sm:text-base border-b-2 border-blue-500 pb-3 pt-3 hover:text-white transition whitespace-nowrap">
           Pour vous
         </a>
@@ -74,7 +74,7 @@
     </button>
   </section>
 
-  <!-- Actions (mobile-first) -->
+       <!-- Actions (mobile-first) -->
 <div class="flex flex-col lg:flex-row lg:items-center border-t border-gray-700 pt-3 gap-3">
   <!-- Icônes à gauche -->
   <div class="flex items-center gap-1 lg:gap-2 flex-wrap">
