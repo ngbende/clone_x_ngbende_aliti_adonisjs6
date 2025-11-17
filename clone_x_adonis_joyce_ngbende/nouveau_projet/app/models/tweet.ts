@@ -23,7 +23,7 @@ export default class Tweet extends BaseModel {
   @column()
   declare parentId?: number | null
 
-  // ✅ ajoute cette ligne :
+  // Champ virtuel pour le contenu nettoyé (sans hashtags)
   public contentClean?: string
 
   @belongsTo(() => User)
