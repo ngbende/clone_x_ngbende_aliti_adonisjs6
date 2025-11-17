@@ -288,36 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 </script>
 {{--  script pour le bouton de suivi   --}}
-<script>
-document.querySelectorAll('.follow-btn').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    e.preventDefault()
-    const userId = btn.dataset.userId
 
-    try {
-      const res = await fetch(`/follow/${userId}/toggle`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': '{{ csrfToken }}',
-          'X-Requested-With': 'XMLHttpRequest',
-        }
-      })
-
-      const data = await res.json()
-
-      if (data.status === 'followed') {
-        btn.textContent = 'Suivi ✔️'
-        btn.classList.add('bg-gray-200')
-      } else if (data.status === 'unfollowed') {
-        btn.textContent = 'Suivre'
-        btn.classList.remove('bg-gray-200')
-      }
-    } catch (err) {
-      console.error('Erreur toggle follow:', err)
-    }
-  })
-})
-</script>
  
     
   </body>

@@ -37,13 +37,15 @@
             </div>
           </a>
 
-          <button
-            type="button"
-            data-user-id="{{ s.id }}"
-            class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
-              {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
-            {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
-          </button>
+        <form action="{{ route('user.follow', { id: s.id }) }}" method="POST" class="inline-block">
+  {{ csrfField() }}
+  <button
+    type="submit"
+    class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
+      {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+    {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+  </button>
+</form>
         </div>
         @endeach
       </div>

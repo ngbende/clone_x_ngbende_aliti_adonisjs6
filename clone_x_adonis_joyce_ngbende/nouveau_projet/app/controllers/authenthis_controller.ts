@@ -29,19 +29,21 @@ export default class AuthenthisController {
     // Récupérer les suggestions
     const suggestions = await User.query().whereNot('id', auth.user!.id)
 
-    // Vérifier pour chaque suggestion si l'utilisateur connecté les suit déjà
-    const suggestionsWithFollowState = await Promise.all(
-      suggestions.map(async (user) => {
-        const isFollowing = await Follow.query()
-          .where('followerId', auth.user!.id)
-          .andWhere('followedId', user.id)
-          .first()
+  // Calcul du followStatus pour chaque suggestion
+const suggestionsWithFollowState = await Promise.all(
+  suggestions.map(async (user) => {
+    const existingFollow = await Follow.query()
+      .where('follower_id', auth.user!.id)
+      .andWhere('followed_id', user.id)
+      .first()
 
-        return {
-          ...user.toJSON(),
-          isFollowing: !!isFollowing,
-        }
-      })
+    const followStatus = existingFollow ? 'followed' : 'none'
+
+    return {
+      ...user.toJSON(),
+      followStatus: followStatus, // Utilise followStatus au lieu de isFollowing
+    }
+  })
     )
     // 🔹 Ici on transforme le content en contentClean
     tweets.forEach((tweet) => {
