@@ -195,6 +195,18 @@ userLikes.forEach((tweet) => {
       .preload('following')
       .firstOrFail()
 
+
+      // - Calcul du statut de follow
+  let followStatus = 'none'
+  if (auth.user) {
+    const existingFollow = await Follow.query()
+      .where('follower_id', auth.user.id)
+      .andWhere('followed_id', user.id)
+      .first()
+    
+    followStatus = existingFollow ? 'followed' : 'none'
+  }
+
     // Tweets écrits par cet utilisateur
    const tweets = await Tweet.query()
    .where('userId', user.id)        
@@ -367,7 +379,10 @@ userLikes.forEach((tweet) => {
       return view.render('pages/profile', { user, tweets: [], userReplies: [], userMedias: [], userLikes: [], isBlocked: true })
     }
 
-    return view.render('pages/profile', { user, tweets: allTweets, isBlocked, userReplies, userMedias, userLikes })
+    return view.render('pages/profile', {  user: {
+      ...user.toJSON(),
+      followStatus: followStatus //ICI
+    }, tweets: allTweets, isBlocked, userReplies, userMedias, userLikes })
   }
 
   public async repliesPartial({ view, params }: HttpContext) {
