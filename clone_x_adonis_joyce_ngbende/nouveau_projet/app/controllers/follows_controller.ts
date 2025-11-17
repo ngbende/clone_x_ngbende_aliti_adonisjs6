@@ -20,11 +20,11 @@ export default class FollowsController {
       if (follow) {
         await follow.delete()
         console.log('Unfollowed successfully')
-        return response.ok({ status: 'unfollowed' })
+        return response.redirect().toRoute('profile.show', { id: followedId })
       } else {
         await Follow.create({ followerId, followedId })
         console.log('Followed successfully')
-        return response.ok({ status: 'followed' })
+        return response.redirect().toRoute('profile.show', { id: followedId })
       }
     } catch (error) {
       console.error('Error toggling follow status:', error)
