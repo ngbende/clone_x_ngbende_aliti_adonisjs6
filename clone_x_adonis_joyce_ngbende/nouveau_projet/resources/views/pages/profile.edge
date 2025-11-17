@@ -57,7 +57,19 @@
               Modifier le profil
             </a>
           </div>
+         @else
+          <!-- Si c'est le profil d'un autre utilisateur : bouton Follow -->
+          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-14 lg:-top-16 xl:-top-16">
+            <button
+              type="button"
+              data-user-id="{{ user.id }}"
+              class="follow-btn px-4 py-2 rounded-full text-sm font-semibold md:text-base
+                {{ user.followStatus === 'followed' ? 'bg-gray-500 text-white' : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }} hover:opacity-90 transition">
+              {{ user.followStatus === 'followed' ? 'Suivi' : user.followStatus === 'pending' ? 'En attente' : 'Suivre' }}
+            </button>
+          </div>
         @endif
+
 
         <p class="font-semibold username1 text-lg sm:text-xl md:text-xl lg:text-2xl">{{user.nom}}</p>
         <p class="text-gray-400 text-sm md:text-base lg:text-base username2">{{ `@${user.nom}` }}</p>
