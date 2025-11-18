@@ -31,7 +31,8 @@
 
     @each(user in users)
     <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3 xl:mx-auto xl:w-3/4">
-      <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 md:gap-4 min-w-0">
+      <div>
+  <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 md:gap-4 min-w-0">
         <img 
           src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
           alt="avatar" 
@@ -41,8 +42,9 @@
           <p class="text-white font-semibold text-sm truncate sm:text-base md:text-lg">{{ user.nom }} {{ user.prenom }}</p>
         </div>
       </a>
-
-      <form action="{{ route('user.follow', { id: user.id }) }}" method="POST" class="inline-block">
+      </div>
+    
+  <form action="{{ route('user.follow', { id: user.id }) }}" method="POST" class="inline-block">
         {{ csrfField() }}
         <button
           type="submit"
@@ -51,7 +53,9 @@
           {{ user.followStatus === 'followed' ? 'Suivi ✔️' : user.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
         </button>
       </form>
+    
     </div>
+
     @endeach
 
     <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl xl:mt-12  xl:ml-4">Tweets</h2>
