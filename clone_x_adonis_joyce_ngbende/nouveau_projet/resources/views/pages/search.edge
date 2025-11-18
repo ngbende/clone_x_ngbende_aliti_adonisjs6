@@ -20,7 +20,7 @@
         name="query"
         value="{{ query }}"
         placeholder="Recherche..."
-        class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base md:text-lg md:p-3"
+        class="w-full p-2 text-sm rounded bg-gray-800 border border-gray-600 sm:text-base md:text-lg md:p-3 xl:w-auto"
       />
     </form>
 
@@ -30,7 +30,7 @@
     @endif
 
     @each(user in users)
-    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3 xl:px-4">
+    <div class="flex items-center gap-2 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors sm:gap-3 md:gap-4 md:p-3 ">
       <a href="{{ route('profile.show', { id: user.id }) }}" class="flex items-center gap-2 flex-1 sm:gap-3 md:gap-4 min-w-0">
         <img 
           src="{{ user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
