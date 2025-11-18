@@ -5,6 +5,7 @@ import Media from '#models/media'
 import Hashtag from '#models/hashtag'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
+import SuggestionService from '#services/suggestion_service'
 
 export default class GestionTweetsController {
   public async createTweets({ request, auth, response }: HttpContext) {
@@ -84,7 +85,7 @@ export default class GestionTweetsController {
       return response.status(500).send('Erreur serveur lors de la création du tweet.')
     }
   }
-  public async show({ params, view, response }: HttpContext) {
+  public async show({ params, view, response, auth }: HttpContext) {
     try {
       const tweetId = params.id
 
@@ -155,8 +156,9 @@ export default class GestionTweetsController {
           mediasCount: r.medias?.length  // C'est correct!
         }))
       })
+      const suggestions = await SuggestionService.getSuggestions(auth.user!.id)
 
-      return view.render('pages/reply', { tweet })
+      return view.render('pages/reply', { tweet, suggestions })
     } catch (error) {
       console.error('Erreur affichage thread :', error)
       return response.status(500).send('Erreur serveur')

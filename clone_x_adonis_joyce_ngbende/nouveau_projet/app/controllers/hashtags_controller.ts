@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import Hashtag from '#models/hashtag'
-
+import SuggestionService from '#services/suggestion_service'
 export default class HashtagsController {
-  public async showHashtags({ params, view, response }: HttpContext) {
+  public async showHashtags({ params, view, response,auth }: HttpContext) {
     try {
       const texteHashtag = params.tag.toLowerCase()
 
@@ -24,8 +24,9 @@ export default class HashtagsController {
             })
         })
         .firstOrFail()
+         const suggestions = await SuggestionService.getSuggestions(auth.user!.id)
 
-      return view.render('pages/hashtag', { hashtag, tweets: hashtag.tweets })
+      return view.render('pages/hashtag', { hashtag, tweets: hashtag.tweets,suggestions: suggestions  })
     } catch (error) {
       console.error(error)
       return response.status(404).send('Hashtag introuvable')

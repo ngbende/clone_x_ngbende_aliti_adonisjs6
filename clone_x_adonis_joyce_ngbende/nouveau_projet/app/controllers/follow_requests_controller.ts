@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import FollowRequest from '#models/follow_request'
 import Follow from '#models/follow'
 import User from '#models/user'
+import SuggestionService from '#services/suggestion_service'
 
 export default class FollowRequestsController {
   // Toggle follow / demande de suivi
@@ -108,7 +109,8 @@ export default class FollowRequestsController {
       .where('cible_id', user.id)
       .andWhere('statut', 'en_attente')
       .preload('demandeur')
+  const suggestions = await SuggestionService.getSuggestions(auth.user!.id)
 
-    return view.render('pages/receiveFollows', { demandes })
+    return view.render('pages/receiveFollows', { demandes, suggestions: suggestions  })
   }
 }

@@ -4,6 +4,7 @@ import User from '#models/user'
 import Retweet from '#models/retweet'
 import Follow from '#models/follow'
 import Block from '#models/block'
+import SuggestionService from '#services/suggestion_service'
 
 export default class ProfilesController {
   // Profil de l'utilisateur connecté
@@ -181,8 +182,9 @@ userLikes.forEach((tweet) => {
     tweet.contentClean = tweet.content
   }
 })
+  const suggestions = await SuggestionService.getSuggestions(auth.user!.id)
 
-    return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false, userReplies, userMedias, userLikes })  
+    return view.render('pages/profile', { user, tweets: allTweets, isBlocked: false, userReplies, userMedias, userLikes, suggestions: suggestions  })  
   }
 
   
@@ -378,11 +380,12 @@ userLikes.forEach((tweet) => {
     if (blocked) {
       return view.render('pages/profile', { user, tweets: [], userReplies: [], userMedias: [], userLikes: [], isBlocked: true })
     }
+  const suggestions = await SuggestionService.getSuggestions(auth.user!.id)
 
     return view.render('pages/profile', {  user: {
       ...user.toJSON(),
       followStatus: followStatus //ICI
-    }, tweets: allTweets, isBlocked, userReplies, userMedias, userLikes })
+    }, tweets: allTweets, isBlocked, userReplies, userMedias, userLikes, suggestions: suggestions  })
   }
 
   public async repliesPartial({ view, params }: HttpContext) {
