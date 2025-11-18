@@ -42,18 +42,15 @@
         </div>
       </a>
 
-      <button
-        type="button"
-        data-user-id="{{ user.id }}"
-        data-is-private="{{ user.isPrivate }}"
-        class="follow-btn flex-shrink-0 text-xs px-2 py-1 rounded-full font-semibold transition-colors
-          {{ user.followStatus === 'followed' ? 'bg-gray-600 text-white' 
-            : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
-            : 'bg-white text-black' }} sm:text-sm sm:px-3 md:text-base md:px-4 md:py-2">
-        {{ user.followStatus === 'followed' ? 'Suivi ✔️' 
-          : user.followStatus === 'pending' ? 'En attente ⏳' 
-          : (user.isPrivate ? 'Demander 🔒' : 'Suivre') }}
-      </button>
+       <form action="{{ route('user.follow', { id: s.id }) }}" method="POST" class="inline-block">
+  {{ csrfField() }}
+  <button
+    type="submit"
+    class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
+      {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+    {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+  </button>
+</form>
     </div>
     @endeach
 
