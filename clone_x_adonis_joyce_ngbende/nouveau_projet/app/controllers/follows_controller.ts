@@ -3,7 +3,7 @@ import Tweet from '#models/tweet'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class FollowsController {
-  public async toggleFollow({ auth, params, response }: HttpContext) {
+  public async toggleFollow({ auth, params, request, response }: HttpContext) {
     try {
       const followerId = auth.user!.id
       const followedId = Number(params.id)
@@ -17,15 +17,25 @@ export default class FollowsController {
         .andWhere('followed_id', followedId)
         .first()
 
+
       if (follow) {
         await follow.delete()
         console.log('Unfollowed successfully')
-        return response.redirect().back()
+        // return response.redirect().back()
       } else {
         await Follow.create({ followerId, followedId })
         console.log('Followed successfully')
-        return response.redirect().back()
       }
+    //  Rediriger VERS LA RECHERCHE avec la query actuelle
+  
+          const currentQuery = request.input('query', '') // Récupère la query de la page actuelle
+    if (currentQuery) {
+      return response.redirect().toRoute('search', {}, {
+        qs: { query: currentQuery }
+      })
+    }
+          return response.redirect().back()
+
     } catch (error) {
       console.error('Error toggling follow status:', error)
     return response.redirect().back() // Même en cas d'erreur, rester sur la page

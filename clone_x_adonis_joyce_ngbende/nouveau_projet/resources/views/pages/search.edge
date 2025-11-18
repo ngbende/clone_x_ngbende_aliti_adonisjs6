@@ -43,14 +43,16 @@
       </a>
       
       <form action="{{ route('user.follow', { id: user.id }) }}" method="POST" class="inline-block">
-        {{ csrfField() }}
-        <button
-          type="submit"
-          class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
-            {{ user.followStatus === 'followed' ? 'bg-gray-500 text-white' : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
-          {{ user.followStatus === 'followed' ? 'Suivi ✔️' : user.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
-        </button>
-      </form>
+    {{ csrfField() }}
+    <!-- ✅ CHAMP CACHÉ POUR GARDER LA RECHERCHE -->
+    <input type="hidden" name="query" value="{{ query }}">
+    <button
+      type="submit"
+      class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
+        {{ user.followStatus === 'followed' ? 'bg-gray-500 text-white' : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+      {{ user.followStatus === 'followed' ? 'Suivi ✔️' : user.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+    </button>
+  </form>
     </div>
     @endeach
 
