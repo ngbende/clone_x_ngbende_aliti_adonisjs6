@@ -14,7 +14,7 @@
 <div class="flex flex-1">
   <main class="flex-1 w-full px-4 py-4 border-l border-r border-gray-700 sm:px-0 md:ml-20 md:max-w-2xl md:mx-auto lg:ml-64 lg:max-w-3xl xl:w-2/4 xl:mx-auto xl:mt-8 xl:pt-4">
     <!-- Votre contenu principal reste identique -->
-    <form action="{{ route('search') }}" method="GET" class="mb-4">
+    <form action="{{ route('search') }}" method="GET" class="mb-4"> 
       <input
         type="text"
         name="query"
@@ -24,7 +24,7 @@
       />
     </form>
 
-    <h2 class="font-bold text-base mb-3 sm:text-lg md:text-xl xl:mt-8">Utilisateurs</h2>
+    <h2 class="font-bold text-base mb-3 sm:text-lg md:text-xl xl:mt-8 xl:ml-4">Utilisateurs</h2>
     @if(users.length === 0)
       <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-4">Aucun utilisateur trouvé.</p>
     @endif
@@ -54,7 +54,7 @@
     </div>
     @endeach
 
-    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl xl:mt-12">Tweets</h2>
+    <h2 class="font-bold text-base mt-6 mb-3 sm:text-lg md:text-xl xl:mt-12  xl:ml-4">Tweets</h2>
     @if(tweets.length === 0)
       <p class="text-gray-500 text-xs sm:text-sm md:text-base xl:ml-4">Aucun tweet trouvé.</p>
     @endif
