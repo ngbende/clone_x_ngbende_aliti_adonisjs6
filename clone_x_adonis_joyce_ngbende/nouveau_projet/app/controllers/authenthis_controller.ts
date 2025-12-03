@@ -7,6 +7,7 @@ import env from '#start/env'
 import Tweet from '#models/tweet'
 import Follow from '#models/follow'
 import sgMail from '@sendgrid/mail'
+import { DateTime } from 'luxon'
 
 export default class AuthenthisController {
   public async showHomeUser({ view, auth }: HttpContext) {
@@ -98,7 +99,7 @@ const suggestionsWithFollowState = await Promise.all(
 
   public async createAccount({ request, response, session }: HttpContext) {
     try {
-      const { nom, prenom, email, telephone, password } =
+      const { nom, prenom, email, telephone, password,dateNaissance } =
         await request.validateUsing(createAcountValidator)
 
       // Vérifie si l'utilisateur existe déjà
@@ -116,6 +117,7 @@ return response.redirect().toRoute('show.signUp')
         email,
         telephone: telephone ?? undefined,
         password,
+        date_naissance: dateNaissance ? DateTime.fromJSDate(dateNaissance) : null,
         verified: false,
         verificationToken,
       })

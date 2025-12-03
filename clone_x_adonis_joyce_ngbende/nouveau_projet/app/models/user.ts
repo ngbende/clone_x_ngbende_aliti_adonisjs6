@@ -49,7 +49,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column({ columnName: 'photoProfil' })
   declare photoProfil: string | null
+  
+  @column.date()
+  declare date_naissance: DateTime | null
 
+  
   @column({ columnName: 'coverPicture' })
   declare coverPicture: string | null
 
