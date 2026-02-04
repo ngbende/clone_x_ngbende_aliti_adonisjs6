@@ -8,10 +8,10 @@ export default class Media extends BaseModel {
   declare id: number
 
   @column()
-  declare imageUrl: string | null
+  declare type: 'image' | 'video'
 
   @column()
-  declare videoUrl: string | null
+  declare url: string
 
   @column()
   declare tweetId: number

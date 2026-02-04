@@ -1,77 +1,317 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Document
-    </title>
-    <script src="https://cdn.tailwindcss.com">
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil Twitter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
 
-    </script>
-  </head>
-  <body class="bg-black w-full flex flex-col h-screen">
-    @include('partials/header')
-       @!component('components/logoutModal')
+<body class="bg-black w-full flex flex-col min-h-screen">
+  @include('partials/header')
+  @!component('components/logoutModal')
 
-    <main id="main_profil" class="ml-[18%] w-[82%] flex flex-col sm:ml-[20%] sm:w-2/4">
-      <div
-        class="sticky z-50 h-15 justify-around top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700 text-sm sm:text-base"
-      >
-        <div class="flex flex-row items-center gap-8 sm:gap-x-52">
-          <a class="text-white text-sm">Pour vous</a>
-          <a class="text-white text-sm">Abonnements</a>
-        </div>
+ <main id="main_profil" class="flex-1 md:ml-16 lg:ml-64 pb-16 md:pb-0  mt-14">
+<!-- Header sticky / fixed -->
+<div class="fixed top-0 left-0 w-full bg-black/90 backdrop-blur-md border-b border-gray-700/50 z-50">
+  <div class="w-full max-w-2xl mx-auto px-2 sm:px-4">
+    
+    <div class="flex items-center h-14 justify-center">
+      <!-- Navigation links -->
+      <div class="flex items-center gap-6">
+        <a href="{{ route('home.index') }}"
+           class="text-white font-bold text-sm sm:text-base pb-3 pt-3 border-b-2 border-blue-500">
+          Pour vous
+        </a>
+        <a href="{{ route('tweets.following') }}"
+           class="text-gray-500 font-bold text-sm sm:text-base pb-3 pt-3 border-b-2 border-transparent hover:border-gray-400 hover:text-white transition">
+          Abonnements
+        </a>
       </div>
+    </div>
+  </div>
+</div>
 
-      <section id="photo_profil" class="flex flex-col bg-gray-700 w-full sm:h-40">
-        <div class="bg-black w-auto sm:h-96 relative flex flex-col items-start">
 
-          <div class="flex flex-row p-5 gap-2 w-full">
-            <a id="username_profil" class="text-white text-sm">
-              <img src="assets/sug_1.jpg" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
-            </a>
-            <input
-              id="tweets"
-              type="text"
-              placeholder="Que se passe-t-il?"
-              class="border-none rounded-md text-base sm:text-2xl text-white flex-1 bg-transparent focus:outline-none"
-            />
-          </div>
 
-          <button
-            type="button"
-            class="btn_post right-3 absolute mt-[4.5rem] sm:mt-11 text-black bg-white border-white border-[2px] rounded-full text-sm sm:text-xl p-2 w-[90px] sm:w-[100px]"
-          >
-            Poster
-          </button>
 
-          <section
-            class="img_section none flex-col items-center justify-center h-[40vh] w-[80%] border-b border-gray-700 text-white mx-auto"
-            style="display: none"
-          >
-            <img id="imagePreview" style="display: none" class="rounded-lg w-60 h-55 object-cover" />
-          </section>
+<!-- Section création de tweet -->
+<section id="photo_profil" class="border-b border-gray-700">
+  <div class="bg-black w-full relative flex flex-col items-start p-4">
+    <div class="flex gap-3 w-full">
+      <a id="username_profil" class="text-white text-sm">
+        <img src="{{auth.user.photoProfil || 'assets/sug_1.jpg'}}" alt="photo de profil" class="profile-picture rounded-full w-10 h-10" />
+      </a>
+      
+     <form action="{{ route('tweets.create') }}" method="POST" enctype="multipart/form-data" class="flex-1">
+  {{ csrfField() }}
 
-          <div class="flex px-6 gap-4 mt-5 border-b-2 border-gray-700 w-full">
-            <img src="assets/galerie_twees.png" alt="" id="image_tweet" class="cursor-pointer" />
-            <input type="file" id="imageInput" accept="image/*" style="display: none" />
+  <!-- Zone de saisie -->
+  <input
+    id="tweets"
+    type="text"
+    name="inputTweet"
+    placeholder="Que se passe-t-il?"
+    class="border-none rounded-md text-lg sm:text-xl text-white w-full bg-transparent focus:outline-none placeholder-gray-500 mb-4"
+  />
+  
+  <!-- Inputs cachés -->
+  <input type="file" name="image" id="imageInput" accept="image/*" class="hidden" />
+  <input type="file" name="video" id="videoInput" accept="video/*" class="hidden" />
 
-            <button>
-              <img src="assets/Gif.png" alt="" class="galerie_input" />
-            </button>
-            <a href="">              <img src="assets/graphique.png" alt="" /></a>
-            <a href="">              <img src="assets/smile.png" alt="" /></a>
-            <a href="">              <img src="assets/Top-Tweets.png" alt="" /></a>
-          </div>
-        </div>
-      </section>
+  <!-- Prévisualisation vidéo -->
+  <section id="videoPreviewSection" class="video_section flex-col items-center justify-center mb-4 hidden">
+    <video id="videoPreview" controls class="rounded-lg w-full max-w-md object-cover hidden"></video>
+    <button type="button" onclick="removeVideo()" class="text-red-500 text-sm mt-2 hover:text-red-600">
+      Supprimer la vidéo
+    </button>
+  </section>
 
-      <section class="post_tweets flex flex-col w-full border-b border-gray-700 text-white">
-        <!-- <div id="icon_reaction" class="flex w-full justify-between p-4"></div> -->
-      </section>
-    </main>
+  <!-- Prévisualisation image -->
+  <section id="imagePreviewSection" class="img_section flex-col items-center justify-center mb-4 hidden">
+    <img id="imagePreview" class="rounded-lg w-full max-w-md object-cover hidden" />
+    <button type="button" onclick="removeImage()" class="text-red-500 text-sm mt-2 hover:text-red-600">
+      Supprimer l'image
+    </button>
+  </section>
 
-    @include('partials/sectionFolowSearch')
+       <!-- Actions (mobile-first) -->
+<div class="flex flex-col lg:flex-row lg:items-center border-t border-gray-700 pt-3 gap-3">
+  <!-- Icônes à gauche -->
+  <div class="flex items-center gap-1 lg:gap-2 flex-wrap">
+    <label for="imageInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/picture.png" alt="galerie" class="w-5 h-5" />
+    </label>
+    
+    <label for="videoInput" class="cursor-pointer text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/video.png" alt="video" class="w-5 h-5" />
+    </label>
+    
+    <button type="button" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition">
+      <img src="https://img.icons8.com/ios-filled/50/FFFFFF/grok.png" alt="grok" class="w-5 h-5" />
+    </button>
+
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden lg:block">
+      @include('components/icones/pol')
+    </a>
+
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden lg:block">
+      @include('components/icones/calendrier')
+    </a>
+
+    <a href="#" class="text-white p-2 rounded-full hover:bg-blue-400/10 transition hidden xl:block">
+      @include('components/icones/localisation')
+    </a>
+  </div>
+  
+  <!-- Bouton Poster - Desktop: aligné naturellement à droite -->
+  <button type="submit" class="text-black bg-white border-white border-[2px] rounded-full text-sm font-bold px-4 py-2 hover:bg-gray-200 transition w-full lg:w-auto">
+    Poster
+  </button>
+</div>
+</form>
+
+    </div>
+  </div>
+</section>
+
+    <!-- Feed des tweets -->
+    <section class="post_tweets flex flex-col">
+      @each(tweet in tweets)
+        @include('partials/tweetSection')
+         @!component('components/reponseForm')
+  @!component('components/deleteTweet')
+
+      @endeach
+    </section>
+  </main>
+
+  @include('partials/sectionFolowSearch')
+ 
+  <!-- UNIQUEMENT 2 LIGNES VERTICALES -->
+  <!-- Ligne entre header et main -->
+  <div class="hidden md:block fixed left-16 lg:left-64 top-0 w-px h-screen bg-gray-700 z-40"></div>
+  
+  <!-- Ligne entre main et search (uniquement quand search est visible) -->
+    <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
+    <script>
+  // Prévisualisation image
+  document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const imagePreviewSection = document.getElementById('imagePreviewSection');
+
+    imageInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+
+      // Masquer la prévisualisation vidéo si elle existe
+      hideVideoPreview();
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+        imagePreview.classList.remove('hidden');
+        imagePreviewSection.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Prévisualisation vidéo
+    const videoInput = document.getElementById('videoInput');
+    const videoPreview = document.getElementById('videoPreview');
+    const videoPreviewSection = document.getElementById('videoPreviewSection');
+
+    videoInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+
+      // Masquer la prévisualisation image si elle existe
+      hideImagePreview();
+      
+      const url = URL.createObjectURL(file);
+      videoPreview.src = url;
+      videoPreview.classList.remove('hidden');
+      videoPreviewSection.classList.remove('hidden');
+
+      videoPreview.onloadedmetadata = function() {
+        console.log(`Durée vidéo: ${videoPreview.duration.toFixed(1)} secondes`);
+      };
+    });
+
+    // Fonctions pour supprimer les prévisualisations
+    function removeImage() {
+      imageInput.value = '';
+      hideImagePreview();
+    }
+
+    function removeVideo() {
+      videoInput.value = '';
+      hideVideoPreview();
+    }
+
+    function hideImagePreview() {
+      imagePreview.classList.add('hidden');
+      imagePreviewSection.classList.add('hidden');
+      imagePreview.src = '';
+    }
+
+    function hideVideoPreview() {
+      videoPreview.classList.add('hidden');
+      videoPreviewSection.classList.add('hidden');
+      videoPreview.src = '';
+    }
+
+    });
+</script>
+
+<script>
+  lucide.createIcons();
+</script>
+<script>
+document.querySelectorAll('.like-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const tweetId = btn.dataset.tweetId
+    const countEl = btn.querySelector('.like-count')
+    const heartEl = btn.querySelector('i')
+
+    try {
+      const res = await fetch(`/tweets/${tweetId}/like`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': '{{ csrfToken }}'
+        }
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        let count = parseInt(countEl.textContent)
+
+        if (data.action === 'liked') {
+          countEl.textContent = count + 1
+          heartEl.classList.remove('text-gray-400')
+          heartEl.classList.add('text-pink-400')
+        } else if (data.action === 'unliked') {
+          countEl.textContent = Math.max(0, count - 1)
+          heartEl.classList.remove('text-pink-400')
+          heartEl.classList.add('text-gray-400')
+        }
+      }
+
+    } catch (err) {
+      console.error('Erreur like:', err)
+    }
+  })
+})
+
+
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.retweet-btn')
+    if (!btn) return
+
+    const tweetId = btn.dataset.tweetId
+    const countEl = btn.querySelector('.retweet-count')
+    const iconEl = btn.querySelector('i')
+
+    try {
+      const res = await fetch(`/tweets/${tweetId}/retweet`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': '{{ csrfToken }}'
+        }
+      })
+
+      const data = await res.json()
+      console.log('Toggle retweet:', data)
+
+      let count = Number(countEl.textContent)
+
+      if (data.action === 'retweeted') {
+        countEl.textContent = count + 1
+        iconEl.classList.replace('text-gray-400', 'text-green-400')
+      } else {
+        countEl.textContent = Math.max(0, count - 1)
+        iconEl.classList.replace('text-green-400', 'text-gray-400')
+      }
+
+    } catch (err) {
+      console.error('Erreur retweet:', err)
+    }
+  })
+})
+</script>
+{{--  script pour le bouton de suivi   --}}
+
+ 
+    
   </body>
 </html>
+{{--  <script>
+  document.querySelectorAll('.replyBtn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tweetId = btn.dataset.tweetId
+      const userName = btn.dataset.userName
+      const content = btn.dataset.tweetContent
+      const avatar = btn.dataset.userAvatar
+
+      document.getElementById('parentName').innerText = userName
+      document.getElementById('parentContent').innerText = content
+      document.getElementById('parentAvatar').src = avatar
+      document.getElementById('parentIdInput').value = tweetId
+
+      document.getElementById('replyModal').classList.remove('hidden')
+    })
+  })
+
+  document.getElementById('closeReplyModal').addEventListener('click', () => {
+    document.getElementById('replyModal').classList.add('hidden')
+  })
+</script>  --}}
+

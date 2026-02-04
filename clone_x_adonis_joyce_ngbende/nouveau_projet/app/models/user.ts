@@ -10,6 +10,7 @@ import Retweet from './retweet.js'
 import GrokSuggestion from './grok_suggestion.js'
 import Follow from './follow.js'
 import Block from './block.js'
+import FollowRequest from './follow_request.js'
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
   passwordColumnName: 'password',
@@ -43,13 +44,17 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare website: string | null
 
-  @column({ serializeAs: 'isPrivate' })
+  @column({ columnName: 'isPrivate' })
   declare isPrivate: boolean
 
-  @column({ serializeAs: 'photoProfil' })
+  @column({ columnName: 'photoProfil' })
   declare photoProfil: string | null
+  
+  @column.date()
+  declare date_naissance: DateTime | null
 
-  @column({ serializeAs: 'coverPicture' })
+  
+  @column({ columnName: 'coverPicture' })
   declare coverPicture: string | null
 
   @column({ serializeAs: 'verified' })
@@ -60,6 +65,15 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Tweet)
   declare tweets: HasMany<typeof Tweet>
+
+  // Dans User.ts - ajoute cette relation
+@hasMany(() => Tweet, {
+  foreignKey: 'userId',
+  onQuery: (query) => {
+    query.whereNotNull('parentId') // seulement les réponses
+  }
+})
+declare replies: HasMany<typeof Tweet>
 
   @hasMany(() => Retweet)
   declare retweets: HasMany<typeof Retweet>
@@ -80,6 +94,27 @@ export default class User extends compose(BaseModel, AuthFinder) {
   // Relations avec Block
   @hasMany(() => Block, { foreignKey: 'blockerId' })
   declare blockedUsers: HasMany<typeof Block>
+
+  public async isBlocking(userId: number): Promise<boolean> {
+    const exists = await Block.query()
+      .where('blocker_id', this.id)
+      .andWhere('blocked_id', userId)
+      .first()
+    return !!exists
+  }
+
+  public async isBlockedBy(userId: number): Promise<boolean> {
+    const exists = await Block.query()
+      .where('blocker_id', userId)
+      .andWhere('blocked_id', this.id)
+      .first()
+    return !!exists
+  }
+  @hasMany(() => FollowRequest, { foreignKey: 'demandeur_id' })
+  declare sentFollowRequests: HasMany<typeof FollowRequest>
+
+  @hasMany(() => FollowRequest, { foreignKey: 'cible_id' })
+  declare receivedFollowRequests: HasMany<typeof FollowRequest>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

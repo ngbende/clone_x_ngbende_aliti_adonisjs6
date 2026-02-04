@@ -1,0 +1,32 @@
+@each(userItem in users)
+  <div class="flex items-center gap-3 p-2 border-b border-gray-700 hover:bg-gray-800 transition-colors m-2">
+    <a href="{{ route('profile.show', { id: userItem.id }) }}" class="flex items-center gap-3 flex-1">
+    <img 
+      src="{{ userItem.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+      alt="avatar" 
+      class="w-10 h-10 rounded-full"
+    />
+    <div class="flex flex-col">
+      <p class="text-white font-semibold">{{ userItem.nom }}</p>
+      @if(userItem.prenom)
+        <p class="text-gray-400 text-sm">{{ userItem.prenom }}</p>
+      @endif
+    </div>
+    </a>
+    <div class="ml-auto">
+      {{-- Ici tu peux mettre un bouton “Suivre / Ne plus suivre” si besoin --}}
+      <button
+  type="button"
+  data-user-id="{{ userItem.id }}"
+  class="follow-btn text-sm px-3 py-1 rounded-full
+    {{ userItem.followStatus === 'followed' ? 'bg-gray-600 text-white' 
+      : userItem.followStatus === 'pending' ? 'bg-yellow-500 text-black' 
+      : 'bg-white text-black' }}">
+  {{ userItem.followStatus === 'followed' ? 'Suivi ✔️' 
+    : userItem.followStatus === 'pending' ? 'En attente ⏳' 
+    : (userItem.isPrivate ? 'Demander à suivre 🔒' : 'Suivre') }}
+</button>
+
+    </div>
+  </div>
+@endeach

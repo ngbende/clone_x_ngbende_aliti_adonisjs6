@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Utilisateur introuvable</title>
+  <link rel="stylesheet" href="/style.css" />
+   <script src="https://cdn.tailwindcss.com">
+
+    </script>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white text-center">
+  <h1 class="text-3xl font-bold mb-4">😕 Utilisateur introuvable</h1>
+  <p>{{ message || "Ce profil n'existe pas ou n'est pas accessible pour le moment." }}</p>
+
+  <a href="/home" class="mt-6 inline-block bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Retour à l'accueil</a>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<div id="replyFormModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+  <div class="bg-gray-900 text-white w-full max-w-[600px] max-h-[90vh] rounded-2xl shadow-xl flex flex-col">
+    <!-- En-tête fixe -->
+    <div class="flex-shrink-0 p-6 pb-4 border-b border-gray-700 relative">
+      <button id="closeReplyModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold">
+        ×
+      </button>
+      
+      <div id="replyParent" class="flex gap-3 pr-8">
+        <img id="replyAvatar" src="https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png" alt="avatar" class="w-10 h-10 rounded-full flex-shrink-0" />
+        <div class="min-w-0 flex-1">
+          <p id="replyUser" class="font-semibold truncate"></p>
+          <p id="replyContent" class="text-gray-300 text-sm line-clamp-2"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenu scrollable -->
+    <div class="flex-1 overflow-y-auto p-6">
+      <form id="replyForm" method="POST" action="" enctype="multipart/form-data" class="flex flex-col gap-4">
+        {{ csrfField() }}
+        <input type="hidden" name="parent_id" id="replyParentId" />
+
+        <textarea 
+          name="content" 
+          rows="3" 
+          class="w-full bg-gray-800 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" 
+          placeholder="Postez votre réponse..." 
+          required
+        ></textarea>
+
+        <!-- Previews des médias -->
+        <img id="modalImagePreview" style="display:none" class="rounded-lg w-full max-h-48 object-cover" />
+        <video id="modalVideoPreview" controls style="display:none" class="rounded-lg w-full max-h-48 object-cover"></video>
+
+        <!-- Boutons de fichiers -->
+        <div class="flex gap-4 text-sm">
+          <label for="imageFile" class="flex items-center gap-2 cursor-pointer text-blue-400 hover:text-blue-300">
+            <img src="https://img.icons8.com/ios-filled/50/0084FF/picture.png" alt="image" class="w-5 h-5" />
+            <span>Image</span>
+            <input type="file" name="image" id="imageFile" accept="image/*" class="hidden" />
+          </label>
+
+          <label for="videoFile" class="flex items-center gap-2 cursor-pointer text-blue-400 hover:text-blue-300">
+            <img src="https://img.icons8.com/ios-filled/50/0084FF/video.png" alt="video" class="w-5 h-5" />
+            <span>Vidéo</span>
+            <input type="file" name="video" id="videoFile" accept="video/*" class="hidden" />
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bouton fixe en bas -->
+    <div class="flex-shrink-0 p-6 pt-4 border-t border-gray-700">
+      <button type="submit" form="replyForm" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 rounded-full font-semibold transition-colors">
+        Répondre
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.openReplyForm').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tweetId = btn.dataset.id;
+      const user = btn.dataset.user;
+      const content = btn.dataset.content;
+
+      if (!tweetId || !user || !content) {
+        console.error('Données manquantes dans le bouton de réponse');
+        return;
+      }
+
+      document.getElementById('replyUser').textContent = user;
+      document.getElementById('replyContent').textContent = content;
+      document.getElementById('replyParentId').value = tweetId;
+
+      const form = document.getElementById('replyForm');
+      form.action = `/tweets/${tweetId}/reply`;
+
+      document.getElementById('replyFormModal').classList.remove('hidden');
+    });
+  });
+
+  document.getElementById('closeReplyModal').addEventListener('click', () => {
+    document.getElementById('replyFormModal').classList.add('hidden');
+  });
+});
+</script>
+
+<script>
+
+// Gestion des previews avec IDs UNIQUES
+const imageInput = document.getElementById('imageFile');
+const imagePreview = document.getElementById('modalImagePreview'); // ID unique
+const videoInput = document.getElementById('videoFile');
+const videoPreview = document.getElementById('modalVideoPreview'); // ID unique
+
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    imagePreview.src = reader.result;
+    imagePreview.style.display = 'block';
+    videoPreview.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+videoInput.addEventListener('change', () => {
+  const file = videoInput.files[0];
+  if (!file) return;
+
+  videoPreview.src = URL.createObjectURL(file);
+  videoPreview.style.display = 'block';
+  imagePreview.style.display = 'none';
+});
+</script>

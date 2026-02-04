@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compte privé 🔒</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-center">
+    <!-- Logo X / Twitter -->
+    <div class="mb-6">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Twitter-logo.svg" 
+           alt="X Logo" class="w-12 mx-auto">
+    </div>
+
+    <!-- Titre -->
+    <h1 class="text-2xl font-bold mb-4 text-gray-900">Compte privé 🔒</h1>
+
+    <!-- Message -->
+    <p class="text-gray-700 mb-6">
+      Vous ne pouvez pas voir les contenus de <span class="font-semibold">{{ cible.nom }}</span>.
+    </p>
+
+    <!-- Formulaire / Bouton dynamique -->
+    @if(followStatus === 'none')
+      <form action="{{ route('user.request', { id: cible.id }) }}" method="POST" class="flex justify-center mb-4">
+        {{ csrfField() }}
+        <button type="submit" 
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition">
+          Demander à suivre
+        </button>
+      </form>
+
+    @elseif(followStatus === 'pending')
+      <form action="{{ route('user.request', { id: cible.id }) }}" method="POST" class="flex justify-center mb-4">
+        {{ csrfField() }}
+        <button type="submit" 
+                class="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full transition">
+          Annuler la demande ⏳
+        </button>
+      </form>
+
+    @elseif(followStatus === 'accepted')
+      <button class="bg-green-500 text-white font-bold py-2 px-4 rounded-full cursor-not-allowed mb-4" disabled>
+        Vous suivez déjà ✔️
+      </button>
+    @endif
+
+    <!-- Bouton retour accueil -->
+    <a href="{{ route('home.index') }}" 
+       class="inline-block bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full transition">
+      ← Retour à l’accueil
+    </a>
+
+  </div>
+
+</body>
+</html>

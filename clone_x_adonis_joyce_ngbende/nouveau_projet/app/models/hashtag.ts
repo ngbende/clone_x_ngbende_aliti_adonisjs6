@@ -7,7 +7,7 @@ export default class Hashtag extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
-  @column()
+  @column({ columnName: 'texteHashtag' })
   declare texteHashtag: string
 
   @manyToMany(() => Tweet, {

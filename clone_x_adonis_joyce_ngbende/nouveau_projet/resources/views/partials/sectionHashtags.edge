@@ -1,0 +1,120 @@
+<div class="w-full px-2 sm:px-4 mx-auto mt-4 sm:mt-6 p-3 sm:p-4 bg-gray-900 text-white rounded-lg shadow-md">
+  <h1 class="text-xl font-bold mb-4 text-center sm:text-2xl">
+    Tweets avec <span class="text-blue-400">#{{ hashtag.texteHashtag }}</span>
+  </h1>
+
+  @each(tweet in tweets)
+    <div class="tweet border-b border-gray-700 p-4 mb-4 rounded-lg hover:bg-gray-800 transition">
+      
+      {{-- Header tweet --}}
+      <div class="flex items-center gap-3 mb-2">
+        <img src="{{ tweet.user.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+             alt="avatar" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full">
+        <span class="font-semibold text-sm sm:text-base">{{ tweet.user.nom }}</span>
+      </div>
+
+      {{-- Contenu tweet --}}
+      <p class="mt-1 leading-relaxed text-sm sm:text-base">
+        {{ tweet.content }}
+      </p>
+
+      {{-- Médias --}}
+      @if(tweet.medias && tweet.medias.length > 0)
+        <div class="medias flex flex-wrap gap-2 mt-2">
+          @each(media in tweet.medias)
+            @if(media.type === 'image')
+              <img src="data:image/*;base64,{{ media.url }}" class="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded" />
+            @else
+              <video controls class="w-32 h-24 sm:w-48 sm:h-32 rounded">
+                <source src="data:video/*;base64,{{ media.url }}" />
+              </video>
+            @endif
+          @endeach
+        </div>
+      @endif
+
+      {{-- Hashtags --}}
+      <div class="hashtags mt-2 flex flex-wrap gap-1 sm:gap-2">
+        @each(tag in tweet.hashtags)
+          <a href="{{ route('hashtag.show', { tag: tag.texteHashtag }) }}" 
+             class="text-blue-400 hover:underline text-xs sm:text-sm">
+            #{{ tag.texteHashtag }}
+          </a>
+        @endeach
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex flex-wrap justify-start items-center text-gray-400 mt-3 gap-1 text-xs sm:gap-2 sm:text-sm">
+        {{-- Répondre --}}
+        <button class="openReplyForm px-2 py-0.5 rounded flex items-center gap-1 hover:bg-blue-400/10 hover:text-blue-400 transition"
+                data-id="{{ tweet.id }}"
+                data-user="{{ tweet.user.nom }}"
+                data-content="{{ tweet.content }}">
+          Répondre
+        </button>
+
+        {{-- Nombre de réponses --}}
+        <button class="lengthReply flex items-center gap-1 px-2 py-0.5 rounded hover:bg-gray-400/10 transition">
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          {{ tweet.replies?.length || 0 }}
+        </button>
+
+        {{-- Retweet --}}
+        <form action="{{ route('tweets.retweet', { id: tweet.id }) }}" method="POST" class="inline">
+          {{ csrfField() }}
+          <button type="submit"
+                  class="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-green-400/10 transition
+                        {{ tweet.retweets?.some(rt => rt.userId === auth.user.id) 
+                          ? 'text-green-400' 
+                          : 'text-gray-400 hover:text-green-400' }}">
+            <i data-lucide="repeat-2" class="w-4 h-4"></i>
+            <span>{{ tweet.retweets?.length || 0 }}</span>
+          </button>
+        </form>
+
+        {{-- Like --}}
+        <form action="{{ route('tweets.like', { id: tweet.id }) }}" method="POST" class="inline">
+          {{ csrfField() }}
+          <button type="submit" 
+                  class="flex items-center gap-1 px-2 py-0.5 rounded hover:bg-pink-400/10 transition
+                        {{ tweet.likes?.some(like => like.userId === auth.user.id) 
+                          ? 'text-pink-400' 
+                          : 'text-gray-400 hover:text-pink-400' }}">
+            <i data-lucide="heart" class="w-4 h-4"></i>
+            <span>{{ tweet.likes?.length || 0 }}</span>
+          </button>
+        </form>
+
+
+        {{-- Supprimer si c'est mon tweet --}}
+        @if(auth.user.id === tweet.user.id)
+          <button onclick="openDeleteModal({{ tweet.id }}, '{{ tweet.content }}')"
+                  class="px-2 py-0.5 rounded hover:bg-red-400/10 hover:text-red-400 transition">
+            Supprimer
+          </button>
+        @endif
+
+        {{-- Voir le thread --}}
+        <a href="{{ route('tweet.show', { id: tweet.id }) }}" class="px-2 py-0.5 rounded hover:bg-gray-400/10 hover:underline transition">
+          Voir le thread →
+        </a>
+
+        {{-- Bloquer/Débloquer si ce n'est pas mon tweet --}}
+        @if(auth.user.id !== tweet.user.id)
+          <form action="{{ route('user.block', { id: tweet.user.id }) }}" method="POST" class="inline-block">
+            {{ csrfField() }}
+            <button type="submit"
+                    class="px-2 py-0.5 text-xs rounded font-semibold hover:opacity-90 transition
+                          {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }}">
+              {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+            </button>
+          </form>
+        @endif
+      </div>
+    </div>
+  @endeach
+</div>
+<script>
+  // Initialiser icônes Lucide
+  lucide.createIcons();
+</script>

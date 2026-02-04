@@ -3,66 +3,127 @@
     <meta name="description" content="A welcome page made with EdgeJS" />
   @endslot
   
-         
   @slot('main')
-    <header>
-      <div class="w-full h-16 mb-6 items-center">
-        <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-full h-full object-contain" />
-      </div>
-      <h1 class="text-white text-3xl flex flex-col mx-auto mb-4 sm:text-2xl text-center">
-        Connectez‑vous à X
-      </h1>
-    </header>
+    <div class="flex flex-col w-full min-h-screen bg-black">
+      <!-- Header -->
+      <header class="w-full border-b border-gray-700 p-4 md:p-6 lg:p-8 sticky top-0 bg-black/80 backdrop-blur">
+        <div class="max-w-sm sm:max-w-md mx-auto">
+          <img src="assets/logo_twitter.jpg" alt="Logo Twitter" class="w-8 h-8 md:w-10 md:h-10 object-contain" />
+        </div>
+      </header>
 
-    <main
-      class="w-[400px] flex flex-col justify-center items-center sm:w-full sm:max-w-[320px] md:max-w-[360px]"
-    >
-      <form action="{{ route('auth.login') }}" method="POST" class="w-full flex flex-col justify-center items-center mt-11 px-4">
-      {{ csrfField() }}
-        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="#" class="text-black">se connecter avec google</a>
-        </button>
+      <!-- Main Content -->
+      <main class="flex-grow flex justify-center items-start w-full p-4 sm:p-6 md:p-8">
+        <div class="w-full max-w-sm sm:max-w-md mx-auto bg-black rounded-xl p-6 sm:p-8 border border-gray-800 sm:border-none">
+          
+          <!-- Page Title -->
+          <div class="mb-6 sm:mb-8 md:mb-10">
+            <h1 class="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center sm:text-left leading-tight">
+              Connectez‑vous à X
+            </h1>
+          </div>
 
-        <button class="bg-white border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="#" class="text-black">se connecter avec apple</a>
-        </button>
+          <!-- Login Form -->
+          <form action="{{ route('auth.login') }}" method="POST" class="space-y-4 sm:space-y-5">
+            {{ csrfField() }}
+            
+            <!-- Error Messages -->
+            @if(flashMessages.has('errors.general') && !flashMessages.has('unverified_email'))
+              <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 sm:p-4 rounded-lg text-xs sm:text-sm md:text-base text-center">
+                {{ flashMessages.get('errors.general') }}
+              </div>
+            @endif
 
-        <p class="text-white text-sm mt-4">
-          OU
-        </p>
+            @if(flashMessages.has('success'))  
+              <div class="bg-green-500/20 border border-green-500 text-green-400 p-3 sm:p-4 rounded-lg text-xs sm:text-sm md:text-base text-center">
+                {{ flashMessages.get('success') }}
+              </div>
+            @endif
 
-        <input
-          type="text"
-          id="num_mail"
-          name="numMail"
-          placeholder="Numéro de Téléphone,adresse email"
-      
-          class="border-2 p-5 bg-black rounded-md text-sm text-white w-full mb-4 mt-3"
-        />
+            <!-- Social Login Buttons -->
+            <div class="space-y-3 sm:space-y-4">
+              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors">
+                <a href="#" class="block">Se connecter avec Google</a>
+              </button>
 
-          <input
-          id="password2"
-          type="password"
-          name="passwordAuth"
-          placeholder="Mot de passe"
-          class="border-2 p-4 rounded-md text-sm text-white bg-black border-gray-500 w-full"
-        />
+              <button type="button" class="w-full border border-gray-600 bg-black text-white hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors">
+                <a href="#" class="block">Se connecter avec Apple</a>
+              </button>
+            </div>
 
-        <button id="submit_connex" type="submit" class="bg-white rounded-3xl p-3 w-full mt-5">
-          Suivant
-        </button>
+            <!-- Divider -->
+            <div class="flex items-center gap-3 sm:gap-4 my-4 sm:my-5 md:my-6">
+              <div class="flex-1 h-px bg-gray-700"></div>
+              <p class="text-gray-400 text-xs sm:text-sm md:text-base">OU</p>
+              <div class="flex-1 h-px bg-gray-700"></div>
+            </div>
 
-        <button class="bg-black border-white border-[2px] rounded-3xl p-3 w-full mt-5">
-          <a href="#" class="text-white">mot de passe oublié?</a>
-        </button>
-      </form>
-    </main>
+            <!-- Form Fields -->
+            <div class="space-y-3 sm:space-y-4">
+              <input
+                type="text"
+                id="num_mail"
+                name="numMail"
+                placeholder="Numéro de téléphone, adresse email"
+                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 py-3 text-sm focus:border-[#1D9BF0] focus:outline-none transition-colors"
+              />
 
-    <footer class="w-full flex flex-col justify-center items-center mt-6 mb-5 p-4">
-      <p class="text-gray-100 text-sm sm:text-xs text-center">
-        vous n'avez pas de compte ?
-        <a href="authehti.html" class="text-blue-400">Inscrivez‑vous</a>
-      </p>
-    </footer>
+              <input
+                id="password2"
+                type="password"
+                name="passwordAuth"
+                placeholder="Mot de passe"
+                class="w-full border border-gray-600 bg-black text-white placeholder-gray-500 rounded-lg px-4 py-3 text-sm focus:border-[#1D9BF0] focus:outline-none transition-colors"
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              id="submit_connex" 
+              type="submit" 
+              class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-3 text-sm sm:text-base md:text-lg transition-colors mt-4 sm:mt-6 md:mt-8"
+            >
+              Suivant
+            </button>
+
+            <!-- Forgot Password Button -->
+            <button 
+              type="button" 
+              class="w-full border border-gray-600 bg-black text-[#1D9BF0] hover:bg-gray-950 rounded-full py-3 text-sm sm:text-base md:text-lg font-bold transition-colors mt-3"
+            >
+              <a href="{{ route('password.request') }}" class="block">Mot de passe oublié ?</a>
+            </button>
+          </form>
+
+          <!-- Unverified Email Message -->
+          @if(flashMessages.has('unverified_email'))
+            <div class="bg-red-500/20 border border-red-500 text-red-400 p-3 sm:p-4 md:p-5 rounded-lg mt-4 sm:mt-6 md:mt-8">
+              <p class="text-xs sm:text-sm md:text-base mb-3 sm:mb-4">{{ flashMessages.get('errors.general') }}</p>
+              
+              <form action="{{ route('auth.resend.verification') }}" method="POST">
+                {{ csrfField() }}
+                <input type="hidden" name="email" value="{{ flashMessages.get('unverified_email') }}">
+                <button 
+                  type="submit" 
+                  class="w-full bg-[#1D9BF0] hover:bg-[#1A8CD8] text-white font-bold rounded-full py-2 sm:py-3 text-xs sm:text-sm md:text-base transition-colors"
+                >
+                  Renvoyer le lien de vérification
+                </button>
+              </form>
+            </div>
+          @endif
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="w-full border-t border-gray-700 p-4 md:p-6 lg:p-8">
+        <div class="max-w-sm sm:max-w-md mx-auto text-center">
+          <p class="text-gray-400 text-xs sm:text-sm md:text-base">
+            Vous n'avez pas de compte ?
+            <a href="/" class="text-[#1D9BF0] hover:underline font-bold">Inscrivez‑vous</a>
+          </p>
+        </div>
+      </footer>
+    </div>
   @endslot
 @end

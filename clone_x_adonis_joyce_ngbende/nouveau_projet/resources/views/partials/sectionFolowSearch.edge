@@ -1,164 +1,101 @@
-<section
-  id="search-section"
-  class="hidden sm:flex absolute w-1/4 flex-col top-0 right-0 justify-center gap-8"
->
-  <!-- Barre de recherche -->
-  <div
-    class="fixed top-0 right-0 z-50 w-[22.5vw] bg-black bg-opacity-100 backdrop-blur text-white flex flex-col gap-4 py-4 pr-4"
-  >
-    <input
-      type="text"
-      placeholder="Rechercher"
-      class="text-white bg-[#16181c] border border-white rounded-full text-sm w-full pl-10 py-2 relative"
-    />
-    <img
-      src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"
-      alt="search"
-      class="w-4 h-4 absolute top-1/2 left-3 transform -translate-y-1/2"
-    />
-  </div>
-  <div
-    id="case_suggestion"
-    class="flex flex-col w-full relative h-75 border-[1px] border-gray-300 rounded-xl right-10 p-5 gap-4"
-  >
-    <h3 class="font-bold text-2xl text-white">
-      Vous pourriez aimer
-    </h3>
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_1.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          *Urbano*
-        </p>
-        <p>
-          @Urbano_N
-        </p>
-      </div>
-
-      <button class="text-black bg-white border-white border-[2px] rounded-full text-sm p-1 w-[80px] ml-17">
-        Suivre
+    <!-- Section droite - Desktop uniquement (XL: 1280px+) -->
+    <section id="search-section" class="hidden xl:flex z-50 fixed w-80 h-screen top-0 right-0 flex-col gap-6 p-4 border-l border-gray-700 bg-black overflow-y-auto">
+      <!-- Barre de recherche -->
+      <div class="sticky top-0 bg-black pt-4 pb-2 z-10">
+        <form action="/search" method="GET" class="relative">
+          <input type="text" name="query" placeholder="Rechercher" 
+                 class="text-white bg-[#16181c] border border-gray-600 rounded-full text-sm w-full pl-10 pr-4 py-3 focus:outline-none focus:border-blue-500" 
+                 value="{{ query || '' }}" />
+          <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            🔍
           </button>
-    </div>
-
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_2.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          Bernard BAHATI
-        </p>
-        <p>
-          @Bernard_bahati
-        </p>
+        </form>
       </div>
 
-      <button
-        class="items-center text-black bg-white border-white border-[2px] rounded-full text-sm w-[80px] ml-8"
-      >
-        Suivre
-          </button>
-    </div>
+      <!-- Suggestions -->
+      <div id="case_suggestion" class="flex flex-col w-full border border-gray-600 rounded-xl p-4 gap-4 bg-[#16181c]">
+        <h3 class="font-bold text-xl text-white">Vous pourriez aimer</h3>
 
-    <div class="flex flex-row text-white gap-3">
-      <img src="assets/sug_3.jpg" alt="profil_sugg" class="rounded-full w-11 h-11" />
-      <div class="flex flex-col">
-        <p>
-          Billy
-        </p>
-        <p>
-          @RebeuDeter
-        </p>
+        @if(!suggestions || suggestions.length === 0)
+          <p class="text-gray-400 text-sm">Aucun utilisateur à suggérer</p>
+        @endif
+
+        @each(s in suggestions)
+        <div class="flex flex-row text-white gap-3 justify-between items-center">
+          <a href="{{ route('profile.show', { id: s.id }) }}" class="flex flex-row gap-3 items-center flex-1 min-w-0">
+            <img 
+              src="{{ s.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+              alt="profil_sugg" 
+              class="rounded-full w-10 h-10 flex-shrink-0"
+            />
+            <div class="flex flex-col min-w-0">
+              <p class="font-semibold text-sm truncate">{{ s.nom }}</p>
+              <p class="text-gray-400 text-sm">@user{{ s.id }}</p>
+              @if(s.isPrivate)
+                <span class="text-yellow-400 text-xs">Compte privé 🔒</span>
+              @endif
+            </div>
+          </a>
+
+        <form action="{{ route('user.follow', { id: s.id }) }}" method="POST" class="inline-block">
+  {{ csrfField() }}
+  <button
+    type="submit"
+    class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
+      {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+    {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+  </button>
+</form>
+        </div>
+        @endeach
       </div>
 
-      <button
-        class="items-center text-black bg-white border-white border-[2px] rounded-full text-sm p-1 w-[80px] ml-14"
-      >
-        Suivre
-          </button>
-    </div>
+      <!-- Tendances -->
+      <div id="case_tendance" class="flex flex-col w-full border border-gray-600 rounded-xl p-4 gap-4 text-white bg-[#16181c]">
+        <h3 class="font-bold text-xl text-white">Ce qui se passe</h3>
+        
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">Nairobi</h4>
+          <p class="text-gray-400 text-sm">51 k publications</p>
+        </div>
 
-    <a href="#" class="text-blue-600">Afficher plus</a>
-  </div>
-  <div
-    id="case_tendance"
-    class="flex flex-col w-full relative h-100 border-[1px] border-gray-300 rounded-xl right-10 p-5 gap-4 text-white"
-  >
-    <h3 class="font-bold text-2xl text-white">
-      Ce qui se passe
-    </h3>
-    <div class="">
-      <div class="flex flex-row justify-between">
-        <p>
-          Tendances
-        </p>
-        <a href="#">...</a>
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">le m23</h4>
+          <p class="text-gray-400 text-sm">2 728 publications</p>
+        </div>
+
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">AS Monaco</h4>
+          <p class="text-gray-400 text-sm">5 629 publications</p>
+        </div>
+        
+        <a href="#" class="text-blue-500 text-sm hover:underline">Afficher plus</a>
       </div>
 
-      <h4>
-        Nairobi
-      </h4>
-      <p>
-        51 k publications
-      </p>
-    </div>
-
-    <div>
-      <div class="flex flex-row justify-between">
-        <p>
-          Tendances
-        </p>
-        <a href="#">...</a>
-      </div>
-      <h4>
-        le m23
-      </h4>
-      <p>
-        2 728 publications
-      </p>
-    </div>
-
-    <div>
-      <div class="flex flex-row justify-between">
-        <p>
-          Tendances
-        </p>
-        <a href="#">...</a>
-      </div>
-      <h4>
-        AS Monaco
-      </h4>
-      <p>
-        5 629 publications
-      </p>
-    </div>
-    <a href="#" class="text-blue-600">Afficher plus</a>
-  </div>
-  <div
-    class="w-[25%] justify-end items-center h-15 flex fixed bottom-0 right-6 border-2 rounded-t-lg shadow-[0_-4px_8px_rgba(255,255,255,0.2)]"
-  >
-    <a href="">      <img src="assets/Button - Écrire un nouveau Message → SVG.png" alt="new message" class="w-6 h-6 mr-6" /></a>
-    <a href="">      <img src="assets/Button - Ouvrir → SVG.png" alt="ouvrir" class="w-6 h-6 mr-6" /></a>
-  </div>
-  <footer class="mt-auto text-sm text-gray-500 text-center space-y-1">
-    <p>
-      <a href="#" class="hover:underline">Conditions d’utilisation</a>|
-          <a href="#" class="hover:underline">Politique de confidentialité</a>|
+      <!-- Footer -->
+      <footer class="text-xs text-gray-500 space-y-2 mt-4">
+        <div class="flex flex-wrap gap-2">
+          <a href="#" class="hover:underline">Conditions d'utilisation</a>·
+          <a href="#" class="hover:underline">Politique de confidentialité</a>·
           <a href="#" class="hover:underline">Cookies</a>
-    </p>
-    <p>
-      <a href="#" class="hover:underline">Accessibilité</a>|
-          <a href="#" class="hover:underline">Infos sur les annonces</a>|
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="#" class="hover:underline">Accessibilité</a>·
+          <a href="#" class="hover:underline">Infos sur les annonces</a>·
           <a href="#" class="hover:underline">Plus</a>
-    </p>
-    <p class="mt-2">
-      © 2025 X Corp.
-    </p>
-  </footer>
-</section>
-<!-- Ligne entre nav et main -->
-<!-- Ligne entre nav et main -->
-<div class="div-bar hidden sm:block fixed left-67 top-0 w-px h-screen bg-gray-700 z-50">
-</div>
-
-<!-- Ligne entre main et search -->
-<div class="div-bar hidden sm:block fixed left-[70%] top-0 w-px h-screen bg-gray-700 z-50">
-</div>
+        </div>
+        <p class="mt-2">© 2025 X Corp.</p>
+      </footer>
+    </section>

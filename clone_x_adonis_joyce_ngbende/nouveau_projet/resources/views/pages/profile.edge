@@ -3,159 +3,327 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      Document
-    </title>
-    <script src="https://cdn.tailwindcss.com">
-
-    </script>
+    <title>Profil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   </head>
-  <body class="bg-black w-full flex flex-col h-screen">
-    @include('partials/header')
 
-    <main id="main_profil" class="relative ml-[20%] w-2/4 h-full flex flex-col">
-      <div
-        class="sticky z-50 h-15 justify-between top-0 bg-opacity-80 backdrop-blur-md text-white flex gap-10 p-4 border-b border-gray-700"
-      >
-        <a href="acceuil.html">          <img
-            width="20"
-            height="20"
-            src="https://img.icons8.com/sf-regular-filled/48/FFFFFF/left.png"
-            alt="left"
-          /></a>
+  <body class="w-full flex flex-col min-h-screen bg-black">
+    @include('partials/headerProfile')
 
-        <a href="" class="mr-40">
-          <div id="para-name-user_profil1" class="flex flex-col">
-            <p class="text-white text-sm w-[300px] username1">
-              username
-            </p>
-            <p class="text-white text-sm w-[300px]">
-              0 message
-            </p>
-          </div>
+    <main id="main_profil" class="flex-1 w-full pb-16 mt-16 md:pb-0 md:mt-0 md:ml-20 md:border-l md:border-r md:border-gray-700 md:mx-auto md:max-w-2xl lg:ml-64 lg:max-w-3xl xl:max-w-2xl xl:mr-80">
+
+      <!-- Header sticky -->
+      <div class="sticky top-0 z-50 bg-black/70 backdrop-blur-md text-white flex items-center gap-3 p-4 md:p-6 border-b border-gray-700">
+        <a href="/home" class="flex-shrink-0">
         </a>
+        <a href="{{ route('search') }}">
+        </a>
+        <div class="flex flex-col min-w-0 flex-1">
+          <p class="font-semibold text-white text-sm md:text-base username1 truncate">{{user.nom}}</p>
+          <p class="text-gray-400 text-xs md:text-sm">{{ `${user.replies?.length || 0} messages` }}</p>
+        </div>
 
-        <a href="">          <img
-            width="17"
-            height="17"
-            src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"
-            alt="search--v1"
-          /></a>
-      </div>
-      <section id="photo_profil" class="flex flex-col bg-gray-700 h-52 w-full mt-33">
-        <div class="bg-[#333639] w-auto h-full relative flex items-start">
-          <div id="space_couverture" class="w-[100%]">
-          </div>
-
-          <div
-            class="div-profil rounded-full border-black border-5 w-35 h-35 bg-[#333639] absolute top-32 left-4"
-            aria-label="Placeholder photo de profil"
-          >
-            <img class="profile-picture object-cover w-full h-full rounded-full" />
-          </div>
-          <!-- <div id="case-profil" class="flex flex-row"> -->
-          <button
-            id="btn-modifier"
-            class="text-white sm:ml-[-200px] mt-55 border-white border-[1px] rounded-full text-sm p-3 w-[200px] cursor-pointer"
-          >
-            Modifier le profil
-            </button>
-          <!--  Popup (modal) -->
-          <div
-            id="popup-modifier"
-            class="hidden fixed inset-0 bg-opacity-50 h-screen overflow-y-scroll  flex  justify-center items-center z-50"
-          >
-            <div class="space_popup bg-white p-6 rounded shadow-lg w-[45%] h-screen mt-10 text-center mr-28">
-              <!-- <h2 class="text-lg font-semibold mb-4">Modifier votre photo</h2> -->
-
-              <!-- Champ pour choisir une image -->
-              <!-- zone couverture -->
-              <img
-                width="40"
-                height="40"
-                src="https://img.icons8.com/ios-filled/50/apple-camera.png"
-                alt="apple-camera"
-                id="icon-couverture"
-                class=" mt-40 ml-60 cursor-pointer"
-              />
-              <img id="preview_couverture" class="w-full h-32 object-cover  " />
-
-              <input type="file" accept="image/*" id="input-couverture" style="display: none" />
-
-              <div
-                id="space_photo"
-                class="rounded-full border-black border-5 w-20 h-20 bg-[#333639] mt-4"
-                aria-label="Placeholder photo de profil"
-              >
-                <img id="preview_profil" class="rounded-full w-full h-full object-cover hidden" />
-
-                <img
-                  width="50"
-                  height="50"
-                  src="https://img.icons8.com/ios-filled/50/apple-camera.png"
-                  alt="apple-camera"
-                  id="icon-profil"
-                  class=" flex  absolute mt-2 ml-2 cursor-pointer"
-                />
-                <input type="file" id="input-profil" accept="image/*" style="display: none" />
-              </div>
-
-              <!-- Boutons -->
-              <div class="flex justify-around mt-32">
-                <button id="btn-annuler" class="bg-gray-400 text-white px-4 py-2 rounded">Annuler</button>
-                <button id="btn-valider" class="bg-green-600 text-white px-4 py-2 rounded">Enregistrer</button>
-              </div>
-            </div>
-          </div>
-
+        <div class="ml-auto flex-shrink-0">
+          <img width="17" height="17" src="https://img.icons8.com/ios/50/FFFFFF/search--v1.png"/>
         </div>
       </div>
-    </div>
 
-    <div id="para-name-user_profil" class="flex flex-col">
-      <a href="" class="p-5 mt-13">
-        <p class="text-white text-sm w-[300px] username1">
-          username
-        </p>
-        <p class="text-white text-sm w-[300px] username2">
-          @username
-        </p>
-      </a>
-    </div>
-    <div id="dates_profil" class="text-white text-sm flex flex-row gap-4 pl-5">
-      <img
-        width="15"
-        height="15"
-        src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"
-        alt="calendar"
-      />
-      <p>
-        inscrit en juillet 2025
-      </p>
-    </div>
-    <div id="infos_profil" class="text-white text-sm flex flex-row gap-4 pl-5 mt-4">
-      <p>
-        0 abonnenemnts
-      </p>
-      <p>
-        0 abonnés
-      </p>
-    </div>
-  </section>
-  <section id="post_profil" class="flex w-full border-b border-gray-700 mt-53 flex-row">
-    <div id="nav_post" class="flex w-full justify-between p-4">
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Posts</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Réponses</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Tweets-marquants</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Articles</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">Médias</a>
-      <a href="#" class="text-gray-400 hover:bg-gray-800 px-4 py-2">J'aime</a>
-    </div>
-  </section>
-  <section class="post_tweets">
-  </section>
-</main>
+      <!-- Bannière + avatar -->
+      <section id="photo_profil" class="relative w-full h-32 bg-gray-700 sm:h-40 md:h-44 lg:h-48 xl:h-52">
+        @if(auth.user && auth.user.id === user.id)
+          <img src="{{ auth.user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
+               class="object-cover w-full h-full" id="banner-img"/>
+          <img class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-11 md:w-22 md:h-22 lg:-bottom-12 lg:w-24 lg:h-24 xl:-bottom-14 xl:w-32 xl:h-32"
+          src="{{auth.user.photoProfil || '/images/default-avatar.png' }}"
+               id="profile-img" />
+        @else
+          <img src="{{ user.coverPicture || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}"  
+               class="object-cover w-full h-full" id="banner-img"/>
+          <img src="{{ user.photoProfil || '/images/default-avatar.png' }}" 
+               class="absolute -bottom-8 left-4 w-16 h-16 rounded-full border-2 border-black object-cover sm:-bottom-10 sm:w-20 sm:h-20 sm:border-4 md:-bottom-11 md:w-22 md:h-22 lg:-bottom-12 lg:w-24 lg:h-24 xl:-bottom-14 xl:w-32 xl:h-32"
+               id="profile-img" />
+        @endif
+      </section>
 
-@include('partials/sectionFolowSearch')
+      <!-- Infos utilisateur -->
+      <div id="para-name-user_profil" class="mt-10 px-4 text-white relative sm:mt-12 md:mt-14 lg:mt-16 xl:mt-16">
+        
+        <!-- Bouton Modifier le profil -->
+        @if(auth.user && auth.user.id === user.id)
+          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-14 lg:-top-16 xl:-top-16">
+            <a href="{{ route('profile.edit') }}" 
+               class="px-4 py-2 border border-gray-500 rounded-full text-sm bg-black/70 hover:bg-gray-700 transition">
+              Modifier le profil
+            </a>
+          </div>
+         @else
+          <!-- Si c'est le profil d'un autre utilisateur : bouton Follow -->
+          <div class="absolute -top-12 right-4 sm:-top-14 md:-top-14 lg:-top-16 xl:-top-16">
+            <form action="{{ route('user.follow', { id: user.id }) }}" method="POST" class="inline-block">
+              {{ csrfField() }}
+              <button
+                type="submit"
+                class="follow-btn px-4 py-2 rounded-full text-sm font-semibold md:text-base
+                  {{ user.followStatus === 'followed' ? 'bg-gray-500 text-white' : user.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }} hover:opacity-90 transition">
+                {{ user.followStatus === 'followed' ? 'Suivi' : user.followStatus === 'pending' ? 'En attente' : 'Suivre' }}
+              </button>
+            </form>
+          </div>
+        @endif
+
+        <p class="font-semibold username1 text-lg sm:text-xl md:text-xl lg:text-2xl">{{user.nom}}</p>
+        <p class="text-gray-400 text-sm md:text-base lg:text-base username2">{{ `@${user.nom}` }}</p>
+        
+        @if(user.bio)
+          <p class="mt-3 text-white text-sm leading-relaxed sm:text-base md:text-base lg:text-lg">{{ user.bio }}</p>
+        @endif
+
+        <div class="flex flex-col gap-2 items-start mt-3 text-gray-400 text-sm sm:flex-row sm:flex-wrap sm:items-center md:text-base">
+          @if(user.location)
+            <div class="flex items-center gap-1">
+              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/marker.png"/>
+              <span>{{ user.location }}</span>
+            </div>
+          @endif
+
+          @if(user.website)
+            <div class="flex items-center gap-1">
+              <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/link.png"/>
+              <a href="{{ user.website }}" class="text-blue-400 hover:underline" target="_blank">
+                {{ user.website.length > 30 ? user.website.substring(0, 30) + '...' : user.website }}
+              </a>
+            </div>
+          @endif
+
+          <div class="flex items-center gap-1">
+            <img width="16" height="16" src="https://img.icons8.com/ios-glyphs/30/FFFFFF/calendar.png"/>
+            <span>{{ `Inscrit en ${user.createdAt.year}` }}</span>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-3 text-sm md:text-base">
+          <p class="flex items-center gap-1">
+            <span class="font-semibold">{{ user.following?.length || 0 }}</span>
+            <a href="{{ route('profile.follows', { username: user.nom, type: 'followings' }) }}"
+               class="{{ type === 'followings' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+              abonnements
+            </a>
+          </p>
+          <p class="flex items-center gap-1">
+            <span class="font-semibold">{{ user.followers?.length || 0 }}</span>
+            <a href="{{ route('profile.follows', { username: user.nom, type: 'followers' }) }}"
+               class="{{ type === 'followers' ? 'text-blue-400' : 'text-gray-400 hover:text-white' }}">
+              abonnés
+            </a>
+          </p>
+        </div>
+
+        <!-- Bouton Bloquer -->
+        @if(auth.user.id !== user.id)
+          <div class="mt-4">
+            <form action="{{ route('user.block', { id: user.id }) }}" method="POST" class="inline-block">
+              {{ csrfField() }}
+              <button type="submit"
+                      class="px-4 py-2 rounded-full text-sm font-semibold md:text-base
+                             {{ isBlocked ? 'bg-green-600' : 'bg-red-600' }} hover:opacity-90 transition">
+                {{ isBlocked ? 'Débloquer' : 'Bloquer' }}
+              </button>
+            </form>
+          </div>
+        @endif
+      </div>
+
+      <!-- Onglets profil -->
+      <section id="post_profil" class="flex w-full border-b border-gray-700 mt-6 md:mt-8">
+        <nav id="nav_post" class="flex w-full text-sm md:text-base overflow-x-auto">
+          <a href="#" class="tab flex-1 text-center py-3 font-semibold border-b-2 border-blue-500 active whitespace-nowrap px-4" data-target="posts">Posts</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="replies">Réponses</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="medias">Tweets-marquants</a>
+          <a href="#" class="tab flex-1 text-center py-3 text-gray-400 hover:text-white whitespace-nowrap px-4" data-target="likes">J'aime</a>
+        </nav>
+      </section>
+
+      <!-- Contenu des onglets -->
+      <section id="profile-tweets" class="flex w-full flex-col">
+        <div id="container-posts" class="w-full flex-col">
+          @each(tweet in tweets)
+            <div class="flex gap-3 px-4 md:px-6">
+              @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+              @!component('components/deleteTweet')
+            </div>
+          @endeach
+        </div>
+
+        <div id="container-replies" class="hidden">
+          @each(tweet in userReplies)
+            <div class="flex gap-3 px-4 md:px-6">
+              @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+              @!component('components/deleteTweet')
+            </div>
+          @endeach
+        </div>
+
+        <div id="container-medias" class="hidden">
+          @each(tweet in userMedias)
+            <div class="flex gap-3 px-4 md:px-6">
+              @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+              @!component('components/deleteTweet')
+            </div>
+          @endeach
+        </div>
+
+        <div id="container-likes" class="hidden">
+          @each(tweet in userLikes)
+            <div class="flex gap-3 px-4 md:px-6">
+              @include('partials/tweetSecProfile')
+              @!component('components/reponseForm')
+              @!component('components/deleteTweet')
+            </div>
+          @endeach
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Section droite - Desktop uniquement (XL: 1280px+) -->
+    <section id="search-section" class="hidden xl:flex fixed w-80 h-screen top-0 right-0 flex-col gap-6 p-4 border-l border-gray-700 bg-black overflow-y-auto z-30">
+      <!-- Barre de recherche -->
+      <div class="sticky top-0 bg-black pt-4 pb-2 z-10">
+        <form action="/search" method="GET" class="relative">
+          <input type="text" name="query" placeholder="Rechercher" 
+                 class="text-white bg-[#16181c] border border-gray-600 rounded-full text-sm w-full pl-10 pr-4 py-3 focus:outline-none focus:border-blue-500" 
+                 value="{{ query || '' }}" />
+          <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            🔍
+          </button>
+        </form>
+      </div>
+
+      <!-- Suggestions -->
+      <div id="case_suggestion" class="flex flex-col w-full border border-gray-600 rounded-xl p-4 gap-4 bg-[#16181c]">
+        <h3 class="font-bold text-xl text-white">Vous pourriez aimer</h3>
+
+        @if(!suggestions || suggestions.length === 0)
+          <p class="text-gray-400 text-sm">Aucun utilisateur à suggérer</p>
+        @endif
+
+        @each(s in suggestions)
+        <div class="flex flex-row text-white gap-3 justify-between items-center">
+          <a href="{{ route('profile.show', { id: s.id }) }}" class="flex flex-row gap-3 items-center flex-1 min-w-0">
+            <img 
+              src="{{ s.photoProfil || 'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png' }}" 
+              alt="profil_sugg" 
+              class="rounded-full w-10 h-10 flex-shrink-0"
+            />
+            <div class="flex flex-col min-w-0">
+              <p class="font-semibold text-sm truncate">{{ s.nom }}</p>
+              <p class="text-gray-400 text-sm">@user{{ s.id }}</p>
+              @if(s.isPrivate)
+                <span class="text-yellow-400 text-xs">Compte privé 🔒</span>
+              @endif
+            </div>
+          </a>
+
+          <button
+            type="button"
+            data-user-id="{{ s.id }}"
+            class="follow-btn text-sm px-3 py-1 rounded-full font-semibold flex-shrink-0
+              {{ s.followStatus === 'followed' ? 'bg-gray-500 text-white' : s.followStatus === 'pending' ? 'bg-yellow-500 text-black' : 'bg-white text-black' }}">
+            {{ s.followStatus === 'followed' ? 'Suivi ✔️' : s.followStatus === 'pending' ? 'En attente ⏳' : 'Suivre' }}
+          </button>
+        </div>
+        @endeach
+      </div>
+
+      <!-- Tendances -->
+      <div id="case_tendance" class="flex flex-col w-full border border-gray-600 rounded-xl p-4 gap-4 text-white bg-[#16181c]">
+        <h3 class="font-bold text-xl text-white">Ce qui se passe</h3>
+        
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">Nairobi</h4>
+          <p class="text-gray-400 text-sm">51 k publications</p>
+        </div>
+
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">le m23</h4>
+          <p class="text-gray-400 text-sm">2 728 publications</p>
+        </div>
+
+        <div class="hover:bg-gray-800 p-2 rounded-lg cursor-pointer transition">
+          <div class="flex flex-row justify-between">
+            <p class="text-gray-400 text-sm">Tendances</p>
+            <a href="#" class="text-gray-400">⋯</a>
+          </div>
+          <h4 class="font-bold text-white text-sm">AS Monaco</h4>
+          <p class="text-gray-400 text-sm">5 629 publications</p>
+        </div>
+        
+        <a href="#" class="text-blue-500 text-sm hover:underline">Afficher plus</a>
+      </div>
+
+      <!-- Footer -->
+      <footer class="text-xs text-gray-500 space-y-2 mt-4">
+        <div class="flex flex-wrap gap-2">
+          <a href="#" class="hover:underline">Conditions d'utilisation</a>·
+          <a href="#" class="hover:underline">Politique de confidentialité</a>·
+          <a href="#" class="hover:underline">Cookies</a>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="#" class="hover:underline">Accessibilité</a>·
+          <a href="#" class="hover:underline">Infos sur les annonces</a>·
+          <a href="#" class="hover:underline">Plus</a>
+        </div>
+        <p class="mt-2">© 2025 X Corp.</p>
+      </footer>
+    </section>
+
+    <!-- Lignes verticales - alignées avec le header -->
+    <div class="hidden md:block fixed left-20 top-0 w-px h-screen bg-gray-700 z-40 lg:left-64"></div>
+    <div class="hidden xl:block fixed right-80 top-0 w-px h-screen bg-gray-700 z-40"></div>
+
+<script>
+  lucide.createIcons();
+</script>
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // Style des onglets
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove('active', 'border-blue-500', 'text-white', 'font-semibold');
+      t.classList.add('text-gray-400');
+    });
+    
+    tab.classList.add('active', 'border-blue-500', 'text-white', 'font-semibold');
+    tab.classList.remove('text-gray-400');
+
+    // Affichage contenu
+    const target = tab.dataset.target;
+    
+    // Cacher TOUT
+    document.getElementById('container-posts').classList.add('hidden');
+    document.getElementById('container-replies').classList.add('hidden');
+    document.getElementById('container-medias').classList.add('hidden');
+    document.getElementById('container-likes').classList.add('hidden');
+    
+    // Montrer la cible
+    document.getElementById(`container-${target}`).classList.remove('hidden');
+  });
+});
+</script>
+
 </body>
 </html>

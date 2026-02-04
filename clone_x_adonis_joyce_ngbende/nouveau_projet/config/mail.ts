@@ -1,30 +1,24 @@
-import env from '#start/env'
+import Env from '#start/env'
 import { defineConfig, transports } from '@adonisjs/mail'
 
-const mailConfig = defineConfig({
-  default: 'smtp',
+export default defineConfig({
+  default: 'sendgrid',
 
-  // Adresse globale de l’expéditeur
   from: {
-    address: env.get('SMTP_USER')!,
-    name: 'CloneX App',
+    address: Env.get('MAIL_FROM_ADDRESS')!,
+    name: Env.get('MAIL_FROM_NAME')!,
   },
 
   mailers: {
-    smtp: transports.smtp({
-      host: env.get('SMTP_HOST'),
-      port: env.get('SMTP_PORT'),
+    sendgrid: transports.smtp({
+      host: 'smtp.sendgrid.net',
+      port: 587,
+      secure: false, // TLS false pour le port 587
       auth: {
         type: 'login',
-        user: env.get('SMTP_USER')!,
-        pass: env.get('SMTP_PASSWORD')!,
+        user: 'apikey', // obligatoire pour SendGrid SMTP
+        pass: Env.get('SENDGRID_API_KEY')!, // ta clé API SendGrid
       },
     }),
   },
 })
-
-export default mailConfig
-
-declare module '@adonisjs/mail/types' {
-  export interface MailersList extends InferMailers<typeof mailConfig> {}
-}

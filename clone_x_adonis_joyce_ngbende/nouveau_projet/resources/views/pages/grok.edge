@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assistant IA Grok - Générateur de tweets</title>
+     <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="bg-black text-white min-h-screen">
+      @include('partials/headerProfile')
+
+       @!component('components/logoutModal')
+<main  class="flex-1 w-full pb-16 mt-16 border-l border-r border-gray-700 md:pb-0 md:mt-0 md:ml-16 md:mx-auto md:max-w-2xl lg:ml-64">
+       
+<div class="flex min-h-screen">
+    <section class="flex-1 px-4 py-6">
+<div class="bg-gray-800 p-6 sm:p-8 lg:p-10 rounded-xl shadow-lg space-y-6 max-w-2xl mx-auto lg:mr-12">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-center text-blue-300">🚀 Assistant IA Grok</h1>
+      <p class="text-gray-400 text-center text-sm sm:text-base">Génère, optimise ou analyse ton tweet grâce à l'IA !</p>
+
+      <form id="tweetForm" method="POST" class="space-y-4">
+        {{ csrfField() }}
+        <textarea
+          id="tweetContent"
+          name="prompt"
+          placeholder="Écris ton idée de tweet ici..."
+          rows="4"
+ class="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+ ></textarea>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-between">
+          <button type="button" id="enrichBtn" class="flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition">
+            ✨ Générer un tweet
+          </button>
+          <button type="button" id="hashtagBtn" class="flex-1 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-semibold rounded-lg transition">
+            🏷️ Générer des hashtags
+          </button>
+          <button type="button" id="analyzeBtn" class="flex-1 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition">
+            🔍 Analyser le tweet
+          </button>
+        </div>
+      </form>
+
+      <!-- Résultats IA -->
+      <div id="enrichedText" class="result-box hidden bg-gray-700 p-4 sm:p-6 rounded-lg text-sm sm:text-base whitespace-pre-wrap"></div>
+      <div id="suggestions" class="result-box hidden bg-gray-700 p-4 sm:p-6 rounded-lg text-sm sm:text-base whitespace-pre-wrap"></div>
+      <div id="analysisText" class="result-box hidden bg-gray-700 p-4 sm:p-6 rounded-lg text-sm sm:text-base whitespace-pre-wrap"></div>
+
+    </div>
+    </section>
+  </div>
+  </main>
+
+  <script>
+    const tweetContent = document.getElementById("tweetContent");
+    const enrichedBox = document.getElementById("enrichedText");
+    const suggestionsBox = document.getElementById("suggestions");
+    const analysisBox = document.getElementById("analysisText");
+    const csrfToken = document.querySelector('#tweetForm input[name="_csrf"]').value;
+
+    document.getElementById("enrichBtn").addEventListener("click", async () => {
+      enrichedBox.classList.remove("hidden");
+      enrichedBox.innerText = "⏳ Génération de tweet en cours...";
+      try {
+        const response = await fetch("/grok/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+          body: JSON.stringify({ prompt: tweetContent.value })
+        });
+        if (!response.ok) throw new Error("Erreur réseau ou serveur");
+        const data = await response.json();
+        enrichedBox.innerText = data.content;
+      } catch (err) {
+        enrichedBox.innerText = "❌ Erreur lors de la génération du tweet.";
+      }
+    });
+
+    document.getElementById("hashtagBtn").addEventListener("click", async () => {
+      suggestionsBox.classList.remove("hidden");
+      suggestionsBox.innerText = "⏳ Génération de hashtags en cours...";
+      try {
+        const response = await fetch("/grok/suggest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+          body: JSON.stringify({ text: tweetContent.value })
+        });
+        if (!response.ok) throw new Error("Erreur réseau ou serveur");
+        const data = await response.json();
+     const hashtags = data.hashtags ? data.hashtags.split(" ") : [];
+suggestionsBox.innerHTML =
+  hashtags.length
+    ? "✨ Hashtags suggérés : " + hashtags.map(tag => `<span class="text-blue-400">#${tag.replace(/^#/, "")}</span>`).join(" ")
+    : "❌ Aucun hashtag disponible.";
+
+      } catch (err) {
+        suggestionsBox.innerText = "❌ Erreur lors de la génération des hashtags.";
+      }
+    });
+
+    document.getElementById("analyzeBtn").addEventListener("click", async () => {
+      analysisBox.classList.remove("hidden");
+      analysisBox.innerText = "🔍 Analyse en cours...";
+      try {
+        const response = await fetch("/grok/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken },
+          body: JSON.stringify({ text: tweetContent.value })
+        });
+        if (!response.ok) throw new Error("Erreur réseau ou serveur");
+        const data = await response.json();
+        analysisBox.innerText = data.analysis;
+      } catch (err) {
+        analysisBox.innerText = "❌ Erreur lors de l'analyse du tweet.";
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>
